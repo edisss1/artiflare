@@ -1,7 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
+  font-family: "Fira Code", monospace;
   min-height: 100dvh;
+  @apply dark:text-typography-dark dark:bg-bg-dark transition-all duration-100 ease-in-out;
 }

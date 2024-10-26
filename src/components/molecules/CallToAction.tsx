@@ -7,7 +7,7 @@ const CallToAction = () => {
         Start collaborating creatively with your team in real-time
       </h2>
       <Link
-        className="bg-secondary hover:opacity-55 transition-opacity duration-150 rounded-sm text-typography-light px-6 py-4"
+        className="bg-secondary hover:shadow-xl hover:shadow-secondary/50  transition-all duration-150 rounded-sm text-typography-light px-6 py-4"
         to={"/auth/signup"}>
         Get Started
       </Link>

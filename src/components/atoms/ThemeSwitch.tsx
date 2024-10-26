@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
-import sun from "../../../public/sun-svgrepo-com 1.svg"
-import moon from "../../../public/moon-svgrepo-com.svg"
-import Button from "./Button"
+import sun from "../../assets/sun-svgrepo-com 1.svg"
+import moon from "../../assets/moon-svgrepo-com.svg"
 
 const ThemeSwitch = () => {
   const [darkMode, setDarkMode] = useState(
@@ -16,7 +15,7 @@ const ThemeSwitch = () => {
   const toggleDarkMode = () => setDarkMode(!darkMode)
 
   return (
-    <Button
+    <button
       className="max-w-8 w-full relative [&>*]:w-8"
       onClick={toggleDarkMode}>
       <img
@@ -33,7 +32,7 @@ const ThemeSwitch = () => {
         src={moon}
         alt=""
       />
-    </Button>
+    </button>
   )
 }
 export default ThemeSwitch

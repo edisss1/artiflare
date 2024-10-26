@@ -6,6 +6,6 @@
 
 body {
   font-family: "Fira Code", monospace;
-  min-height: 100dvh;
-  @apply dark:text-typography-dark dark:bg-bg-dark transition-all duration-100 ease-in-out;
+  min-height: 100vh;
+  @apply text-typography-light bg-bg-light dark:text-typography-dark  dark:bg-bg-dark transition-all duration-300 ease-in-out;
 }

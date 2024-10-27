@@ -14,7 +14,7 @@ const NavBar = () => {
         <Link
           path="/auth/signup"
           textContent="Sign Up"
-          className="bg-secondary px-2 text-now rounded-sm hover:bg-opacity-40 transition-colors duration-150"
+          className="bg-secondary dark:bg-secondary/90 px-2 text-now rounded-sm hover:bg-opacity-40 transition-colors duration-150"
         />
         <ThemeSwitch />
       </div>

@@ -7,6 +7,7 @@ const Information = () => {
     <section className="flex flex-col gap-4 mx-auto w-fit mt-[clamp(1rem,100vh,10rem)] mb-16">
       {informationContent.map((section, index) => (
         <div
+          key={section.header}
           className={`flex gap-4 justify-between ${
             index === 1 ? "flex-row-reverse" : ""
           }`}>

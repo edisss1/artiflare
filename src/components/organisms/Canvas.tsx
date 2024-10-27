@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { Canvas, Line, Group, TPointerEvent, TEvent } from "fabric"
+import { Canvas, Line, Group, TEvent } from "fabric"
 
 const CanvasBoard = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -51,6 +51,7 @@ const CanvasBoard = () => {
       const initCanvas = new Canvas(canvasRef.current, {
         width: window.innerWidth,
         height: window.innerHeight,
+        preserveObjectStacking: true,
       })
 
       initCanvas.backgroundColor = "#fff"
@@ -75,6 +76,7 @@ const CanvasBoard = () => {
         }
 
         initCanvas.add(gridLines)
+        initCanvas.sendObjectToBack(gridLines)
         initCanvas.renderAll()
       }
 

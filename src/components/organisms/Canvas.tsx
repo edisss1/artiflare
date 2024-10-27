@@ -1,36 +1,50 @@
 import { useEffect, useRef, useState } from "react"
-import { Canvas, Line, Group } from "fabric"
+import { Canvas, Line, Group, TPointerEvent, TEvent } from "fabric"
 
 const CanvasBoard = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [canvas, setCanvas] = useState<Canvas | null>(null)
-  const gridSize = 15
 
-  //   const [isDragging, setIsDragging] = useState(false)
-  //   const [lastPos, setLastPos] = useState<{ x: number; y: number } | null>(null)
+  const [isDragging, setIsDragging] = useState<boolean>(false)
+  const [startDragPosition, setStartDragPosition] = useState<{
+    x: number | undefined
+    y: number | undefined
+  }>({ x: 0, y: 0 })
 
-  //   const onMouseDown = (e: any) => {
-  //     setIsDragging(true)
-  //     setLastPos({ x: e.e.offsetX, y: e.e.offsetY })
-  //   }
-  //   const onMouseMove = (e: any) => {
-  //     if (!isDragging || !lastPos || !canvas) return
+  useEffect(() => {
+    const onMouseDown = (e: TEvent) => {
+      setIsDragging(true)
+      const pointer = canvas?.getViewportPoint(e.e as MouseEvent)
+      setStartDragPosition({ x: pointer?.x, y: pointer?.y })
+    }
 
-  //     const deltaX = e.e.offsetX - lastPos.x
-  //     const deltaY = e.e.offsetY - lastPos.y
+    const onMouseMove = (e: TEvent) => {
+      if (!isDragging) return
+      const pointer = canvas?.getViewportPoint(e.e as MouseEvent)
 
-  //     canvas.viewportTransform[4] += deltaX
-  //     canvas.viewportTransform[5] += deltaY
+      const deltaX = pointer!.x - startDragPosition.x!
+      const deltaY = pointer!.y - startDragPosition.y!
 
-  //     canvas.renderAll()
+      const currentTransform = canvas?.viewportTransform
+      if (currentTransform) {
+        currentTransform[4] += deltaX
+        currentTransform[5] += deltaY
+        canvas.setViewportTransform(currentTransform)
+      }
 
-  //     setLastPos({ x: e.e.offsetX, y: e.e.offsetY })
-  //   }
+      setStartDragPosition({ x: pointer?.x, y: pointer?.y })
+    }
 
-  //   const onMouseUp = () => {
-  //     setIsDragging(false)
-  //     setLastPos(null)
-  //   }
+    const onMouseUp = () => {
+      setIsDragging(false)
+    }
+
+    canvas?.on("mouse:down", onMouseDown)
+    canvas?.on("mouse:move", onMouseMove)
+    canvas?.on("mouse:up", onMouseUp)
+
+    return () => {}
+  }, [canvas, isDragging, startDragPosition])
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -41,11 +55,7 @@ const CanvasBoard = () => {
 
       initCanvas.backgroundColor = "#fff"
 
-      //   initCanvas.on("mouse:down", onMouseDown)
-      //   initCanvas.on("mouse:move", onMouseMove)
-      //   initCanvas.on("mouse:up", onMouseUp)
-
-      const drawGrid = () => {
+      const drawGrid = (gridSize = 15) => {
         const gridLines = new Group([], { selectable: false })
 
         for (let x = 0; x <= initCanvas.width; x += gridSize) {

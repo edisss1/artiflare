@@ -3,10 +3,12 @@ import CanvasNav from "../components/organisms/CanvasNav"
 
 const DrawingBoard = () => {
   return (
-    <div>
+    <main>
       <CanvasNav />
-      <CanvasBoard />
-    </div>
+      <div>
+        <CanvasBoard />
+      </div>
+    </main>
   )
 }
 export default DrawingBoard

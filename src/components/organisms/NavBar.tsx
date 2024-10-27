@@ -16,6 +16,8 @@ const NavBar = () => {
           textContent="Sign Up"
           className="bg-secondary dark:bg-secondary/90 px-2 text-now rounded-sm hover:bg-opacity-40 transition-colors duration-150"
         />
+        <Link path="/app/board">test link</Link>
+        <Link path="/app/dashboard">test link2</Link>
         <ThemeSwitch />
       </div>
     </nav>

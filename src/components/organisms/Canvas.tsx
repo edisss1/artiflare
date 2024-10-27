@@ -4,7 +4,33 @@ import { Canvas, Line, Group } from "fabric"
 const CanvasBoard = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [canvas, setCanvas] = useState<Canvas | null>(null)
-  const gridSize = 25
+  const gridSize = 15
+
+  //   const [isDragging, setIsDragging] = useState(false)
+  //   const [lastPos, setLastPos] = useState<{ x: number; y: number } | null>(null)
+
+  //   const onMouseDown = (e: any) => {
+  //     setIsDragging(true)
+  //     setLastPos({ x: e.e.offsetX, y: e.e.offsetY })
+  //   }
+  //   const onMouseMove = (e: any) => {
+  //     if (!isDragging || !lastPos || !canvas) return
+
+  //     const deltaX = e.e.offsetX - lastPos.x
+  //     const deltaY = e.e.offsetY - lastPos.y
+
+  //     canvas.viewportTransform[4] += deltaX
+  //     canvas.viewportTransform[5] += deltaY
+
+  //     canvas.renderAll()
+
+  //     setLastPos({ x: e.e.offsetX, y: e.e.offsetY })
+  //   }
+
+  //   const onMouseUp = () => {
+  //     setIsDragging(false)
+  //     setLastPos(null)
+  //   }
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -14,6 +40,10 @@ const CanvasBoard = () => {
       })
 
       initCanvas.backgroundColor = "#fff"
+
+      //   initCanvas.on("mouse:down", onMouseDown)
+      //   initCanvas.on("mouse:move", onMouseMove)
+      //   initCanvas.on("mouse:up", onMouseUp)
 
       const drawGrid = () => {
         const gridLines = new Group([], { selectable: false })

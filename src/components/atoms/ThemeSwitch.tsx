@@ -16,7 +16,7 @@ const ThemeSwitch = () => {
 
   return (
     <button
-      className="max-w-8 w-full relative [&>*]:w-8"
+      className="max-w-6 w-full relative [&>*]:w-6"
       onClick={toggleDarkMode}>
       <img
         className={`absolute inset-0 transition-opacity ${

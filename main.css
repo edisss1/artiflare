@@ -13,3 +13,12 @@ body {
   min-height: 100vh;
   @apply text-typography-light bg-bg-light dark:text-typography-dark  dark:bg-bg-dark transition-all duration-300 ease-in-out;
 }
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 0.5fr 3fr;
+  grid-template-areas:
+    "aside nav nav"
+    "aside main main"
+    "aside main main";
+}

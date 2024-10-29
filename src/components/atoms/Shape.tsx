@@ -1,5 +1,6 @@
 import { Circle, Line, Rect } from "react-konva"
 import { LineType } from "../../types/ShapeTypes"
+import { KonvaEventObject } from "konva/lib/Node"
 
 interface Shape {
   id: string
@@ -18,6 +19,7 @@ interface Shape {
     y: number
   }
   lines: LineType[]
+  onDragEnd: (e: KonvaEventObject<MouseEvent>) => void
 }
 
 const Shape = ({
@@ -33,11 +35,13 @@ const Shape = ({
   scale,
   radius,
   lines,
+  onDragEnd,
 }: Shape) => {
   switch (shape) {
     case "rectangle":
       return (
         <Rect
+          onDragEnd={onDragEnd}
           rotation={rotation}
           x={x}
           y={y}
@@ -50,6 +54,7 @@ const Shape = ({
     case "circle":
       return (
         <Circle
+          onDragEnd={onDragEnd}
           rotation={rotation}
           x={x}
           y={y}
@@ -64,6 +69,7 @@ const Shape = ({
       lines.map((line) => {
         return (
           <Line
+            onDragEnd={onDragEnd}
             points={line.points}
             stroke={stroke}
             rotation={rotation}

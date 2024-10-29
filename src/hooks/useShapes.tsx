@@ -1,35 +1,30 @@
 import { useCallback, useState } from "react"
 import { v4 as uuidv4 } from "uuid"
-
-interface Shape {
-  id: string
-  type: string
-  x: number
-  y: number
-  width: number
-  height: number
-  radius: number
-  color: string
-  border: string
-}
+import { Shape } from "../types/ShapeTypes"
 
 export function useShapes() {
   const [shapes, setShapes] = useState<Shape[]>([])
 
-  const addShape = useCallback((type: string, x: number, y: number) => {
-    const newShape = {
+  const addShape = useCallback((shape: string, x: number, y: number) => {
+    const newShape: Shape = {
       id: uuidv4(),
-      type,
+      shape,
       x,
       y,
       width: 100,
       height: 100,
+      fill: "#333333",
       radius: 50,
-      color: "#D3D9D9",
-      border: "#333333",
+      stroke: "#333333",
+      strokeWidth: 1,
+      rotation: 0,
+      scale: {
+        x: 1,
+        y: 1,
+      },
+      lines: [],
     }
     setShapes((prevShapes) => [...prevShapes, newShape])
-
-    return { shapes, addShape }
   }, [])
+  return { shapes, addShape }
 }

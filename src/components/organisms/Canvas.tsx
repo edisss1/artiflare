@@ -7,13 +7,20 @@ import {
   handleMouseDrawingMove,
   handleMouseDrawingUp,
 } from "../../utils/drawingFunctions/line"
+import { useShapes } from "../../hooks/useShapes"
+import Shape from "../atoms/Shape"
 
-const CanvasBoard = () => {
-  const [tool, setTool] = useState<Tool>({ type: "" })
+interface CanvasBoardProps {
+  tool: Tool
+  setTool: React.Dispatch<React.SetStateAction<Tool>>
+}
+
+const CanvasBoard = ({ tool, setTool }: CanvasBoardProps) => {
   const [coordinates, setCoordinates] = useState<Dimensions>({ x: 0, y: 0 })
   const [scale, setScale] = useState<Scale>({ x: 1, y: 1 })
   const [lines, setLines] = useState<LineType[]>([])
   const [isDrawing, setIsDrawing] = useState(false)
+  const { shapes, addShape } = useShapes()
 
   const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
     switch (tool.type) {
@@ -108,31 +115,8 @@ const CanvasBoard = () => {
       onMouseUp={handleMouseUp}
       draggable={!isDrawing}>
       <Layer>
-        <Rect
-          scale={scale}
-          x={coordinates.x}
-          y={coordinates.y}
-          width={100}
-          height={100}
-          fill="#333333"
-          draggable
-          onDragEnd={handleShapeCoordinatesChange}
-        />
-        {lines.map((line, i) => (
-          <Line
-            key={i}
-            points={line.points && line.points}
-            scale={scale}
-            stroke="#df4b26"
-            tension={0.5}
-            globalCompositeOperation={
-              line.tool.type === "eraser"
-                ? "destination-out"
-                : line.tool.type === "line"
-                ? "source-over"
-                : undefined
-            }
-          />
+        {shapes.map((shape) => (
+          <Shape {...shape} onDragEnd={handleShapeCoordinatesChange} />
         ))}
       </Layer>
     </Stage>

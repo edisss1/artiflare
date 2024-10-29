@@ -22,3 +22,8 @@ body {
     "aside main main"
     "aside main main";
 }
+
+.grid-pattern {
+  background-image: url("/src/assets/ooorganize.svg");
+  background-repeat: repeat;
+}

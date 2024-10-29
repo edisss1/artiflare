@@ -1,5 +1,5 @@
 import { Layer, Line, Rect, Stage } from "react-konva"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { KonvaEventObject } from "konva/lib/Node"
 import { Dimensions, Scale, Tool, LineType } from "../../types/ShapeTypes"
 import {
@@ -12,39 +12,40 @@ const CanvasBoard = () => {
   const [tool, setTool] = useState<Tool>({ type: "" })
   const [coordinates, setCoordinates] = useState<Dimensions>({ x: 0, y: 0 })
   const [scale, setScale] = useState<Scale>({ x: 1, y: 1 })
-  const [lines, setLines] = useState<LineType[]>([
-    {
-      points: [0, 0],
-      tool: { type: "" },
-    },
-  ])
-  const isDrawing = useRef(false)
+  const [lines, setLines] = useState<LineType[]>([])
+  const [isDrawing, setIsDrawing] = useState(false)
 
   const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
     switch (tool.type) {
       case "line":
-        return handleMouseDrawingDown(e, isDrawing, setLines, lines, tool)
+        return handleMouseDrawingDown(
+          e,
+          setIsDrawing,
+          setLines,
+          lines,
+          tool,
+          scale
+        )
     }
   }
 
   const handleMouseMove = (e: KonvaEventObject<MouseEvent>) => {
     switch (tool.type) {
       case "line":
-        return handleMouseDrawingMove(e, isDrawing, lines, setLines)
+        return handleMouseDrawingMove(e, isDrawing, lines, setLines, scale)
     }
   }
 
   const handleMouseUp = () => {
     switch (tool.type) {
       case "line":
-        return handleMouseDrawingUp(isDrawing)
+        return handleMouseDrawingUp(setIsDrawing)
     }
   }
 
   const handleScaleChange = (e: WheelEvent) => {
     e.preventDefault()
     const scrollStep = 0.05
-
     setScale((prevScale) => {
       const newScaleX =
         e.deltaY > 0
@@ -74,7 +75,6 @@ const CanvasBoard = () => {
         setTool((prevTool) => ({
           type: prevTool.type === "line" ? "" : "line",
         }))
-        console.log("Line tool selected, isDrawing: ", isDrawing.current)
         break
     }
   }
@@ -95,6 +95,8 @@ const CanvasBoard = () => {
     }
   }, [])
 
+  console.log(lines)
+
   return (
     <Stage
       className="bg-white grid-pattern"
@@ -104,7 +106,7 @@ const CanvasBoard = () => {
       onMouseDown={(e) => handleMouseDown(e)}
       onMouseMove={(e) => handleMouseMove(e)}
       onMouseUp={handleMouseUp}
-      draggable={isDrawing.current}>
+      draggable={!isDrawing}>
       <Layer>
         <Rect
           scale={scale}
@@ -119,10 +121,10 @@ const CanvasBoard = () => {
         {lines.map((line, i) => (
           <Line
             key={i}
-            points={line.points}
+            points={line.points && line.points}
             scale={scale}
             stroke="#df4b26"
-            tension={1}
+            tension={0.5}
             globalCompositeOperation={
               line.tool.type === "eraser"
                 ? "destination-out"

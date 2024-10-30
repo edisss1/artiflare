@@ -1,44 +1,36 @@
 import { useState } from "react"
-import CanvasBoard from "../components/organisms/Canvas"
+import CanvasBoard from "../components/organisms/CanvasBoard"
 import CanvasNav from "../components/organisms/CanvasNav"
-import { Tool, TShape } from "../types/ShapeTypes"
+import { Canvas, Rect } from "fabric"
+import ToolBar from "../components/molecules/ToolBar"
+import Settings from "../components/organisms/Settings"
 
 const DrawingBoard = () => {
-  const [tool, setTool] = useState<Tool>({ type: null })
-  const [shapeType, setShapeType] = useState<TShape | null>(null)
+  const [canvas, setCanvas] = useState<Canvas | null>(null)
 
-  const toolsList: Tool[] = [
-    {
-      type: "rectangle",
-    },
-    {
-      type: "circle",
-    },
-    {
-      type: "ellipse",
-    },
-    {
-      type: "eraser",
-    },
-    {
-      type: "eraser",
-    },
-    {
-      type: "pen",
-    },
-    {
-      type: "line",
-    },
-    {
-      type: null,
-    },
-  ]
+  const addRectangle = () => {
+    if (!canvas) return
+
+    const rect = new Rect({
+      width: 100,
+      height: 100,
+      top: 300,
+      left: 400,
+      fill: "#333333",
+    })
+
+    console.log(rect.width)
+    canvas.add(rect)
+  }
 
   return (
     <>
       <CanvasNav />
+
       <div className="relative">
-        <CanvasBoard tool={tool} setTool={setTool} />
+        <ToolBar onClick={addRectangle} />
+        <CanvasBoard canvas={canvas} setCanvas={setCanvas} />
+        <Settings canvas={canvas} />
       </div>
     </>
   )

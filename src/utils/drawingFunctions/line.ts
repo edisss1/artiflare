@@ -1,14 +1,12 @@
 import { KonvaEventObject } from "konva/lib/Node"
 import { LineType, Tool } from "../../types/ShapeTypes"
-import { Vector2d } from "konva/lib/types"
 
 export const handleMouseDrawingDown = (
   e: KonvaEventObject<MouseEvent>,
   setIsDrawing: React.Dispatch<React.SetStateAction<boolean>>,
   setLines: React.Dispatch<React.SetStateAction<LineType[]>>,
   lines: LineType[],
-  tool: Tool,
-  scale: Vector2d
+  tool: Tool
 ) => {
   setIsDrawing(true)
   const stage = e.target.getStage()
@@ -38,8 +36,7 @@ export const handleMouseDrawingMove = (
   e: KonvaEventObject<MouseEvent>,
   isDrawing: boolean,
   lines: LineType[],
-  setLines: React.Dispatch<React.SetStateAction<LineType[]>>,
-  scale: Vector2d
+  setLines: React.Dispatch<React.SetStateAction<LineType[]>>
 ) => {
   if (!isDrawing) {
     return

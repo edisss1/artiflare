@@ -1,18 +1,46 @@
 import { useState } from "react"
 import CanvasBoard from "../components/organisms/Canvas"
 import CanvasNav from "../components/organisms/CanvasNav"
-import { Tool } from "../types/ShapeTypes"
+import { Tool, TShape } from "../types/ShapeTypes"
 
 const DrawingBoard = () => {
-  const [tool, setTool] = useState<Tool>({ type: "" })
+  const [tool, setTool] = useState<Tool>({ type: null })
+  const [shapeType, setShapeType] = useState<TShape | null>(null)
+
+  const toolsList: Tool[] = [
+    {
+      type: "rectangle",
+    },
+    {
+      type: "circle",
+    },
+    {
+      type: "ellipse",
+    },
+    {
+      type: "eraser",
+    },
+    {
+      type: "eraser",
+    },
+    {
+      type: "pen",
+    },
+    {
+      type: "line",
+    },
+    {
+      type: null,
+    },
+  ]
 
   return (
-    <main>
+    <>
       <CanvasNav />
-      <div>
+      <div className="relative">
         <CanvasBoard tool={tool} setTool={setTool} />
       </div>
-    </main>
+    </>
   )
 }
 export default DrawingBoard

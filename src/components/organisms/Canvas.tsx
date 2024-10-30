@@ -1,14 +1,24 @@
-import { Layer, Line, Rect, Stage } from "react-konva"
+import { Layer, Stage } from "react-konva"
 import { useEffect, useState } from "react"
 import { KonvaEventObject } from "konva/lib/Node"
-import { Dimensions, Scale, Tool, LineType } from "../../types/ShapeTypes"
+import {
+  Dimensions,
+  Scale,
+  Tool,
+  LineType,
+  TShape,
+} from "../../types/ShapeTypes"
 import {
   handleMouseDrawingDown,
   handleMouseDrawingMove,
   handleMouseDrawingUp,
 } from "../../utils/drawingFunctions/line"
-import { useShapes } from "../../hooks/useShapes"
 import Shape from "../atoms/Shape"
+import { shapeSelection } from "../../utils/drawingFunctions/shapeSelection"
+import { useDispatch, useSelector } from "react-redux"
+import { addShape, selectShape } from "../../redux/slices/shapeSlice"
+import { v4 as uuidv4 } from "uuid"
+import { selectShapes } from "../../redux/selectors/shapeSelectors"
 
 interface CanvasBoardProps {
   tool: Tool
@@ -20,26 +30,49 @@ const CanvasBoard = ({ tool, setTool }: CanvasBoardProps) => {
   const [scale, setScale] = useState<Scale>({ x: 1, y: 1 })
   const [lines, setLines] = useState<LineType[]>([])
   const [isDrawing, setIsDrawing] = useState(false)
-  const { shapes, addShape } = useShapes()
+
+  const dispatch = useDispatch()
+  const shapes = useSelector(selectShapes)
+  const selectedShapeId = useSelector(selectShape)
+
+  const handleAddShape = (e: KonvaEventObject<MouseEvent>, shapeType: Tool) => {
+    const newShape: TShape = {
+      id: uuidv4(),
+      shape: shapeType.type,
+      x: e.evt.clientX,
+      y: e.evt.clientY,
+      width: 100,
+      height: 100,
+      fill: "blue",
+      stroke: "black",
+      strokeWidth: 2,
+      rotation: 0,
+      scale: { x: 1, y: 1 },
+      lines: [],
+      radius: shapeType.type === "circle" ? 50 : 0,
+    }
+
+    dispatch(addShape(newShape))
+  }
 
   const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
     switch (tool.type) {
       case "line":
-        return handleMouseDrawingDown(
-          e,
-          setIsDrawing,
-          setLines,
-          lines,
-          tool,
-          scale
-        )
+        handleMouseDrawingDown(e, setIsDrawing, setLines, lines, tool)
+        break
+      case "rectangle":
+      case "circle":
+        handleAddShape(e, tool)
+        break
+      default:
+        break
     }
   }
 
   const handleMouseMove = (e: KonvaEventObject<MouseEvent>) => {
     switch (tool.type) {
       case "line":
-        return handleMouseDrawingMove(e, isDrawing, lines, setLines, scale)
+        return handleMouseDrawingMove(e, isDrawing, lines, setLines)
     }
   }
 
@@ -79,10 +112,11 @@ const CanvasBoard = ({ tool, setTool }: CanvasBoardProps) => {
   const handleKeyPress = (e: KeyboardEvent) => {
     switch (e.key) {
       case "l":
-        setTool((prevTool) => ({
-          type: prevTool.type === "line" ? "" : "line",
-        }))
+        shapeSelection(setTool, { type: "line" })
         break
+      case "r":
+        shapeSelection(setTool, { type: "rectangle" })
+        console.log("rectangle selected")
     }
   }
 

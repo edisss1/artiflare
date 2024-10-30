@@ -1,24 +1,8 @@
 import { Circle, Line, Rect } from "react-konva"
-import { LineType } from "../../types/ShapeTypes"
+import { TShape } from "../../types/ShapeTypes"
 import { KonvaEventObject } from "konva/lib/Node"
 
-interface Shape {
-  id: string
-  shape: string
-  x: number
-  y: number
-  width: number
-  height: number
-  fill: string
-  radius: number
-  stroke: string
-  strokeWidth: number
-  rotation: number
-  scale: {
-    x: number
-    y: number
-  }
-  lines: LineType[]
+interface ShapeComponent extends TShape {
   onDragEnd: (e: KonvaEventObject<MouseEvent>) => void
 }
 
@@ -36,7 +20,7 @@ const Shape = ({
   radius,
   lines,
   onDragEnd,
-}: Shape) => {
+}: ShapeComponent) => {
   switch (shape) {
     case "rectangle":
       return (

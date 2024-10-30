@@ -16,7 +16,7 @@ export type Tool = {
     | "line"
     | "ellipse"
     | "pen"
-    | ""
+    | null
     | "eraser"
 }
 
@@ -25,11 +25,11 @@ export type LineType = {
   points: number[]
 }
 
-export interface Shape {
+export interface TShape {
   id: string
-  shape: string
-  x: number
-  y: number
+  shape: string | null
+  x: number | undefined
+  y: number | undefined
   width: number
   height: number
   fill: string
@@ -41,5 +41,5 @@ export interface Shape {
     x: number
     y: number
   }
-  lines: LineType[]
+  lines?: LineType[]
 }

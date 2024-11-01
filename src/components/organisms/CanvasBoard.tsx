@@ -1,13 +1,12 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 
-import { Canvas, Rect } from "fabric"
+import { Canvas } from "fabric"
 
 interface CanvasBoardProps {
-  canvas: Canvas | null
   setCanvas: React.Dispatch<React.SetStateAction<Canvas | null>>
 }
 
-const CanvasBoard = ({ canvas, setCanvas }: CanvasBoardProps) => {
+const CanvasBoard = ({ setCanvas }: CanvasBoardProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -18,6 +17,7 @@ const CanvasBoard = ({ canvas, setCanvas }: CanvasBoardProps) => {
     })
 
     initCanvas.renderAll()
+    initCanvas.backgroundColor = "#ffffff"
 
     setCanvas(initCanvas)
 
@@ -26,7 +26,7 @@ const CanvasBoard = ({ canvas, setCanvas }: CanvasBoardProps) => {
     }
   }, [])
 
-  return <canvas ref={canvasRef} className="grid-pattern" id="canvas"></canvas>
+  return <canvas ref={canvasRef} className="grid-pattern " id="canvas"></canvas>
 }
 
 export default CanvasBoard

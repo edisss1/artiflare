@@ -1,5 +1,5 @@
 import { Canvas } from "fabric"
-import React, { useEffect, useState } from "react"
+import React, { KeyboardEvent, useCallback, useEffect, useState } from "react"
 import {
   setWidth,
   setHeight,
@@ -8,6 +8,7 @@ import {
   setStroke,
 } from "../../redux/slices/shapeManagementSlice"
 import SettingsInput from "../atoms/SettingsInput"
+import Button from "../atoms/Button"
 
 interface SettingProps {
   canvas: Canvas | null
@@ -133,12 +134,33 @@ const Settings = ({
     })
   }, [canvas])
 
+  const deleteSelectedObject = () => {
+    canvas?.remove(selectedObject)
+    canvas?.renderAll()
+  }
+
+  const handleKeyPress = useCallback((e: KeyboardEvent<Element>) => {
+    switch (e.key) {
+      case "delete":
+        deleteSelectedObject()
+        break
+    }
+  }, [])
+
+  // useEffect(() => {
+  //   document.addEventListener("keydown")
+
+  //   return () => {
+  //     document.removeEventListener("keydown", () => handleKeyPress)
+  //   }
+  // }, [handleKeyPress])
+
   return (
     <aside
       className={`${
         !selectedObject
           ? "hidden"
-          : "flex flex-col fixed top-[50%] right-2 bg-primary z-40 border-2 border-black p-4 -translate-y-[50%]"
+          : "flex flex-col fixed top-[50%] right-2 bg-primary z-40 border-2 border-black p-4 -translate-y-[50%] text-typography-light"
       }`}>
       {selectedObject && selectedObject.type === "rect" && (
         <div className="flex flex-col gap-2 ">
@@ -170,6 +192,7 @@ const Settings = ({
             label="Stroke"
             type="color"
           />
+          <Button text="Delete" onClick={deleteSelectedObject} />
         </div>
       )}
       {selectedObject && selectedObject.type === "circle" && (
@@ -188,6 +211,7 @@ const Settings = ({
             label="Color"
             type="color"
           />
+          <Button text="Delete" onClick={deleteSelectedObject} />
         </div>
       )}
     </aside>

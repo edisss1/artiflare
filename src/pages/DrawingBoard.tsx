@@ -70,7 +70,7 @@ const DrawingBoard = () => {
           dispatch={dispatch}
           stroke={stroke}
         />
-        <CanvasBoard canvas={canvas} setCanvas={setCanvas} />
+        <CanvasBoard setCanvas={setCanvas} />
       </div>
     </>
   )

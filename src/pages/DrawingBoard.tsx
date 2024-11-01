@@ -10,7 +10,7 @@ import { AppDispatch, RootState } from "../redux/store"
 const DrawingBoard = () => {
   const [canvas, setCanvas] = useState<Canvas | null>(null)
   const dispatch: AppDispatch = useDispatch()
-  const { width, height, diameter, color } = useSelector(
+  const { width, height, diameter, color, stroke } = useSelector(
     (state: RootState) => state.shape
   )
   const addRectangle = () => {
@@ -36,6 +36,8 @@ const DrawingBoard = () => {
       top: 300,
       left: 400,
       fill: "#333333",
+      stroke: "#333333",
+      strokeWidth: 1,
       opacity: 100,
     })
 
@@ -66,6 +68,7 @@ const DrawingBoard = () => {
           color={color}
           canvas={canvas}
           dispatch={dispatch}
+          stroke={stroke}
         />
         <CanvasBoard canvas={canvas} setCanvas={setCanvas} />
       </div>

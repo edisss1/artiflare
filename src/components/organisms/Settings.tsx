@@ -5,6 +5,7 @@ import {
   setHeight,
   setColor,
   setDiameter,
+  setStroke,
 } from "../../redux/slices/shapeManagementSlice"
 import SettingsInput from "../atoms/SettingsInput"
 
@@ -15,6 +16,7 @@ interface SettingProps {
   height: string | number
   diameter: string | number
   color: string
+  stroke: string
 }
 
 const Settings = ({
@@ -24,6 +26,7 @@ const Settings = ({
   height,
   color,
   diameter,
+  stroke,
 }: SettingProps) => {
   const [selectedObject, setSelectedObject] = useState<any>(null)
 
@@ -70,6 +73,15 @@ const Settings = ({
 
     if (!selectedObject) return
     selectedObject.set({ fill: colorValue })
+    canvas?.renderAll()
+  }
+
+  const handleStrokeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const strokeValue = e.target.value
+    dispatch(setStroke(strokeValue))
+
+    if (!selectedObject) return
+    selectedObject.set({ stroke: strokeValue })
     canvas?.renderAll()
   }
 
@@ -149,6 +161,13 @@ const Settings = ({
             onChange={(e) => handleColorChange(e)}
             id="color"
             label="Color"
+            type="color"
+          />
+          <SettingsInput
+            value={stroke}
+            onChange={(e) => handleStrokeChange(e)}
+            id="stroke"
+            label="Stroke"
             type="color"
           />
         </div>

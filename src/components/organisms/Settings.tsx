@@ -1,5 +1,5 @@
 import { Canvas } from "fabric"
-import React, { KeyboardEvent, useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import {
   setWidth,
   setHeight,
@@ -135,25 +135,32 @@ const Settings = ({
   }, [canvas])
 
   const deleteSelectedObject = () => {
-    canvas?.remove(selectedObject)
-    canvas?.renderAll()
+    if (canvas && selectedObject) {
+      canvas.remove(selectedObject)
+      canvas.renderAll()
+    }
   }
 
-  const handleKeyPress = useCallback((e: KeyboardEvent<Element>) => {
-    switch (e.key) {
-      case "delete":
-        deleteSelectedObject()
-        break
+  // TODO: Add keyboard shortcut for deleting selected object
+
+  const handleKeyPress = useCallback(
+    (e: globalThis.KeyboardEvent) => {
+      switch (e.key) {
+        case "Delete":
+          deleteSelectedObject()
+          break
+      }
+    },
+    [deleteSelectedObject]
+  )
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyPress)
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress)
     }
-  }, [])
-
-  // useEffect(() => {
-  //   document.addEventListener("keydown")
-
-  //   return () => {
-  //     document.removeEventListener("keydown", () => handleKeyPress)
-  //   }
-  // }, [handleKeyPress])
+  }, [handleKeyPress])
 
   return (
     <aside

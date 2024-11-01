@@ -1,7 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit"
+import shapeManagementReducer from "./slices/shapeManagementSlice"
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    shape: shapeManagementReducer,
+  },
 })
 
 export type AppStore = typeof store

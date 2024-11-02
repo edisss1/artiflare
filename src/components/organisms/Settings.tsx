@@ -37,7 +37,10 @@ const Settings = ({
 
     const boundingRect = object.getBoundingRect()
 
-    setSettingsPosition({ top: boundingRect.top, left: boundingRect.left })
+    setSettingsPosition({
+      top: boundingRect.top,
+      left: boundingRect.left,
+    })
 
     setSelectedObject(object)
 

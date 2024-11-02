@@ -4,9 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  transition: all 0.2s ease-in-out;
-}
+/* * {
+  transition: all 0.1s linear;
+} */
 
 body {
   font-family: "Fira Code", monospace;
@@ -31,4 +31,11 @@ body {
 .grid-pattern__white {
   background-image: url("/src/assets/grid-white.svg");
   background-repeat: repeat;
+}
+
+.color-swatch {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  @apply w-8 h-8 rounded-[50%] cursor-pointer p-0 border-2 border-bg-dark;
 }

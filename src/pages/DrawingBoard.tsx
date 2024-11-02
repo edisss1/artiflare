@@ -32,7 +32,7 @@ const DrawingBoard = () => {
     const rect = new Circle({
       width: 100,
       height: 100,
-      radius: 100,
+      radius: 50,
       top: 300,
       left: 400,
       fill: "#333333",

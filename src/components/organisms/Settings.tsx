@@ -30,6 +30,32 @@ const Settings = ({
   stroke,
 }: SettingProps) => {
   const [selectedObject, setSelectedObject] = useState<any>(null)
+  const [settingsPosition, setSettingsPosition] = useState({ top: 0, left: 0 })
+
+  const handleObjectSelection = (object: any) => {
+    if (!object) return
+
+    const boundingRect = object.getBoundingRect()
+
+    setSettingsPosition({ top: boundingRect.top, left: boundingRect.left })
+
+    setSelectedObject(object)
+
+    switch (object.type) {
+      case "rect":
+        dispatch(setWidth(Math.round(object.width * object.scaleX)))
+        dispatch(setHeight(Math.round(object.height * object.scaleY)))
+        dispatch(setColor(object.fill))
+        dispatch(setDiameter(""))
+        break
+      case "circle":
+        dispatch(setDiameter(Math.round(object.radius * 2 * object.scaleX)))
+        dispatch(setColor(object.fill))
+        dispatch(setWidth(""))
+        dispatch(setHeight(""))
+        break
+    }
+  }
 
   const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const widthValue = parseInt(e.target.value.replace(/,/g, ""), 10)
@@ -86,27 +112,6 @@ const Settings = ({
     canvas?.renderAll()
   }
 
-  const handleObjectSelection = (object: any) => {
-    if (!object) return
-
-    setSelectedObject(object)
-
-    switch (object.type) {
-      case "rect":
-        dispatch(setWidth(Math.round(object.width * object.scaleX)))
-        dispatch(setHeight(Math.round(object.height * object.scaleY)))
-        dispatch(setColor(object.fill))
-        dispatch(setDiameter(""))
-        break
-      case "circle":
-        dispatch(setDiameter(Math.round(object.radius * 2 * object.scaleX)))
-        dispatch(setColor(object.fill))
-        dispatch(setWidth(""))
-        dispatch(setHeight(""))
-        break
-    }
-  }
-
   useEffect(() => {}, [])
 
   const clearSettings = () => {
@@ -141,8 +146,6 @@ const Settings = ({
     }
   }
 
-  // TODO: Add keyboard shortcut for deleting selected object
-
   const handleKeyPress = useCallback(
     (e: globalThis.KeyboardEvent) => {
       switch (e.key) {
@@ -164,13 +167,18 @@ const Settings = ({
 
   return (
     <aside
+      style={{
+        position: "absolute",
+        top: settingsPosition.top,
+        left: settingsPosition.left,
+      }}
       className={`${
         !selectedObject
           ? "hidden"
-          : "flex flex-col fixed top-[50%] right-2 bg-primary z-40 border-2 border-black p-4 -translate-y-[50%] text-typography-light"
+          : "flex items-center bg-primary z-40 border-2 border-black p-4 -translate-y-[120%] -translate-x-[25%] text-typography-light"
       }`}>
       {selectedObject && selectedObject.type === "rect" && (
-        <div className="flex flex-col gap-2 ">
+        <div className="flex gap-2 items-center">
           <SettingsInput
             type="number"
             value={width}
@@ -185,25 +193,29 @@ const Settings = ({
             label="Height"
             type="number"
           />
-          <SettingsInput
-            value={color}
-            onChange={(e) => handleColorChange(e)}
-            id="color"
-            label="Color"
-            type="color"
-          />
-          <SettingsInput
-            value={stroke}
-            onChange={(e) => handleStrokeChange(e)}
-            id="stroke"
-            label="Stroke"
-            type="color"
-          />
+          <div className="flex gap-4">
+            <SettingsInput
+              value={color}
+              onChange={(e) => handleColorChange(e)}
+              id="color"
+              label="Color"
+              type="color"
+              className="color-swatch"
+            />
+            <SettingsInput
+              value={stroke}
+              onChange={(e) => handleStrokeChange(e)}
+              id="stroke"
+              label="Stroke"
+              type="color"
+              className="color-swatch"
+            />
+          </div>
           <Button text="Delete" onClick={deleteSelectedObject} />
         </div>
       )}
       {selectedObject && selectedObject.type === "circle" && (
-        <div className="flex flex-col gap-2 ">
+        <div className="flex gap-2 ">
           <SettingsInput
             value={diameter}
             onChange={(e) => handleDiameterChange(e)}
@@ -217,6 +229,7 @@ const Settings = ({
             id="color"
             label="Color"
             type="color"
+            className="bg-transparent outline-none border-none w-8 "
           />
           <Button text="Delete" onClick={deleteSelectedObject} />
         </div>

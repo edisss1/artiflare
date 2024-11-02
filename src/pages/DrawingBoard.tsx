@@ -1,11 +1,12 @@
 import { useState } from "react"
 import CanvasBoard from "../components/organisms/CanvasBoard"
 import CanvasNav from "../components/organisms/CanvasNav"
-import { Canvas, Circle, Rect } from "fabric"
+import { Canvas } from "fabric"
 import ToolBar from "../components/molecules/ToolBar"
 import Settings from "../components/organisms/Settings"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../redux/store"
+import { useShapes } from "../hooks/useShapes"
 
 const DrawingBoard = () => {
   const [canvas, setCanvas] = useState<Canvas | null>(null)
@@ -13,44 +14,16 @@ const DrawingBoard = () => {
   const { width, height, diameter, color, stroke } = useSelector(
     (state: RootState) => state.shape
   )
-  const addRectangle = () => {
-    if (!canvas) return
 
-    const rect = new Rect({
-      width: 100,
-      height: 100,
-      top: 300,
-      left: 400,
-      fill: "#333333",
-    })
-
-    canvas.add(rect)
-  }
-  const addCircle = () => {
-    if (!canvas) return
-
-    const rect = new Circle({
-      width: 100,
-      height: 100,
-      radius: 50,
-      top: 300,
-      left: 400,
-      fill: "#333333",
-      stroke: "#333333",
-      strokeWidth: 1,
-      opacity: 100,
-    })
-
-    canvas.add(rect)
-  }
+  const { addRectangle, addCircle } = useShapes(canvas)
 
   const shapesList = [
     {
-      placeholder: "add rectangle",
+      icon: "add rectangle",
       fn: addRectangle,
     },
     {
-      placeholder: "add circle",
+      icon: "add circle",
       fn: addCircle,
     },
   ]

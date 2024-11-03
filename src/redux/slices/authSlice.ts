@@ -6,6 +6,7 @@ import { doc, setDoc } from "firebase/firestore"
 
 export interface User {
   uid: string
+  img: string | null
   displayName: string | null
   email: string | null
   teams: string[]
@@ -31,6 +32,7 @@ export const signInWithGoogle = createAsyncThunk(
 
       const user: User = {
         uid: result.user.uid,
+        img: result.user.photoURL,
         displayName: result.user.displayName,
         email: result.user.email,
         teams: [],

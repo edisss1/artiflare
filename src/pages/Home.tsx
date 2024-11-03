@@ -19,6 +19,7 @@ const Home = () => {
         const loggedUser: LoggedUser = {
           uid: user.uid,
           email: user.email,
+          img: user.photoURL,
           displayName: user.displayName,
           teams: [],
           boards: [],

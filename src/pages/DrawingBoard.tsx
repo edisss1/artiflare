@@ -1,25 +1,49 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import CanvasBoard from "../components/organisms/CanvasBoard"
 import CanvasNav from "../components/organisms/CanvasNav"
-import { Canvas, Point, TPointerEvent, TPointerEventInfo } from "fabric"
+import { Canvas, Point, TPointerEventInfo } from "fabric"
 import ToolBar from "../components/molecules/ToolBar"
 import Settings from "../components/organisms/Settings"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../redux/store"
 import { useShapes } from "../hooks/useShapes"
+import { doc, getDoc, setDoc } from "firebase/firestore"
+import { db } from "../firestore/firebaseConfig"
+import ProtectedRoute from "../components/organisms/ProtectedRoute"
 
 const DrawingBoard = () => {
   const [canvas, setCanvas] = useState<Canvas | null>(null)
-  const [isDragging, setIsDragging] = useState(false)
-  const [lastPos, setLastPos] = useState({ x: 0, y: 0 })
   const dispatch: AppDispatch = useDispatch()
   const { width, height, diameter, color, stroke } = useSelector(
     (state: RootState) => state.shape
   )
-
-  console.log(canvas)
-
   const { addRectangle, addCircle } = useShapes(canvas)
+
+  const user = useSelector((state: RootState) => state.auth.user)
+
+  // Saving and loading board from db
+
+  const saveBoard = useCallback(async () => {
+    if (!canvas || !user) return
+
+    const boardData = JSON.stringify(canvas.toJSON())
+    const boardRef = doc(db, "boards", user.uid)
+    await setDoc(boardRef, { data: boardData })
+  }, [canvas, user])
+
+  const loadBoard = useCallback(async () => {
+    if (!user) return
+    const boardRef = doc(db, "boards", user.uid)
+    const docSnap = await getDoc(boardRef)
+    if (docSnap.exists()) {
+      const boardData = docSnap.data().data
+      canvas?.loadFromJSON(boardData, () => {
+        canvas.renderAll()
+      })
+    }
+  }, [canvas, user])
+
+  // Canvas zoom in/out
 
   const zoomCanvas = (opt: TPointerEventInfo<WheelEvent>) => {
     if (!canvas) return
@@ -28,7 +52,7 @@ const DrawingBoard = () => {
     let zoom = canvas.getZoom()
     zoom *= 0.999 ** delta
 
-    zoom = Math.max(Math.min(zoom, 5), 1.2)
+    zoom = Math.max(Math.min(zoom, 5), 0.8)
 
     const point = new Point(opt.e.offsetX, opt.e.offsetY)
 
@@ -37,64 +61,30 @@ const DrawingBoard = () => {
     opt.e.stopPropagation()
   }
 
-  // TODO: Implement panning functionality
-
-  const onMouseDownStartPan = (opt: TPointerEventInfo<TPointerEvent>) => {
-    if (!canvas) return
-    const pointer = canvas.getScenePoint(opt.e)
-    if (!pointer) return
-
-    if (opt.e.altKey) {
-      setIsDragging(true)
-      setLastPos({ x: pointer.x, y: pointer.y })
-      canvas.selection = false
-    }
-
-    console.log("mouse down")
-  }
-
-  const onMouseMovePan = (opt: TPointerEventInfo<TPointerEvent>) => {
-    if (!canvas) return
-
-    if (isDragging) {
-      const evt = opt.e
-      const pointer = canvas.getScenePoint(evt)
-      const vpt = canvas.viewportTransform
-
-      vpt[4] += pointer.x - lastPos.x
-      vpt[5] += pointer.y - lastPos.y
-
-      setLastPos({ x: pointer.x, y: pointer.y })
-      canvas.renderAll()
-    }
-
-    console.log("mouse moving")
-  }
-
-  const onMouseUpStopPan = () => {
-    if (!canvas) return
-
-    setIsDragging(false)
-    canvas.setViewportTransform(canvas.viewportTransform)
-    canvas.selection = true
-
-    console.log("mouse up")
-  }
+  // canvas effects
 
   useEffect(() => {
-    if (!canvas) return
+    if (!canvas || !user) return
+
+    loadBoard()
+
+    const saveOnChange = () => saveBoard()
+
     canvas.on("mouse:wheel", zoomCanvas)
-    canvas.on("mouse:down", onMouseDownStartPan)
-    canvas.on("mouse:move", onMouseMovePan)
-    canvas.on("mouse:up", onMouseUpStopPan)
+
+    canvas.on("object:added", saveOnChange)
+    canvas.on("object:modified", saveOnChange)
+    canvas.on("object:removed", saveOnChange)
 
     return () => {
       canvas.off("mouse:wheel", zoomCanvas)
-      canvas.off("mouse:down", onMouseDownStartPan)
-      canvas.off("mouse:move", onMouseMovePan)
-      canvas.off("mouse:up", onMouseUpStopPan)
+      canvas.off("object:added", saveOnChange)
+      canvas.off("object:modified", saveOnChange)
+      canvas.off("object:removed", saveOnChange)
     }
-  }, [canvas])
+  }, [canvas, user, loadBoard, saveBoard])
+
+  // for buttons
 
   const shapesList = [
     {
@@ -108,6 +98,7 @@ const DrawingBoard = () => {
   ]
 
   return (
+    // <ProtectedRoute>
     <>
       <CanvasNav />
 
@@ -125,6 +116,7 @@ const DrawingBoard = () => {
         <CanvasBoard setCanvas={setCanvas} />
       </div>
     </>
+    // </ProtectedRoute>
   )
 }
 export default DrawingBoard

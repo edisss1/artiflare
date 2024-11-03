@@ -1,11 +1,16 @@
 import { useState } from "react"
 import DashboardLinksContainer from "../atoms/DashboardLinksContainer"
 import Search from "../atoms/Search"
+import { User } from "../../redux/slices/authSlice"
 
-const DashboardSidebar = () => {
+interface DashboardSidebarProps {
+  user: User | undefined
+}
+
+const DashboardSidebar = ({ user }: DashboardSidebarProps) => {
   const [query, setQuery] = useState("")
 
-  const handeQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value)
   }
 
@@ -14,10 +19,11 @@ const DashboardSidebar = () => {
       <div className="gap-[clamp(1rem,40vh,5rem)] flex flex-col">
         <Search
           placeholder="Search by title"
-          onChange={(e) => handeQueryChange(e)}
+          onChange={(e) => handleQueryChange(e)}
           value={query}
         />
         <DashboardLinksContainer />
+        <p>{user?.displayName}</p>
       </div>
     </aside>
   )

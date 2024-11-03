@@ -37,6 +37,8 @@ const Settings = ({
 
     const boundingRect = object.getBoundingRect()
 
+    console.log(boundingRect)
+
     setSettingsPosition({
       top: boundingRect.top,
       left: boundingRect.left,
@@ -114,8 +116,6 @@ const Settings = ({
     selectedObject.set({ stroke: strokeValue })
     canvas?.renderAll()
   }
-
-  useEffect(() => {}, [])
 
   const clearSettings = () => {
     dispatch(setWidth(""))

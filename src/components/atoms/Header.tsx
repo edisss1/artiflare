@@ -15,14 +15,16 @@ const Header = ({ plan }: HeaderProps) => {
           {plan}
         </p>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-6">
         <button className="capitalize px-2 py-1 bg-primary rounded-md">
           upgrade
         </button>
-        <button>
-          <img className="w-5" src={bell} alt="/" />
-        </button>
-        <ThemeSwitch />
+        <div className="flex gap-4">
+          <button>
+            <img className="w-5" src={bell} alt="/" />
+          </button>
+          <ThemeSwitch />
+        </div>
       </div>
     </nav>
   )

@@ -13,7 +13,7 @@ const BoardsContainer = () => {
     if (user) {
       dispatch(fetchAllUserBoards(user.uid))
     }
-  }, [])
+  }, [boards])
 
   console.log("Boards: ", boards)
   return (

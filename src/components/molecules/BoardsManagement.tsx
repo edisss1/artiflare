@@ -28,7 +28,7 @@ const BoardsManagement = () => {
             <p>Join a team</p>
           </Button>
           <Button
-            onClick={() => alert("WIP")}
+            onClick={createNewBoard}
             className="flex gap-2 px-2 py-3 max-w-max bg-secondary rounded-sm hover:shadow-lg transition-all duration-200 hover:shadow-secondary/80 ">
             <img src={add} alt="" />
             <p>Create new</p>

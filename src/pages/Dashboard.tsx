@@ -1,9 +1,6 @@
-import { useDispatch, useSelector } from "react-redux"
 import BoardsContainer from "../components/atoms/BoardsContainer"
 import Header from "../components/atoms/Header"
 import DashboardSidebar from "../components/organisms/DashboardSidebar"
-import { AppDispatch, RootState } from "../redux/store"
-import { createBoard } from "../redux/slices/boardSlice"
 import BoardsManagement from "../components/molecules/BoardsManagement"
 
 const Dashboard = () => {

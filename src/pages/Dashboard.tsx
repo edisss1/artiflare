@@ -11,7 +11,7 @@ const Dashboard = () => {
   const user = useSelector((state: RootState) => state.auth.user)
 
   const createNewBoard = async () => {
-    const title = "Test"
+    const title = prompt("Enter title for board:")
     if (title && user) {
       dispatch(createBoard({ user, title }))
     }

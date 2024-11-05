@@ -41,7 +41,7 @@ export const createBoard = createAsyncThunk(
         userUID: user.uid,
         createdAt: new Date().toDateString(),
         updatedAt: new Date().toDateString(),
-        createdBy: `${user.displayName} + ${user.email}`,
+        createdBy: `${user.displayName}`,
         modifiedBy: user.displayName || user.email,
         data: {},
       }
@@ -133,7 +133,12 @@ export const updateBoard = createAsyncThunk(
       const boardRef = doc(db, "boards", boardID)
       await updateDoc(boardRef, {
         data: newBoardData,
-        updatedAt: new Date().toDateString() + `${new Date().getDate()}`,
+        updatedAt: `${new Date().getDay()}.${
+          new Date().getMonth() + 1
+        }.${new Date().getFullYear()}, ${new Date().getHours()}:${new Date()
+          .getMinutes()
+          .toString()
+          .padStart(2, "0")}`,
         modifiedBy: user.displayName || user.email,
       })
 

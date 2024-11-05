@@ -17,9 +17,16 @@ const BoardsContainer = () => {
 
   console.log("Boards: ", boards)
   return (
-    <div className="flex flex-col gap-16">
+    <div className="flex flex-col gap-4">
       {boards.map((board) => (
-        <Board id={board.id} title={board.title} />
+        <Board
+          createdBy={board.createdBy}
+          updatedAt={board.updatedAt}
+          id={board.id}
+          modifiedBy={board.modifiedBy}
+          title={board.title}
+          key={board.id}
+        />
       ))}
     </div>
   )

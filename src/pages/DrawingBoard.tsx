@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useState } from "react"
-import CanvasBoard from "../components/organisms/CanvasBoard"
+import { lazy, useCallback, useEffect, useState } from "react"
+const CanvasBoard = lazy(() => import("../components/organisms/CanvasBoard"))
 import CanvasNav from "../components/organisms/CanvasNav"
 import { Canvas, Point, TPointerEventInfo } from "fabric"
 import ToolBar from "../components/molecules/ToolBar"
-import Settings from "../components/organisms/Settings"
+import ShapeParameters from "../components/organisms/ShapeParameters"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../redux/store"
 import { useShapes } from "../hooks/useShapes"
-import { doc, getDoc, setDoc } from "firebase/firestore"
-import { db } from "../firestore/firebaseConfig"
-import ProtectedRoute from "../components/organisms/ProtectedRoute"
+import { getBoardByID, updateBoard } from "../redux/slices/boardSlice"
+import { useParams } from "react-router-dom"
+import { BoardData } from "../types/BoardData"
 
 const DrawingBoard = () => {
   const [canvas, setCanvas] = useState<Canvas | null>(null)
@@ -21,27 +21,53 @@ const DrawingBoard = () => {
 
   const user = useSelector((state: RootState) => state.auth.user)
 
+  const { boardID } = useParams()
+
+  const status = useSelector((state: RootState) => state.boards.status)
+
+  useEffect(() => {
+    console.log("Status: ", status)
+    console.log("BoardID: ", boardID)
+  }, [status])
+
   // Saving and loading board from db
 
   const saveBoard = useCallback(async () => {
-    if (!canvas || !user) return
-
-    const boardData = JSON.stringify(canvas.toJSON())
-    const boardRef = doc(db, "boards", user.uid)
-    await setDoc(boardRef, { data: boardData })
-  }, [canvas, user])
+    if (canvas && boardID && user) {
+      const newBoardData = canvas.toJSON()
+      console.log("New board data (save board): ", newBoardData)
+      console.log("Dispatching updateBoard with: ", {
+        boardID,
+        newBoardData,
+        user,
+      })
+      dispatch(
+        updateBoard({
+          boardID,
+          newBoardData,
+          user,
+        })
+      )
+      console.log("saving board")
+    } else {
+      console.log("missing dependencies: ", { canvas, boardID, user })
+    }
+  }, [canvas, boardID, user, dispatch])
 
   const loadBoard = useCallback(async () => {
-    if (!user) return
-    const boardRef = doc(db, "boards", user.uid)
-    const docSnap = await getDoc(boardRef)
-    if (docSnap.exists()) {
-      const boardData = docSnap.data().data
-      canvas?.loadFromJSON(boardData, () => {
-        canvas.renderAll()
-      })
+    if (boardID) {
+      const boardData = (await dispatch(getBoardByID(boardID))) as BoardData
+      // console.log("Meta", boardData.meta)
+      // console.log("Payload", boardData.payload)
+      // console.log("Type", boardData.type)
+
+      const { payload } = boardData
+      const { data } = payload
+      canvas?.loadFromJSON(data)
+      console.log("canvas rendered with: ", data)
+      canvas?.requestRenderAll()
     }
-  }, [canvas, user])
+  }, [dispatch, boardID, canvas])
 
   // Canvas zoom in/out
 
@@ -52,7 +78,7 @@ const DrawingBoard = () => {
     let zoom = canvas.getZoom()
     zoom *= 0.999 ** delta
 
-    zoom = Math.max(Math.min(zoom, 5), 0.8)
+    zoom = Math.max(Math.min(zoom, 5), 0.2)
 
     const point = new Point(opt.e.offsetX, opt.e.offsetY)
 
@@ -76,13 +102,15 @@ const DrawingBoard = () => {
     canvas.on("object:modified", saveOnChange)
     canvas.on("object:removed", saveOnChange)
 
+    canvas.renderAll()
+
     return () => {
       canvas.off("mouse:wheel", zoomCanvas)
       canvas.off("object:added", saveOnChange)
       canvas.off("object:modified", saveOnChange)
       canvas.off("object:removed", saveOnChange)
     }
-  }, [canvas, user, loadBoard, saveBoard])
+  }, [canvas, user, loadBoard, saveBoard, boardID])
 
   // for buttons
 
@@ -104,7 +132,7 @@ const DrawingBoard = () => {
 
       <div className="relative ">
         <ToolBar shapesList={shapesList} />
-        <Settings
+        <ShapeParameters
           width={width}
           height={height}
           diameter={diameter}

@@ -16,11 +16,15 @@ export interface User {
 interface AuthState {
   user: User | null
   status: "idle" | "authenticated" | "unauthenticated"
+  email: string
+  password: string
 }
 
 const initialState: AuthState = {
   user: null,
   status: "idle",
+  password: "",
+  email: "",
 }
 
 export const signInWithGoogle = createAsyncThunk(
@@ -69,6 +73,12 @@ const authSlice = createSlice({
       state.user = null
       state.status = "unauthenticated"
     },
+    setPassword: (state, action: PayloadAction<string>) => {
+      state.password = action.payload
+    },
+    setEmail: (state, action: PayloadAction<string>) => {
+      state.email = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -86,6 +96,6 @@ const authSlice = createSlice({
   },
 })
 
-export const { setUser, clearUser } = authSlice.actions
+export const { setUser, clearUser, setEmail, setPassword } = authSlice.actions
 
 export default authSlice.reducer

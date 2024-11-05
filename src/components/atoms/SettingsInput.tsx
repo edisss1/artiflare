@@ -1,6 +1,6 @@
 interface SettingsInputProps {
   id: string
-  label: string
+  label?: string
   value: string | number
   onChange: (() => void) | ((e: React.ChangeEvent<HTMLInputElement>) => void)
   type: string

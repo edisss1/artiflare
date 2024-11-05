@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   if (!user) {
     return <Navigate to="/auth/signup" />
-  } else {
+  } else if (user) {
     return <Navigate to={"/app/dashboard"} />
   }
 

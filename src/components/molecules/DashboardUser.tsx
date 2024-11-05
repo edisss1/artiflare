@@ -10,8 +10,10 @@ const DashboardUser = () => {
   }, [])
 
   return (
-    <div className="flex gap-2 absolute bottom-4">
-      {user?.img ? <img src={user.img} /> : null}
+    <div className="flex gap-2 absolute bottom-0 items-center">
+      {user?.img ? (
+        <img className="w-full max-w-8 rounded-full" src={user.img} />
+      ) : null}
       <p>{user?.displayName}</p>
     </div>
   )

@@ -20,7 +20,7 @@ interface SettingProps {
   stroke: string
 }
 
-const Settings = ({
+const ShapeParameters = ({
   canvas,
   dispatch,
   width,
@@ -214,7 +214,11 @@ const Settings = ({
               className="color-swatch"
             />
           </div>
-          <Button text="Delete" onClick={deleteSelectedObject} />
+          <Button
+            className="border-2 border-typography-light mt-4 py-2 px-4 rounded-md hover:bg-bg-dark hover:text-typography-dark transition-all duration-150"
+            children="Delete"
+            onClick={deleteSelectedObject}
+          />
         </div>
       )}
       {selectedObject && selectedObject.type === "circle" && (
@@ -234,10 +238,14 @@ const Settings = ({
             type="color"
             className="bg-transparent outline-none border-none w-8 "
           />
-          <Button text="Delete" onClick={deleteSelectedObject} />
+          <Button
+            className="border-2 border-typography-light mt-4 py-2 px-4 rounded-md hover:bg-bg-dark hover:text-typography-dark transition-all duration-150"
+            children="Delete"
+            onClick={deleteSelectedObject}
+          />
         </div>
       )}
     </aside>
   )
 }
-export default Settings
+export default ShapeParameters

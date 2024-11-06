@@ -2,10 +2,9 @@ import { useDispatch, useSelector } from "react-redux"
 import FormInput from "../atoms/FormInput"
 import { AppDispatch, RootState } from "../../redux/store"
 import { setEmail, setPassword } from "../../redux/slices/authSlice"
-import Button from "../atoms/Button"
 
 interface FormProps {
-  onSubmit: () => void
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
 }
 
 const Form = ({ onSubmit }: FormProps) => {
@@ -14,7 +13,7 @@ const Form = ({ onSubmit }: FormProps) => {
 
   return (
     <form
-      onSubmit={onSubmit}
+      onSubmit={(e) => onSubmit(e)}
       className="flex flex-col gap-2 items-center mt-4 w-full text-typography-light">
       <FormInput
         value={email}
@@ -28,9 +27,6 @@ const Form = ({ onSubmit }: FormProps) => {
         placeholder="password"
         type="password"
       />
-      <Button className="" onClick={onSubmit}>
-        Sign up
-      </Button>
     </form>
   )
 }

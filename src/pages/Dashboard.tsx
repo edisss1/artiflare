@@ -1,4 +1,4 @@
-import BoardsContainer from "../components/atoms/BoardsContainer"
+import BoardsContainer from "../components/molecules/BoardsContainer"
 import Header from "../components/atoms/Header"
 import DashboardSidebar from "../components/organisms/DashboardSidebar"
 import BoardsManagement from "../components/molecules/BoardsManagement"

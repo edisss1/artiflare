@@ -12,6 +12,7 @@ const Login = () => {
 
   const handleUserSignIn = async () => {
     dispatch(signInWithCredentials({ email, password }))
+    console.log("Signed in")
   }
 
   return (
@@ -25,7 +26,7 @@ const Login = () => {
           </h2>
           <p className="text-xl font-medium">Login</p>
         </div>
-        <Form onSubmit={handleUserSignIn} />
+        <Form children={"Log in"} onSubmit={handleUserSignIn} />
         <AuthWithProviders />
         <div className="flex gap-2 mt-6 mb-9">
           <p>Don't have an account?</p>

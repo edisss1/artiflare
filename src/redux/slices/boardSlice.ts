@@ -41,33 +41,20 @@ export const createBoard = createAsyncThunk(
         userUID: user.uid,
         createdAt: new Date().toDateString(),
         updatedAt: new Date().toDateString(),
-        createdBy: `${user.displayName}`,
+        createdBy: user.displayName || user.email,
         modifiedBy: user.displayName || user.email,
         data: {},
       }
 
       const docRef = await addDoc(boardsRef, boardData)
 
+      await updateDoc(doc(db, "users", user.uid), {
+        boards: arrayUnion(docRef.id),
+      })
+
       return { id: docRef.id, ...boardData }
     } catch (err) {
       console.error(err)
-      throw err
-    }
-  }
-)
-
-export const updateUserBoards = createAsyncThunk(
-  "board/updateUserBoards",
-  async ({ user, boardID }: { user: User | null; boardID: string }) => {
-    if (!user) return
-
-    const userRef = doc(db, "users", user.uid)
-
-    try {
-      await updateDoc(userRef, {
-        boards: arrayUnion(boardID),
-      })
-    } catch (err) {
       throw err
     }
   }

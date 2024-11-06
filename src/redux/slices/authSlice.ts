@@ -96,7 +96,7 @@ export const createUserWithCredentials = createAsyncThunk(
       const user: User = {
         uid: result.user.uid,
         img: result.user.photoURL,
-        displayName: result.user.displayName,
+        displayName: result.user.displayName ?? result.user.email,
         email: result.user.email,
         teams: [],
         boards: [],

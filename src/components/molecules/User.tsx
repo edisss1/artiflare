@@ -15,7 +15,7 @@ const User = () => {
       {user?.img ? (
         <img className="w-full max-w-8 rounded-full" src={user.img} />
       ) : null}
-      <p>{user?.displayName}</p>
+      <p>{user?.displayName || user?.email}</p>
       <button onClick={handleSignOut}>Sign Out</button>
     </div>
   )

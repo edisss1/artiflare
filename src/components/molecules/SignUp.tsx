@@ -9,8 +9,7 @@ const SignUp = () => {
   const dispatch: AppDispatch = useDispatch()
   const { email, password } = useSelector((state: RootState) => state.auth)
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleUserSignUp = async () => {
     dispatch(createUserWithCredentials({ email, password }))
   }
 
@@ -25,7 +24,7 @@ const SignUp = () => {
           </h2>
           <p className="text-xl font-medium">Sign up</p>
         </div>
-        <Form onSubmit={(e) => handleSubmit(e)} />
+        <Form children={"Sign up"} onSubmit={handleUserSignUp} />
         <AuthWithProviders />
         <div className="flex gap-2 mt-6 mb-9">
           <p>Already have an account?</p>

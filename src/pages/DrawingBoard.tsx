@@ -17,7 +17,7 @@ const DrawingBoard = () => {
   const { width, height, diameter, color, stroke } = useSelector(
     (state: RootState) => state.shape
   )
-  const { addRectangle, addCircle } = useShapes(canvas)
+  const { addRectangle, addCircle, addPolygon } = useShapes(canvas)
 
   const user = useSelector((state: RootState) => state.auth.user)
 
@@ -57,9 +57,6 @@ const DrawingBoard = () => {
   const loadBoard = useCallback(async () => {
     if (boardID) {
       const boardData = (await dispatch(getBoardByID(boardID))) as BoardData
-      // console.log("Meta", boardData.meta)
-      // console.log("Payload", boardData.payload)
-      // console.log("Type", boardData.type)
 
       const { payload } = boardData
       const { data } = payload
@@ -122,6 +119,10 @@ const DrawingBoard = () => {
     {
       icon: "add circle",
       fn: addCircle,
+    },
+    {
+      icon: "add polygon",
+      fn: addPolygon,
     },
   ]
 

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import DashboardLinksContainer from "../atoms/DashboardLinksContainer"
 import Search from "../atoms/Search"
-import DashboardUser from "../molecules/DashboardUser"
+import User from "../molecules/User"
 
 const DashboardSidebar = () => {
   const [query, setQuery] = useState("")
@@ -19,7 +19,7 @@ const DashboardSidebar = () => {
           value={query}
         />
         <DashboardLinksContainer />
-        <DashboardUser />
+        <User />
       </div>
     </aside>
   )

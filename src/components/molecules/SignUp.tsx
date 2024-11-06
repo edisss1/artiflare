@@ -1,34 +1,45 @@
 import { useDispatch, useSelector } from "react-redux"
-import { signInWithGoogle, signOutUser } from "../../redux/slices/authSlice"
 import { AppDispatch, RootState } from "../../redux/store"
+import AuthWithProviders from "../atoms/AuthWithProviders"
+import Form from "./Form"
 import { Link } from "react-router-dom"
+import { createUserWithCredentials } from "../../redux/slices/authSlice"
 
 const SignUp = () => {
   const dispatch: AppDispatch = useDispatch()
-  const user = useSelector((state: RootState) => state.auth.user)
+  const { email, password } = useSelector((state: RootState) => state.auth)
 
-  const handleSignIn = () => {
-    dispatch(signInWithGoogle())
-  }
-
-  const handleSignOut = () => {
-    dispatch(signOutUser())
+  const handleSubmit = async () => {
+    dispatch(createUserWithCredentials({ email, password }))
   }
 
   return (
-    <div>
-      {user ? (
-        <div className="flex flex-col gap-2 items-center">
-          <span>Welcome, {user.displayName}</span>
-          <Link to={"/app/dashboard"}>dashboard</Link>
-          <button onClick={handleSignOut}>Sign Out</button>
+    <div
+      aria-label="Sign up form"
+      className="flex flex-col items-center justify-center min-h-screen ">
+      <div className="flex flex-col items-center w-full max-w-[400px]">
+        <div className="flex flex-col gap-2 max-w-[200px] items-center">
+          <h2 className="text-typography-light dark:text-typography-dark text-3xl font-bold">
+            Artiflare
+          </h2>
+          <p className="text-xl font-medium">Sign up</p>
         </div>
-      ) : (
-        <div className="flex flex-col gap-4 items-center">
-          <button onClick={handleSignIn}>Sign In with Google</button>
-          <Link to={"/"}>home</Link>
+        <Form onSubmit={handleSubmit} />
+        <AuthWithProviders />
+        <div className="flex gap-2 mt-6 mb-9">
+          <p>Already have an account?</p>
+          <Link
+            className="relative after:absolute after:w-full after:h-px after:bg-bg-dark dark:after:bg-bg-light after:top-full after:left-0 hover:after:scale-x-0 after:transition-all after:duration-200 after:origin-right "
+            to={"/auth/login"}>
+            Login
+          </Link>
         </div>
-      )}
+        <Link
+          className="relative after:absolute after:w-full after:h-px after:bg-bg-dark dark:after:bg-bg-light after:top-full after:left-0 hover:after:scale-x-0 after:transition-all after:duration-200 after:origin-right"
+          to={"/"}>
+          Go back
+        </Link>
+      </div>
     </div>
   )
 }

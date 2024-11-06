@@ -1,4 +1,4 @@
-import { Canvas, Circle, Rect } from "fabric"
+import { Canvas, Circle, Polyline, Rect } from "fabric"
 
 export function useShapes(canvas: Canvas | null) {
   const addRectangle = () => {
@@ -35,5 +35,26 @@ export function useShapes(canvas: Canvas | null) {
     canvas.add(circle)
   }
 
-  return { addRectangle, addCircle }
+  const addPolygon = () => {
+    if (!canvas) return
+    const polygon = new Polyline(
+      [
+        { x: 10, y: 10 },
+        { x: 50, y: 30 },
+        { x: 40, y: 70 },
+        { x: 60, y: 50 },
+        { x: 100, y: 150 },
+        { x: -40, y: -100 },
+      ],
+      {
+        stroke: "red",
+        left: 100,
+        top: 100,
+      }
+    )
+
+    canvas.add(polygon)
+  }
+
+  return { addRectangle, addCircle, addPolygon }
 }

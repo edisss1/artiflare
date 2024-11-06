@@ -1,13 +1,8 @@
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/store"
-import { useEffect } from "react"
 
-const DashboardUser = () => {
+const User = () => {
   const user = useSelector((state: RootState) => state.auth.user)
-
-  useEffect(() => {
-    console.log(user?.img)
-  }, [])
 
   return (
     <div className="flex gap-2 absolute bottom-0 items-center">
@@ -18,4 +13,4 @@ const DashboardUser = () => {
     </div>
   )
 }
-export default DashboardUser
+export default User

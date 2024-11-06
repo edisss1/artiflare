@@ -1,8 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { signInWithPopup, signOut } from "firebase/auth"
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth"
 import { GoogleAuthProvider } from "firebase/auth"
 import { auth, db } from "../../firestore/firebaseConfig"
 import { doc, setDoc } from "firebase/firestore"
+import { createUserWithEmailAndPassword } from "firebase/auth/cordova"
 
 export interface User {
   uid: string
@@ -57,6 +62,55 @@ export const signInWithGoogle = createAsyncThunk(
   }
 )
 
+export const signInWithCredentials = createAsyncThunk(
+  "auth/signInWithCredentials",
+  async ({ email, password }: { email: string; password: string }) => {
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password)
+
+      const user: User = {
+        uid: result.user.uid,
+        img: result.user.photoURL,
+        displayName: result.user.displayName,
+        email: result.user.email,
+        teams: [],
+        boards: [],
+      }
+
+      await setDoc(doc(db, "users", user.uid), user)
+
+      return user
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
+  }
+)
+
+export const createUserWithCredentials = createAsyncThunk(
+  "auth/createUserWithCredentials",
+  async ({ email, password }: { email: string; password: string }) => {
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, password)
+
+      const user: User = {
+        uid: result.user.uid,
+        img: result.user.photoURL,
+        displayName: result.user.displayName,
+        email: result.user.email,
+        teams: [],
+        boards: [],
+      }
+
+      await setDoc(doc(db, "users", user.uid), user)
+
+      return user
+    } catch (err) {
+      throw err
+    }
+  }
+)
+
 export const signOutUser = createAsyncThunk("auth/signOutUser", async () => {
   await signOut(auth)
 })
@@ -93,6 +147,20 @@ const authSlice = createSlice({
         state.user = null
         state.status = "unauthenticated"
       })
+      .addCase(
+        signInWithCredentials.fulfilled,
+        (state, action: PayloadAction<User>) => {
+          state.user = action.payload
+          state.status = "authenticated"
+        }
+      )
+      .addCase(
+        createUserWithCredentials.fulfilled,
+        (state, action: PayloadAction<User>) => {
+          state.user = action.payload
+          state.status = "authenticated"
+        }
+      )
   },
 })
 

@@ -26,6 +26,7 @@ const Home = () => {
           teams: [],
           boards: [],
         }
+        console.log(loggedUser)
         dispatch(setUser(loggedUser))
       } else {
         dispatch(setUser(null))

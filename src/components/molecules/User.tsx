@@ -1,18 +1,24 @@
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
-import { signOutUser } from "../../redux/slices/authSlice"
+// import { signOutUser } from "../../redux/slices/authSlice"
 import userIcon from "../../assets/UserIcon.svg"
+import { deleteUserFromDatabase } from "../../redux/slices/authSlice"
 
-const User = () => {
+const User = ({ position }: { position: string }) => {
   const dispatch: AppDispatch = useDispatch()
   const user = useSelector((state: RootState) => state.auth.user)
 
-  const handleSignOut = async () => {
-    dispatch(signOutUser())
+  // const handleSignOut = async () => {
+  //   dispatch(signOutUser())
+  // }
+
+  const handleDeleteUser = async () => {
+    dispatch(deleteUserFromDatabase())
   }
 
   return (
-    <div className="flex gap-2 absolute bottom-0 items-center flex-col">
+    <div
+      className={`flex gap-2  ${position} rounded-sm items-center flex-col bg-primary`}>
       <div className="flex gap-2 items-center">
         {user?.img ? (
           <img className="w-full max-w-8 rounded-full" src={user.img} />
@@ -21,7 +27,7 @@ const User = () => {
         )}
         <p>{user?.displayName || user?.email}</p>
       </div>
-      <button onClick={handleSignOut}>Sign Out</button>
+      <button onClick={handleDeleteUser}>Delete profile</button>
     </div>
   )
 }

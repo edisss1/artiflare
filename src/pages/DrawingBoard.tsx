@@ -10,6 +10,7 @@ import { useShapes } from "../hooks/useShapes"
 import { getBoardByID, updateBoard } from "../redux/slices/boardSlice"
 import { useParams } from "react-router-dom"
 import { BoardData } from "../types/BoardData"
+import User from "../components/molecules/User"
 
 const DrawingBoard = () => {
   const [canvas, setCanvas] = useState<Canvas | null>(null)
@@ -133,6 +134,7 @@ const DrawingBoard = () => {
 
       <div className="relative ">
         <ToolBar shapesList={shapesList} />
+        <User position="absolute bottom-9 left-4 p-2 z-10 " />
         <ShapeParameters
           width={width}
           height={height}

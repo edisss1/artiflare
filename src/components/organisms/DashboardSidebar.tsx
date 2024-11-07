@@ -19,7 +19,7 @@ const DashboardSidebar = () => {
           value={query}
         />
         <DashboardLinksContainer />
-        <User />
+        <User position="absolute bottom-0" />
       </div>
     </aside>
   )

@@ -1,5 +1,3 @@
-import { Canvas } from "fabric"
-
 type ToolBarProps = {
   shapesList: {
     icon: string
@@ -9,7 +7,7 @@ type ToolBarProps = {
 
 const ToolBar = ({ shapesList }: ToolBarProps) => {
   return (
-    <aside className="absolute top-[50%] left-8 p-4 bg-primary z-10 text-typography-light flex flex-col gap-2">
+    <aside className="absolute top-[50%] left-4 p-4 bg-primary z-10 text-typography-light flex flex-col gap-2">
       {shapesList.map((shape) => (
         <button
           key={shape.icon}

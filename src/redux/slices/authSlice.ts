@@ -1,12 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import {
+  deleteUser,
+  reauthenticateWithPopup,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
 } from "firebase/auth"
 import { GoogleAuthProvider } from "firebase/auth"
 import { auth, db } from "../../firestore/firebaseConfig"
-import { doc, setDoc } from "firebase/firestore"
+import { deleteDoc, doc, setDoc } from "firebase/firestore"
 import { createUserWithEmailAndPassword } from "firebase/auth/cordova"
 
 export interface User {
@@ -115,6 +117,32 @@ export const signOutUser = createAsyncThunk("auth/signOutUser", async () => {
   await signOut(auth)
 })
 
+export const deleteUserFromDatabase = createAsyncThunk(
+  "auth/deleteUser",
+  async (_, { rejectWithValue }) => {
+    const currentUser = auth.currentUser
+
+    if (!currentUser) {
+      return rejectWithValue("No user is currently logged in.")
+    }
+
+    try {
+      if (currentUser.providerData[0]?.providerId === "google.com") {
+        const provider = new GoogleAuthProvider()
+        await reauthenticateWithPopup(currentUser, provider)
+      }
+
+      const userRef = doc(db, "users", currentUser.uid)
+      await deleteDoc(userRef)
+
+      await deleteUser(currentUser)
+    } catch (err) {
+      console.error("Error deleting user:", err)
+      return rejectWithValue(err)
+    }
+  }
+)
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -161,6 +189,10 @@ const authSlice = createSlice({
           state.status = "authenticated"
         }
       )
+      .addCase(deleteUserFromDatabase.fulfilled, (state) => {
+        state.user = null
+        state.status = "unauthenticated"
+      })
   },
 })
 

@@ -1,7 +1,7 @@
-import { lazy, useCallback, useEffect, useState } from "react"
+import { lazy, useCallback, useEffect, useRef, useState } from "react"
 const CanvasBoard = lazy(() => import("../components/organisms/CanvasBoard"))
 import CanvasNav from "../components/organisms/CanvasNav"
-import { Canvas, Point, TPointerEventInfo } from "fabric"
+import { Canvas, Point, TPointerEvent, TPointerEventInfo } from "fabric"
 import ToolBar from "../components/molecules/ToolBar"
 import ShapeParameters from "../components/organisms/ShapeParameters"
 import { useDispatch, useSelector } from "react-redux"
@@ -11,18 +11,16 @@ import { getBoardByID, updateBoard } from "../redux/slices/boardSlice"
 import { useParams } from "react-router-dom"
 import { BoardData } from "../types/BoardData"
 import User from "../components/molecules/User"
+import { setSelectedShape } from "../redux/slices/shapeManagementSlice"
 
 const DrawingBoard = () => {
   const [canvas, setCanvas] = useState<Canvas | null>(null)
   const dispatch: AppDispatch = useDispatch()
-  const { width, height, diameter, fill, stroke } = useSelector(
+  const selectedShapeRef = useRef<string | null>(null)
+  const { width, height, diameter, fill, stroke, strokeWidth } = useSelector(
     (state: RootState) => state.shape
   )
-  const { addRectangle, addCircle, addPolygon } = useShapes(
-    canvas,
-    fill,
-    stroke
-  )
+  const { addRectangle, addCircle } = useShapes(canvas)
 
   const user = useSelector((state: RootState) => state.auth.user)
 
@@ -34,6 +32,25 @@ const DrawingBoard = () => {
     console.log("Status: ", status)
     console.log("BoardID: ", boardID)
   }, [status])
+
+  const updateSelectedShape = (shape: string | null) => {
+    dispatch(setSelectedShape(shape))
+    selectedShapeRef.current = shape
+  }
+
+  const handleSelectedShape = (e: TPointerEventInfo<TPointerEvent>) => {
+    if (selectedShapeRef.current && canvas) {
+      const pointer = canvas.getScenePoint(e.e)
+      switch (selectedShapeRef.current) {
+        case "rectangle":
+          addRectangle(pointer.x, pointer.y)
+          break
+        case "circle":
+          addCircle(pointer.x, pointer.y)
+      }
+      updateSelectedShape(null)
+    }
+  }
 
   // Saving and loading board from db
 
@@ -50,6 +67,7 @@ const DrawingBoard = () => {
       )
     } else {
     }
+    console.log("Board saved")
   }, [canvas, boardID, user, dispatch])
 
   const loadBoard = useCallback(async () => {
@@ -84,6 +102,23 @@ const DrawingBoard = () => {
   // canvas effects
 
   useEffect(() => {
+    const handleKeyDown = (e: globalThis.KeyboardEvent) => {
+      switch (e.key) {
+        case "Escape":
+          setSelectedShape(null)
+      }
+    }
+
+    console.log("esc down")
+
+    window.addEventListener("keydown", handleKeyDown)
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [canvas])
+
+  useEffect(() => {
     if (!canvas || !user) return
 
     loadBoard()
@@ -95,6 +130,7 @@ const DrawingBoard = () => {
     canvas.on("object:added", saveOnChange)
     canvas.on("object:modified", saveOnChange)
     canvas.on("object:removed", saveOnChange)
+    canvas.on("mouse:down", handleSelectedShape)
 
     canvas.renderAll()
 
@@ -103,6 +139,7 @@ const DrawingBoard = () => {
       canvas.off("object:added", saveOnChange)
       canvas.off("object:modified", saveOnChange)
       canvas.off("object:removed", saveOnChange)
+      canvas.off("mouse:down", handleSelectedShape)
     }
   }, [canvas, user, loadBoard, saveBoard, boardID])
 
@@ -111,15 +148,15 @@ const DrawingBoard = () => {
   const shapesList = [
     {
       icon: "add rectangle",
-      fn: addRectangle,
+      fn: () => updateSelectedShape("rectangle"),
     },
     {
       icon: "add circle",
-      fn: addCircle,
+      fn: () => updateSelectedShape("circle"),
     },
     {
       icon: "add polygon",
-      fn: addPolygon,
+      fn: () => updateSelectedShape("polygon"),
     },
   ]
 

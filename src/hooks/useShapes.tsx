@@ -4,15 +4,20 @@ export interface CustomGroup extends Group {
   shapeType?: string
 }
 
-export function useShapes(canvas: Canvas | null, fill: string, stroke: string) {
-  const addRectangle = () => {
+export function useShapes(canvas: Canvas | null) {
+  const addRectangle = (
+    x: number,
+    y: number,
+    fill = "#333333",
+    stroke = "#333333"
+  ) => {
     if (!canvas) return
 
     const rect = new Rect({
       width: 100,
       height: 100,
-      left: 100,
-      top: 100,
+      left: x,
+      top: y,
       fill: fill,
       stroke: stroke,
       strokeWidth: 2,
@@ -21,15 +26,15 @@ export function useShapes(canvas: Canvas | null, fill: string, stroke: string) {
     canvas.add(rect)
   }
 
-  const addCircle = () => {
+  const addCircle = (x: number, y: number) => {
     if (!canvas) return
 
     const circle = new Circle({
       width: 100,
       height: 100,
       radius: 50,
-      top: 300,
-      left: 400,
+      top: y,
+      left: x,
       fill: null,
       stroke: "#333333",
       strokeWidth: 2,

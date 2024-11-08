@@ -6,7 +6,9 @@ interface ShapeManagementState {
   diameter: number | string
   fill: string
   stroke: string
+  strokeWidth: number
   text: string
+  selectedShape: string | null
 }
 
 const initialState: ShapeManagementState = {
@@ -14,8 +16,10 @@ const initialState: ShapeManagementState = {
   height: "",
   diameter: "",
   fill: "",
-  stroke: "",
+  stroke: "#333333",
+  strokeWidth: 2,
   text: "",
+  selectedShape: null,
 }
 
 const shapeManagementSlice = createSlice({
@@ -40,6 +44,12 @@ const shapeManagementSlice = createSlice({
     setText(state, action: PayloadAction<string>) {
       state.text = action.payload
     },
+    setSelectedShape(state, action: PayloadAction<string | null>) {
+      state.selectedShape = action.payload
+    },
+    setStrokeWidth(state, action: PayloadAction<number>) {
+      state.strokeWidth = action.payload
+    },
   },
 })
 
@@ -50,6 +60,7 @@ export const {
   setColor,
   setStroke,
   setText,
+  setSelectedShape,
 } = shapeManagementSlice.actions
 
 export default shapeManagementSlice.reducer

@@ -4,7 +4,7 @@ interface ShapeManagementState {
   width: number | string
   height: number | string
   diameter: number | string
-  color: string
+  fill: string
   stroke: string
   text: string
 }
@@ -13,7 +13,7 @@ const initialState: ShapeManagementState = {
   width: "",
   height: "",
   diameter: "",
-  color: "",
+  fill: "",
   stroke: "",
   text: "",
 }
@@ -32,7 +32,7 @@ const shapeManagementSlice = createSlice({
       state.diameter = action.payload
     },
     setColor(state, action: PayloadAction<string>) {
-      state.color = action.payload
+      state.fill = action.payload
     },
     setStroke(state, action: PayloadAction<string>) {
       state.stroke = action.payload

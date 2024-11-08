@@ -16,7 +16,7 @@ interface SettingProps {
   width: string | number
   height: string | number
   diameter: string | number
-  color: string
+  fill: string
   stroke: string
 }
 
@@ -25,7 +25,7 @@ const ShapeParameters = ({
   dispatch,
   width,
   height,
-  color,
+  fill,
   diameter,
   stroke,
 }: SettingProps) => {
@@ -204,12 +204,12 @@ const ShapeParameters = ({
           />
           <div className="flex gap-4">
             <SettingsInput
-              value={color}
+              value={fill}
               onChange={(e) => handleColorChange(e)}
               id="color"
               label="Color"
               type="color"
-              className="color-swatch"
+              className=""
             />
             <SettingsInput
               value={stroke}
@@ -237,7 +237,7 @@ const ShapeParameters = ({
             label="Diameter"
           />
           <SettingsInput
-            value={color}
+            value={fill}
             onChange={(e) => handleColorChange(e)}
             id="color"
             label="Color"

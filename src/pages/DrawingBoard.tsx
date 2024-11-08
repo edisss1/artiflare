@@ -15,10 +15,14 @@ import User from "../components/molecules/User"
 const DrawingBoard = () => {
   const [canvas, setCanvas] = useState<Canvas | null>(null)
   const dispatch: AppDispatch = useDispatch()
-  const { width, height, diameter, color, stroke } = useSelector(
+  const { width, height, diameter, fill, stroke } = useSelector(
     (state: RootState) => state.shape
   )
-  const { addRectangle, addCircle, addPolygon } = useShapes(canvas)
+  const { addRectangle, addCircle, addPolygon } = useShapes(
+    canvas,
+    fill,
+    stroke
+  )
 
   const user = useSelector((state: RootState) => state.auth.user)
 
@@ -131,7 +135,7 @@ const DrawingBoard = () => {
           width={width}
           height={height}
           diameter={diameter}
-          color={color}
+          fill={fill}
           canvas={canvas}
           dispatch={dispatch}
           stroke={stroke}

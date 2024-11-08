@@ -1,24 +1,14 @@
-import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState } from "../../redux/store"
-// import { signOutUser } from "../../redux/slices/authSlice"
+import { useSelector } from "react-redux"
+import { RootState } from "../../redux/store"
 import userIcon from "../../assets/UserIcon.svg"
-import { deleteUserFromDatabase } from "../../redux/slices/authSlice"
+import { Link } from "react-router-dom"
 
 const User = ({ position }: { position: string }) => {
-  const dispatch: AppDispatch = useDispatch()
   const user = useSelector((state: RootState) => state.auth.user)
-
-  // const handleSignOut = async () => {
-  //   dispatch(signOutUser())
-  // }
-
-  const handleDeleteUser = async () => {
-    dispatch(deleteUserFromDatabase())
-  }
-
   return (
-    <div
-      className={`flex gap-2  ${position} rounded-sm items-center flex-col bg-primary`}>
+    <Link
+      to={`/app/settings/profile/${user?.uid}`}
+      className={`flex gap-2 hover:bg-bg-dark/40 py-2 px-2 transition-colors duration-200 ${position} rounded-sm items-center flex-col bg-primary`}>
       <div className="flex gap-2 items-center">
         {user?.img ? (
           <img className="w-full max-w-8 rounded-full" src={user.img} />
@@ -27,8 +17,7 @@ const User = ({ position }: { position: string }) => {
         )}
         <p>{user?.displayName || user?.email}</p>
       </div>
-      <button onClick={handleDeleteUser}>Delete profile</button>
-    </div>
+    </Link>
   )
 }
 export default User

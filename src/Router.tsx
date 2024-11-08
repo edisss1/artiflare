@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react"
 import { Route, Routes } from "react-router-dom"
 import Loading from "./components/atoms/Loading"
+import Settings from "./pages/Settings"
 const Home = lazy(() => import("./pages/Home"))
 const Auth = lazy(() => import("./pages/Auth"))
 const Login = lazy(() => import("./components/molecules/Login"))
@@ -19,7 +20,15 @@ function Router() {
         </Route>
         <Route path="/app">
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="recent" />
+          <Route path="favorites" />
           <Route path="board/:boardID" element={<DrawingBoard />} />
+          <Route path="settings" element={<Settings />}>
+            <Route path="profile/:userID" />
+            <Route path="team/:teamID">
+              <Route path="members" />
+            </Route>
+          </Route>
         </Route>
       </Routes>
     </Suspense>

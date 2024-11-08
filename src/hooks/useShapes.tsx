@@ -9,7 +9,7 @@ export function useShapes(canvas: Canvas | null) {
       height: 100,
       left: 100,
       top: 100,
-      fill: "#333333",
+      fill: null,
       stroke: "#333333",
       strokeWidth: 1,
     })

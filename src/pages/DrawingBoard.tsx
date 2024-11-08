@@ -76,7 +76,7 @@ const DrawingBoard = () => {
     let zoom = canvas.getZoom()
     zoom *= 0.999 ** delta
 
-    zoom = Math.max(Math.min(zoom, 5), 0.2)
+    zoom = Math.max(Math.min(zoom, 5), 0.1)
 
     const point = new Point(opt.e.offsetX, opt.e.offsetY)
 

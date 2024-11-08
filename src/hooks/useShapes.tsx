@@ -8,8 +8,9 @@ export function useShapes(canvas: Canvas | null) {
   const addRectangle = (
     x: number,
     y: number,
-    fill = "#333333",
-    stroke = "#333333"
+    fill: string,
+    stroke: string,
+    strokeWidth: number
   ) => {
     if (!canvas) return
 
@@ -20,7 +21,7 @@ export function useShapes(canvas: Canvas | null) {
       top: y,
       fill: fill,
       stroke: stroke,
-      strokeWidth: 2,
+      strokeWidth: strokeWidth,
     })
 
     canvas.add(rect)

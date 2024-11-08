@@ -43,7 +43,7 @@ const DrawingBoard = () => {
       const pointer = canvas.getScenePoint(e.e)
       switch (selectedShapeRef.current) {
         case "rectangle":
-          addRectangle(pointer.x, pointer.y)
+          addRectangle(pointer.x, pointer.y, fill, stroke, strokeWidth)
           break
         case "circle":
           addCircle(pointer.x, pointer.y)

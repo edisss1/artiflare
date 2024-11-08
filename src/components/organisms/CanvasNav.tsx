@@ -13,7 +13,7 @@ const CanvasNav = () => {
       <div className="flex gap-2">
         <Link to={"/app/dashboard"}>Artiflare</Link>
         <span>{">"}</span>
-        <p>{currentBoard?.title}</p>
+        <p>{currentBoard?.boardTitle}</p>
       </div>
     </nav>
   )

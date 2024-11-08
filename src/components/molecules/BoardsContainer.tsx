@@ -25,7 +25,7 @@ const BoardsContainer = () => {
           updatedAt={board.updatedAt}
           id={board.id}
           modifiedBy={board.modifiedBy}
-          title={board.title}
+          title={board.boardTitle}
           key={board.id}
         />
       ))}

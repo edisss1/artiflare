@@ -30,14 +30,14 @@ const initialState: BoardState = {
 
 export const createBoard = createAsyncThunk(
   "board/createBoard",
-  async ({ user, title }: { user: User | null; title: string }) => {
+  async ({ user, boardTitle }: { user: User | null; boardTitle: string }) => {
     try {
       const boardsRef = collection(db, "boards")
 
       if (!user) return
 
       const boardData = {
-        title,
+        boardTitle,
         userUID: user.uid,
         createdAt: new Date().toDateString(),
         updatedAt: new Date().toDateString(),

@@ -1,6 +1,6 @@
 export interface Board {
   id?: string
-  title: string
+  boardTitle: string
   userUID: string
   createdAt: string | null
   updatedAt: string | null

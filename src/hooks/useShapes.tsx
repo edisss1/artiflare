@@ -1,4 +1,9 @@
-import { Canvas, Circle, Polyline, Rect } from "fabric"
+import { Canvas, Circle, Group, Polyline, Rect, Textbox } from "fabric"
+import { useRef } from "react"
+
+export interface CustomGroup extends Group {
+  shapeType?: string
+}
 
 export function useShapes(canvas: Canvas | null) {
   const addRectangle = () => {
@@ -11,7 +16,7 @@ export function useShapes(canvas: Canvas | null) {
       top: 100,
       fill: null,
       stroke: "#333333",
-      strokeWidth: 1,
+      strokeWidth: 2,
     })
 
     canvas.add(rect)
@@ -26,9 +31,9 @@ export function useShapes(canvas: Canvas | null) {
       radius: 50,
       top: 300,
       left: 400,
-      fill: "#333333",
+      fill: null,
       stroke: "#333333",
-      strokeWidth: 1,
+      strokeWidth: 2,
       opacity: 100,
     })
 

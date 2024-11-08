@@ -31,7 +31,6 @@ const ShapeParameters = ({
 }: SettingProps) => {
   const [selectedObject, setSelectedObject] = useState<any>(null)
   const [settingsPosition, setSettingsPosition] = useState({ top: 0, left: 0 })
-
   const handleObjectSelection = (object: any) => {
     if (!object) return
 
@@ -67,7 +66,10 @@ const ShapeParameters = ({
 
     dispatch(setWidth(widthValue))
 
-    if (!selectedObject && selectedObject?.type !== "rect" && !widthValue)
+    if (
+      (!selectedObject && selectedObject?.type !== "rect") ||
+      (selectedObject.type === "group" && !widthValue)
+    )
       return
     selectedObject.set({
       width: isNaN(widthValue) ? 0 : widthValue / selectedObject.scaleX,
@@ -79,7 +81,10 @@ const ShapeParameters = ({
 
     dispatch(setHeight(heightValue))
 
-    if (!selectedObject && selectedObject?.type !== "rect" && heightValue === 0)
+    if (
+      (!selectedObject && selectedObject?.type !== "rect") ||
+      (selectedObject.type && heightValue === 0)
+    )
       return
 
     selectedObject.set({
@@ -99,6 +104,7 @@ const ShapeParameters = ({
     selectedObject.set({ radius: diameterValue / 2 / selectedObject.scaleX })
     canvas?.renderAll()
   }
+
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const colorValue = e.target.value
     dispatch(setColor(colorValue))

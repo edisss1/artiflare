@@ -36,12 +36,7 @@ const DrawingBoard = () => {
   const saveBoard = useCallback(async () => {
     if (canvas && boardID && user) {
       const newBoardData = canvas.toJSON()
-      console.log("New board data (save board): ", newBoardData)
-      console.log("Dispatching updateBoard with: ", {
-        boardID,
-        newBoardData,
-        user,
-      })
+
       dispatch(
         updateBoard({
           boardID,
@@ -49,9 +44,7 @@ const DrawingBoard = () => {
           user,
         })
       )
-      console.log("saving board")
     } else {
-      console.log("missing dependencies: ", { canvas, boardID, user })
     }
   }, [canvas, boardID, user, dispatch])
 
@@ -62,7 +55,6 @@ const DrawingBoard = () => {
       const { payload } = boardData
       const { data } = payload
       canvas?.loadFromJSON(data)
-      console.log("canvas rendered with: ", data)
       canvas?.requestRenderAll()
     }
   }, [dispatch, boardID, canvas])

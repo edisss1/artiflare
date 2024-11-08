@@ -12,7 +12,7 @@ const Modal = ({ modalRef, children }: ModalProps) => {
 
   return (
     <dialog
-      className="w-full max-w-[500px] p-9  relative bg-bg-light dark:backdrop:bg-bg-light/25 backdrop:bg-bg-dark/30"
+      className="modal w-full max-w-[500px] p-9 rounded-sm relative bg-bg-light dark:backdrop:bg-bg-light/25 backdrop:bg-bg-dark/30"
       ref={modalRef}>
       <button
         onClick={closeModal}

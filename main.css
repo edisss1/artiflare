@@ -79,3 +79,33 @@ body {
     transform: rotate(360deg);
   }
 }
+
+.modal {
+  transition: display 0.2s allow-discrete, overlay 1s allow-discrete;
+
+  animation: close 0.2s forwards;
+  &[open] {
+    animation: open 0.2s forwards;
+  }
+}
+
+.modal::backdrop {
+  transition: opacity 0.2s linear;
+}
+
+@keyframes open {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes close {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

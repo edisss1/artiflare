@@ -25,8 +25,8 @@ const BoardsManagement = () => {
   const createNewBoard = async () => {
     if (boardTitle && user) {
       dispatch(createBoard({ user, boardTitle }))
+      modalRef.current?.close()
     }
-    modalRef.current?.close()
   }
 
   return (

@@ -23,7 +23,9 @@ const CreateBoardModalContent = ({
           required
         />
       </div>
-      <button onClick={createBoard} className="mt-8">
+      <button
+        onClick={createBoard}
+        className="mt-8 px-6 py-2 rounded-sm border-2 border-typography-light  hover:bg-secondary transition-colors duration-100 w-fit self-center">
         Create
       </button>
     </div>

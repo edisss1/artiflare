@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom"
 import SettingsNav from "../components/organisms/SettingsNav"
 import SettingsPanel from "../components/molecules/SettingsPanel"
 
-const Settings = () => {
+const SettingsDashboard = () => {
   return (
     <>
       <SettingsNav />
@@ -13,4 +13,4 @@ const Settings = () => {
     </>
   )
 }
-export default Settings
+export default SettingsDashboard

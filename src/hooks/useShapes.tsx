@@ -1,4 +1,4 @@
-import { Canvas, Circle, Group, Polyline, Rect } from "fabric"
+import { Canvas, Circle, Group, Path, Polyline, Rect } from "fabric"
 
 export interface CustomGroup extends Group {
   shapeType?: string
@@ -66,5 +66,22 @@ export function useShapes(canvas: Canvas | null) {
     canvas.add(polygon)
   }
 
-  return { addRectangle, addCircle, addPolygon }
+  const addLine = (
+    // x: number,
+    // y: number,
+    stroke = "#333333",
+    strokeWidth: number
+  ) => {
+    if (!canvas) return
+    const path = new Path("M 0 0")
+
+    path.set({
+      stroke: stroke,
+      strokeWidth: strokeWidth,
+    })
+
+    canvas.add(path)
+  }
+
+  return { addRectangle, addCircle, addPolygon, addLine }
 }

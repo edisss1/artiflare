@@ -194,9 +194,14 @@ const boardSlice = createSlice({
       })
       .addCase(updateBoard.rejected, (state, action) => {
         state.error = action.error.message
+        state.status = "failed"
       })
       .addCase(fetchAllUserBoards.fulfilled, (state, action) => {
         state.boards = action.payload
+        state.status = "succeeded"
+      })
+      .addCase(fetchAllUserBoards.pending, (state) => {
+        state.status = "loading"
       })
   },
 })

@@ -20,7 +20,7 @@ const DrawingBoard = () => {
   const { width, height, diameter, fill, stroke, strokeWidth } = useSelector(
     (state: RootState) => state.shape
   )
-  const { addRectangle, addCircle } = useShapes(canvas)
+  const { addRectangle, addCircle, addLine } = useShapes(canvas)
 
   const user = useSelector((state: RootState) => state.auth.user)
 
@@ -32,6 +32,8 @@ const DrawingBoard = () => {
     console.log("Status: ", status)
     console.log("BoardID: ", boardID)
   }, [status])
+
+  // shape handling
 
   const updateSelectedShape = (shape: string | null) => {
     dispatch(setSelectedShape(shape))
@@ -47,8 +49,11 @@ const DrawingBoard = () => {
           break
         case "circle":
           addCircle(pointer.x, pointer.y)
+          break
+        case "line":
+          addLine(stroke, strokeWidth)
       }
-      updateSelectedShape(null)
+      selectedShapeRef.current !== "line" ? updateSelectedShape(null) : null
     }
   }
 
@@ -106,6 +111,8 @@ const DrawingBoard = () => {
       switch (e.key) {
         case "Escape":
           setSelectedShape(null)
+          updateSelectedShape(null)
+          break
       }
     }
 
@@ -158,6 +165,10 @@ const DrawingBoard = () => {
       icon: "add polygon",
       fn: () => updateSelectedShape("polygon"),
     },
+    {
+      icon: "add line",
+      fn: () => updateSelectedShape("line"),
+    },
   ]
 
   return (
@@ -167,7 +178,7 @@ const DrawingBoard = () => {
 
       <div className="relative ">
         <ToolBar shapesList={shapesList} />
-        <User position="absolute bottom-9 left-4 p-2 z-10 " />
+        <User position="absolute top-4 right-9 z-10 " />
         <ShapeParameters
           width={width}
           height={height}

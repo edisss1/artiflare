@@ -127,18 +127,26 @@ export const deleteUserFromDatabase = createAsyncThunk(
     const currentUser = auth.currentUser;
 
     if (!currentUser) {
-      return rejectWithValue("No user is currently logged in.");
+      console.error("No user is currently authenticated.");
+      return rejectWithValue("No authenticated user.");
     }
 
     try {
-      if (currentUser.providerData[0]?.providerId === "google.com") {
+      // Check for Google provider reauthentication
+      if (
+        currentUser.providerData.some(
+          (data) => data.providerId === "google.com",
+        )
+      ) {
         const provider = new GoogleAuthProvider();
         await reauthenticateWithPopup(currentUser, provider);
       }
 
+      // Delete user document from Firestore
       const userRef = doc(db, "users", currentUser.uid);
       await deleteDoc(userRef);
 
+      // Delete the user from Firebase Authentication
       await deleteUser(currentUser);
     } catch (err) {
       console.error("Error deleting user:", err);

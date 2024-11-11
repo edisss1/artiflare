@@ -1,8 +1,8 @@
 interface FormInputProps {
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  placeholder: string
-  type: string
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+  type: string;
 }
 
 const FormInput = ({ value, onChange, placeholder, type }: FormInputProps) => {
@@ -13,7 +13,8 @@ const FormInput = ({ value, onChange, placeholder, type }: FormInputProps) => {
       onChange={onChange}
       placeholder={placeholder}
       type={type}
+      required
     />
-  )
-}
-export default FormInput
+  );
+};
+export default FormInput;

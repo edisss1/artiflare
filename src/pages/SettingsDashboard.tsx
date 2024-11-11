@@ -1,16 +1,22 @@
-import { Outlet } from "react-router-dom"
-import SettingsNav from "../components/organisms/SettingsNav"
-import SettingsPanel from "../components/molecules/SettingsPanel"
+import { Outlet } from "react-router-dom";
+import SettingsNav from "../components/organisms/SettingsNav";
+import SettingsPanel from "../components/molecules/SettingsLinks.tsx";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store.ts";
 
 const SettingsDashboard = () => {
+  const user = useSelector((state: RootState) => state.auth.user);
+
   return (
     <>
       <SettingsNav />
-      <div className="px-[clamp(1rem,40vw,5rem)] py-4">
-        <SettingsPanel />
+      <div className="px-[clamp(1rem,40vw,5rem)] py-4 flex gap-4 justify-center max-lg:flex-col">
+        <SettingsPanel uid={user.uid} />
+        <div className={"w-full max-w-[900px] bg-primary p-4 rounded-sm"}>
+          <Outlet />
+        </div>
       </div>
-      <Outlet />
     </>
-  )
-}
-export default SettingsDashboard
+  );
+};
+export default SettingsDashboard;

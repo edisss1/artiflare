@@ -1,9 +1,15 @@
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store.ts";
 
-const SettingsPanel = () => {
+interface SettingsLinksProps {
+  uid: string;
+}
+
+const SettingsLinks = ({ uid }: SettingsLinksProps) => {
   return (
-    <div className="flex flex-col bg-primary w-fit p-4 rounded-sm">
-      <NavLink className={"mb-4"} to={""}>
+    <aside className="flex flex-col bg-primary w-full max-w-[300px] p-4 rounded-sm h-full min-h-[500px]  ">
+      <NavLink className={"mb-4"} to={`profile/${uid}`}>
         Profile settings
       </NavLink>
       <div className={"flex flex-col gap-6"}>
@@ -21,7 +27,7 @@ const SettingsPanel = () => {
           </div>
         </div>
       </div>
-    </div>
+    </aside>
   );
 };
-export default SettingsPanel;
+export default SettingsLinks;

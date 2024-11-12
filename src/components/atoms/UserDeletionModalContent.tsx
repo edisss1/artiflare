@@ -12,7 +12,6 @@ const UserDeletionModalContent = () => {
   const navigate = useNavigate();
 
   const handleUserDeletion = () => {
-    console.log("user deleted and cleared");
     dispatch(deleteUserFromDatabase());
     dispatch(clearUser());
     setTimeout(() => {

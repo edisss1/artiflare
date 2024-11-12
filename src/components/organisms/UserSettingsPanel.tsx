@@ -1,18 +1,33 @@
 import SettingsInput from "../atoms/SettingsInput.tsx";
-import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store.ts";
+import { useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store.ts";
 import Button from "../atoms/Button.tsx";
 import Modal from "../molecules/Modal.tsx";
 import UserDeletionModalContent from "../atoms/UserDeletionModalContent.tsx";
 import userIcon from "../../assets/UserIcon.svg";
+import {
+  setNewCompanyName,
+  setNewDisplayName,
+  updateUserName,
+} from "../../redux/slices/userManagementSlice.ts";
 
 const UserSettingsPanel = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  const [username, setUsername] = useState<string>("");
-  const [companyName, setCompanyName] = useState<string>("");
+  const dispatch: AppDispatch = useDispatch();
+  const { newDisplayName, newCompanyName } = useSelector(
+    (state: RootState) => state.userManagement,
+  );
 
   const modalRef = useRef<HTMLDialogElement>(null);
+
+  const handleUserInfoChange = () => {
+    if (newDisplayName !== "") {
+      dispatch(updateUserName({ user, newDisplayName }));
+      return;
+    }
+    if (newCompanyName !== "") return;
+  };
 
   const openModal = () => {
     modalRef.current?.showModal();
@@ -22,23 +37,31 @@ const UserSettingsPanel = () => {
     <div>
       <h2 className={"mb-12"}>Profile details</h2>
       <div className={`flex justify-between w-full max-w-[90%]`}>
-        <div className={"grid gap-2"}>
+        <div className={"grid gap-2 place-items-start"}>
           <SettingsInput
             className={"rounded-sm w-full max-w-[200px]"}
             label={"Name"}
             id={`name`}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={newDisplayName}
+            onChange={(e) => dispatch(setNewDisplayName(e.target.value))}
             type={"text"}
           />
           <SettingsInput
             className={"rounded-sm w-full max-w-[200px]"}
             label={"Company name"}
             id={`company-name`}
-            value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
+            value={newCompanyName}
+            onChange={(e) => dispatch(setNewCompanyName(e.target.value))}
             type={"text"}
           />
+          <Button
+            onClick={handleUserInfoChange}
+            className={
+              "border-2 border-typography-light px-2 py-1 rounded-sm hover:bg-bg-dark hover:text-typography-dark transition-colors duration-150"
+            }
+          >
+            Change
+          </Button>
         </div>
         <div className={"flex flex-col gap-2"}>
           <h3>Your photo</h3>

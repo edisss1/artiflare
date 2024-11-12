@@ -10,15 +10,7 @@ import { GoogleAuthProvider } from "firebase/auth";
 import { auth, db } from "../../firestore/firebaseConfig";
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth/cordova";
-
-export interface User {
-  uid: string;
-  img: string | null;
-  displayName: string | null;
-  email: string | null;
-  teams: string[];
-  boards: string[];
-}
+import { User } from "../../types/User.ts";
 
 interface AuthState {
   user: User | null;
@@ -142,11 +134,9 @@ export const deleteUserFromDatabase = createAsyncThunk(
         await reauthenticateWithPopup(currentUser, provider);
       }
 
-      // Delete user document from Firestore
       const userRef = doc(db, "users", currentUser.uid);
       await deleteDoc(userRef);
 
-      // Delete the user from Firebase Authentication
       await deleteUser(currentUser);
     } catch (err) {
       console.error("Error deleting user:", err);

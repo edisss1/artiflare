@@ -6,7 +6,7 @@ interface SettingsLinksProps {
 
 const SettingsLinks = ({ uid }: SettingsLinksProps) => {
   return (
-    <aside className="flex flex-col bg-primary w-full max-w-[300px] p-4 rounded-sm h-full min-h-[500px]  ">
+    <aside className="flex flex-col bg-primary dark:bg-primary-dark text-typography-light dark:text-typography-dark w-full max-w-[300px] p-4 rounded-sm h-full min-h-[500px]  ">
       <NavLink className={"mb-4"} to={`profile/${uid}`}>
         Profile settings
       </NavLink>

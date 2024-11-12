@@ -8,6 +8,7 @@ export default {
         "bg-light": "#FFFFFF",
         primary: "#E9ECEE",
         secondary: "#F2C40C",
+        "primary-dark": "#121517",
         "bg-dark": "#333333",
         "typography-light": "#333333",
         "typography-dark": "#FFFFFF",
@@ -16,5 +17,4 @@ export default {
     },
   },
   plugins: [],
-}
-
+};

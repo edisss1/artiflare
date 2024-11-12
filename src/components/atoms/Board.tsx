@@ -1,14 +1,14 @@
-import { Link } from "react-router-dom"
-import Button from "./Button"
-import favorite from "../../assets/Favorite.svg"
-import more from "../../assets/More.svg"
+import { Link } from "react-router-dom";
+import Button from "./Button";
+import favorite from "../../assets/Favorite.svg";
+import more from "../../assets/More.svg";
 
 interface BoardProps {
-  id: string | undefined
-  title: string | undefined
-  createdBy: string | null
-  modifiedBy: string | null
-  updatedAt: string | null
+  id: string | undefined;
+  title: string | undefined;
+  createdBy: string | null;
+  modifiedBy: string | null;
+  updatedAt: string | null;
 }
 
 const Board = ({ id, title, createdBy, modifiedBy, updatedAt }: BoardProps) => {
@@ -24,16 +24,18 @@ const Board = ({ id, title, createdBy, modifiedBy, updatedAt }: BoardProps) => {
       <div className="absolute top-[50%] right-4 -translate-y-[50%] flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
         <Button
           onClick={() => alert("WIP")}
-          className="hover:bg-slate-200 transition-colors duration-150 w-8 h-8 flex items-center justify-center rounded-sm">
+          className="hover:bg-slate-200 transition-colors duration-150 w-8 h-8 flex items-center justify-center rounded-sm"
+        >
           <img className="w-6" src={favorite} alt="" />
         </Button>
         <Button
           onClick={() => alert("WIP")}
-          className="hover:bg-slate-200 transition-colors duration-150 w-8 h-8 flex items-center justify-center rounded-sm">
+          className="hover:bg-slate-200 transition-colors duration-150 w-8 h-8 flex items-center justify-center rounded-sm"
+        >
           <img className="w-6" src={more} alt="" />
         </Button>
       </div>
     </div>
-  )
-}
-export default Board
+  );
+};
+export default Board;

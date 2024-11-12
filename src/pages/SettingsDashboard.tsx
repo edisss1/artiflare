@@ -11,9 +11,13 @@ const SettingsDashboard = () => {
   return (
     <ProtectedRoute>
       <SettingsNav />
-      <div className="px-[clamp(1rem,40vw,5rem)] py-4 flex gap-4 justify-center max-lg:flex-col">
+      <div className="px-[clamp(1rem,40vw,5rem)] py-4 flex gap-4 justify-center max-lg:flex-col text-typography-light dark:text-typography-light">
         <SettingsPanel uid={user?.uid} />
-        <div className={"w-full max-w-[900px] bg-primary p-4 rounded-sm"}>
+        <div
+          className={
+            "w-full max-w-[900px] bg-primary p-4 rounded-sm dark:bg-primary-dark dark:text-typography-dark"
+          }
+        >
           <Outlet />
         </div>
       </div>

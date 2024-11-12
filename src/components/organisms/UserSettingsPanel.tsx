@@ -63,7 +63,7 @@ const UserSettingsPanel = () => {
             Change
           </Button>
         </div>
-        <div className={"flex flex-col gap-2"}>
+        <div className={"flex flex-col gap-2 items-center"}>
           <h3>Your photo</h3>
           <img
             className={"aspect-square w-[clamp(2rem,40vw,10rem)]"}

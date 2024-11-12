@@ -73,9 +73,9 @@ export const signInWithCredentials = createAsyncThunk(
 
       await setDoc(doc(db, "users", user.uid), user);
 
-      return user;
+      return user
     } catch (err) {
-      console.error(err);
+      console.error(err)
       throw err;
     }
   },

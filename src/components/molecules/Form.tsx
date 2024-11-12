@@ -33,7 +33,7 @@ const Form = ({ onSubmit, children }: FormProps) => {
         type="password"
       />
       <Button
-        className="my-4 border-2 border-typography-light dark:border-typography-dark rounded-sm px-4 py-1 hover:bg-bg-dark hover:text-typography-dark dark:hover:bg-bg-light dark:hover:text-typography-light transition-colors duration-150"
+        className="my-4 border-2 border-typography-light text-typography-light dark:text-typography-dark dark:border-typography-dark rounded-sm px-4 py-1 hover:bg-bg-dark hover:text-typography-dark dark:hover:bg-bg-light dark:hover:text-typography-light transition-colors duration-150"
         onClick={onSubmit}
       >
         {children}

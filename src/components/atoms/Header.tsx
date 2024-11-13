@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import ThemeSwitch from "./ThemeSwitch";
-import bell from "../../assets/Bell.svg";
+import Bell from "../icons/Bell.tsx";
 
 type HeaderProps = {
   plan: string;
@@ -20,8 +20,8 @@ const Header = ({ plan }: HeaderProps) => {
           upgrade
         </button>
         <div className="flex gap-4 items-center justify-center">
-          <button>
-            <img className="w-9 h-9" src={bell} alt="/" />
+          <button className={"w-8"}>
+            <Bell />
           </button>
           <ThemeSwitch />
         </div>

@@ -75,7 +75,7 @@ export const signInWithCredentials = createAsyncThunk(
 
       return user
     } catch (err) {
-      console.error(err)
+    console.error(err)
       throw err;
     }
   },

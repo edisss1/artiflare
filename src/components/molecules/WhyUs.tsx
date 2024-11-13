@@ -1,4 +1,4 @@
-import { whyUsContent } from "../../utils/whyUsContent"
+import { whyUsContent } from "../../constants/whyUsContent"
 import WhyUsSection from "../atoms/WhyUsSection"
 
 const WhyUs = () => {

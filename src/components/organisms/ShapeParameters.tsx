@@ -1,23 +1,23 @@
-import { Canvas } from "fabric"
-import React, { useCallback, useEffect, useState } from "react"
+import { Canvas } from "fabric";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   setWidth,
   setHeight,
   setColor,
   setDiameter,
   setStroke,
-} from "../../redux/slices/shapeManagementSlice"
-import SettingsInput from "../atoms/SettingsInput"
-import Button from "../atoms/Button"
+} from "../../redux/slices/shapeManagementSlice";
+import SettingsInput from "../atoms/SettingsInput";
+import Button from "../atoms/Button";
 
 interface SettingProps {
-  canvas: Canvas | null
-  dispatch: any
-  width: string | number
-  height: string | number
-  diameter: string | number
-  fill: string
-  stroke: string
+  canvas: Canvas | null;
+  dispatch: any;
+  width: string | number;
+  height: string | number;
+  diameter: string | number;
+  fill: string;
+  stroke: string;
 }
 
 const ShapeParameters = ({
@@ -29,150 +29,150 @@ const ShapeParameters = ({
   diameter,
   stroke,
 }: SettingProps) => {
-  const [selectedObject, setSelectedObject] = useState<any>(null)
-  const [settingsPosition, setSettingsPosition] = useState({ top: 0, left: 0 })
+  const [selectedObject, setSelectedObject] = useState<any>(null);
+  const [settingsPosition, setSettingsPosition] = useState({ top: 0, left: 0 });
   const handleObjectSelection = (object: any) => {
-    if (!object) return
+    if (!object) return;
 
-    const boundingRect = object.getBoundingRect()
+    const boundingRect = object.getBoundingRect();
 
-    console.log(boundingRect)
+    console.log(boundingRect);
 
     setSettingsPosition({
       top: boundingRect.top,
       left: boundingRect.left,
-    })
+    });
 
-    setSelectedObject(object)
+    setSelectedObject(object);
 
     switch (object.type) {
       case "rect":
-        dispatch(setWidth(Math.round(object.width * object.scaleX)))
-        dispatch(setHeight(Math.round(object.height * object.scaleY)))
-        dispatch(setColor(object.fill))
-        dispatch(setDiameter(""))
-        break
+        dispatch(setWidth(Math.round(object.width * object.scaleX)));
+        dispatch(setHeight(Math.round(object.height * object.scaleY)));
+        dispatch(setColor(object.fill));
+        dispatch(setDiameter(""));
+        break;
       case "circle":
-        dispatch(setDiameter(Math.round(object.radius * 2 * object.scaleX)))
-        dispatch(setColor(object.fill))
-        dispatch(setWidth(""))
-        dispatch(setHeight(""))
-        break
+        dispatch(setDiameter(Math.round(object.radius * 2 * object.scaleX)));
+        dispatch(setColor(object.fill));
+        dispatch(setWidth(""));
+        dispatch(setHeight(""));
+        break;
     }
-  }
+  };
 
   const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const widthValue = parseInt(e.target.value.replace(/,/g, ""), 10)
+    const widthValue = parseInt(e.target.value.replace(/,/g, ""), 10);
 
-    dispatch(setWidth(widthValue))
+    dispatch(setWidth(widthValue));
 
     if (
       (!selectedObject && selectedObject?.type !== "rect") ||
       (selectedObject.type === "group" && !widthValue)
     )
-      return
+      return;
     selectedObject.set({
       width: isNaN(widthValue) ? 0 : widthValue / selectedObject.scaleX,
-    })
-    canvas?.renderAll()
-  }
+    });
+    canvas?.renderAll();
+  };
   const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const heightValue = parseInt(e.target.value.replace(/,/g, ""), 10)
+    const heightValue = parseInt(e.target.value.replace(/,/g, ""), 10);
 
-    dispatch(setHeight(heightValue))
+    dispatch(setHeight(heightValue));
 
     if (
       (!selectedObject && selectedObject?.type !== "rect") ||
       (selectedObject.type && heightValue === 0)
     )
-      return
+      return;
 
     selectedObject.set({
       height: isNaN(heightValue) ? 0 : heightValue / selectedObject.scaleY,
-    })
-    canvas?.renderAll()
-  }
+    });
+    canvas?.renderAll();
+  };
 
   const handleDiameterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const diameterValue = parseInt(e.target.value.replace(/,/, ""), 10)
+    const diameterValue = parseInt(e.target.value.replace(/,/, ""), 10);
 
-    dispatch(setDiameter(diameterValue))
+    dispatch(setDiameter(diameterValue));
 
     if (!selectedObject && selectedObject.type !== "circle" && !diameterValue)
-      return
+      return;
 
-    selectedObject.set({ radius: diameterValue / 2 / selectedObject.scaleX })
-    canvas?.renderAll()
-  }
+    selectedObject.set({ radius: diameterValue / 2 / selectedObject.scaleX });
+    canvas?.renderAll();
+  };
 
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const colorValue = e.target.value
-    dispatch(setColor(colorValue))
+    const colorValue = e.target.value;
+    dispatch(setColor(colorValue));
 
-    if (!selectedObject) return
-    selectedObject.set({ fill: colorValue })
-    canvas?.renderAll()
-  }
+    if (!selectedObject) return;
+    selectedObject.set({ fill: colorValue });
+    canvas?.renderAll();
+  };
 
   const handleStrokeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const strokeValue = e.target.value
-    dispatch(setStroke(strokeValue))
+    const strokeValue = e.target.value;
+    dispatch(setStroke(strokeValue));
 
-    if (!selectedObject) return
-    selectedObject.set({ stroke: strokeValue })
-    canvas?.renderAll()
-  }
+    if (!selectedObject) return;
+    selectedObject.set({ stroke: strokeValue });
+    canvas?.renderAll();
+  };
 
   const clearSettings = () => {
-    dispatch(setWidth(""))
-    dispatch(setHeight(""))
-    dispatch(setDiameter(""))
-  }
+    dispatch(setWidth(""));
+    dispatch(setHeight(""));
+    dispatch(setDiameter(""));
+  };
 
   useEffect(() => {
-    if (!canvas) return
+    if (!canvas) return;
 
     canvas.on("selection:created", (e) => {
-      handleObjectSelection(e.selected[0])
-    })
+      handleObjectSelection(e.selected[0]);
+    });
     canvas.on("selection:updated", (e) => {
-      handleObjectSelection(e.selected[0])
-    })
+      handleObjectSelection(e.selected[0]);
+    });
     canvas.on("selection:cleared", () => {
-      setSelectedObject(null)
-      clearSettings()
-    })
+      setSelectedObject(null);
+      clearSettings();
+    });
 
     canvas.on("object:modified", (e) => {
-      handleObjectSelection(e.target)
-    })
-  }, [canvas])
+      handleObjectSelection(e.target);
+    });
+  }, [canvas]);
 
   const deleteSelectedObject = () => {
     if (canvas && selectedObject) {
-      canvas.remove(selectedObject)
-      canvas.renderAll()
+      canvas.remove(selectedObject);
+      canvas.renderAll();
     }
-  }
+  };
 
   const handleKeyPress = useCallback(
     (e: globalThis.KeyboardEvent) => {
       switch (e.key) {
         case "Delete":
-          deleteSelectedObject()
-          break
+          deleteSelectedObject();
+          break;
       }
     },
-    [deleteSelectedObject]
-  )
+    [deleteSelectedObject],
+  );
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyPress)
+    window.addEventListener("keydown", handleKeyPress);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyPress)
-    }
-  }, [handleKeyPress])
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleKeyPress]);
 
   return (
     <aside
@@ -185,7 +185,8 @@ const ShapeParameters = ({
         !selectedObject
           ? "hidden"
           : "flex items-center bg-primary z-40 border-2 border-black p-4 -translate-y-[120%] -translate-x-[25%] text-typography-light"
-      }`}>
+      }`}
+    >
       {selectedObject && selectedObject.type === "rect" && (
         <div className="flex gap-2 items-center">
           <SettingsInput
@@ -252,6 +253,6 @@ const ShapeParameters = ({
         </div>
       )}
     </aside>
-  )
-}
-export default ShapeParameters
+  );
+};
+export default ShapeParameters;

@@ -64,11 +64,7 @@ const CanvasBoard = ({ setCanvas }: CanvasBoardProps) => {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className=" grid-pattern bg-bg-light dark:bg-bg-dark dark:grid-pattern__white -z-10"
-      id="canvas"
-    ></canvas>
+    <canvas ref={canvasRef} className=" grid-pattern " id="canvas"></canvas>
   );
 };
 

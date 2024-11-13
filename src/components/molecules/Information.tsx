@@ -1,4 +1,4 @@
-import { informationContent } from "../../utils/informationContent"
+import { informationContent } from "../../constants/informationContent"
 import InformationImage from "../atoms/InformationImage"
 import InformationText from "../atoms/InformationText"
 

@@ -11,16 +11,31 @@ import { getBoardByID, updateBoard } from "../redux/slices/boardSlice";
 import { useParams } from "react-router-dom";
 import { BoardData } from "../types/BoardData";
 import User from "../components/atoms/User.tsx";
-import { setSelectedShape } from "../redux/slices/shapeManagementSlice";
+import {
+  setDrawingMode,
+  setSelectedShape,
+} from "../redux/slices/shapeManagementSlice";
+import ShapesIcon from "../components/icons/shapes/ShapesIcon.tsx";
+import RectangleIcon from "../components/icons/shapes/RectangleIcon.tsx";
+import CircleIcon from "../components/icons/shapes/CircleIcon.tsx";
 
 const DrawingBoard = () => {
   const [canvas, setCanvas] = useState<Canvas | null>(null);
   const dispatch: AppDispatch = useDispatch();
   const selectedShapeRef = useRef<string | null>(null);
-  const { width, height, diameter, fill, stroke, strokeWidth } = useSelector(
-    (state: RootState) => state.shape,
-  );
-  const { addRectangle, addCircle, addLine } = useShapes(canvas);
+  const {
+    width,
+    height,
+    diameter,
+    fill,
+    stroke,
+    strokeWidth,
+    brushColor,
+    brushWidth,
+    isDrawingMode,
+  } = useSelector((state: RootState) => state.shape);
+
+  const { addRectangle, addCircle, addFreeDrawing } = useShapes(canvas);
 
   const user = useSelector((state: RootState) => state.auth.user);
 
@@ -46,14 +61,16 @@ const DrawingBoard = () => {
       switch (selectedShapeRef.current) {
         case "rectangle":
           addRectangle(pointer.x, pointer.y, fill, stroke, strokeWidth);
+
           break;
         case "circle":
           addCircle(pointer.x, pointer.y);
           break;
-        case "line":
-          addLine(stroke, strokeWidth);
+        case "pencil":
+          addFreeDrawing(brushWidth, brushColor);
+          dispatch(setDrawingMode(true));
+          break;
       }
-      selectedShapeRef.current !== "line" ? updateSelectedShape(null) : null;
     }
   };
 
@@ -62,6 +79,8 @@ const DrawingBoard = () => {
   const saveBoard = useCallback(async () => {
     if (canvas && boardID && user) {
       const newBoardData = canvas.toJSON();
+
+      console.log("Saving board data: ", newBoardData);
 
       dispatch(
         updateBoard({
@@ -81,7 +100,7 @@ const DrawingBoard = () => {
 
       const { payload } = boardData;
       const { data } = payload;
-      canvas?.loadFromJSON(data);
+      await canvas?.loadFromJSON(data);
       canvas?.requestRenderAll();
     }
   }, [dispatch, boardID, canvas]);
@@ -128,9 +147,16 @@ const DrawingBoard = () => {
   useEffect(() => {
     if (!canvas || !user) return;
 
+    const handleObjectAdded = () => {
+      selectedShapeRef.current = null;
+      dispatch(setDrawingMode(false));
+    };
+
     loadBoard();
 
     const saveOnChange = () => saveBoard();
+
+    canvas.isDrawingMode = isDrawingMode;
 
     canvas.on("mouse:wheel", zoomCanvas);
 
@@ -138,6 +164,11 @@ const DrawingBoard = () => {
     canvas.on("object:modified", saveOnChange);
     canvas.on("object:removed", saveOnChange);
     canvas.on("mouse:down", handleSelectedShape);
+    canvas.on("object:added", handleObjectAdded);
+
+    canvas.on("mouse:up", () => {
+      dispatch(setDrawingMode(false));
+    });
 
     canvas.renderAll();
 
@@ -147,6 +178,7 @@ const DrawingBoard = () => {
       canvas.off("object:modified", saveOnChange);
       canvas.off("object:removed", saveOnChange);
       canvas.off("mouse:down", handleSelectedShape);
+      canvas.off("object:added", handleObjectAdded);
     };
   }, [canvas, user, loadBoard, saveBoard, boardID]);
 
@@ -154,25 +186,22 @@ const DrawingBoard = () => {
 
   const shapesList = [
     {
-      icon: "add rectangle",
-      fn: () => updateSelectedShape("rectangle"),
+      icon: <ShapesIcon />,
+      fn: [
+        {
+          label: <RectangleIcon />,
+          fn: () => updateSelectedShape("rectangle"),
+        },
+        { label: <CircleIcon />, fn: () => updateSelectedShape("circle") },
+      ],
     },
     {
-      icon: "add circle",
-      fn: () => updateSelectedShape("circle"),
-    },
-    {
-      icon: "add polygon",
-      fn: () => updateSelectedShape("polygon"),
-    },
-    {
-      icon: "add line",
-      fn: () => updateSelectedShape("line"),
+      icon: "🖌️",
+      fn: [{ label: "🖌️", fn: () => updateSelectedShape("pencil") }],
     },
   ];
 
   return (
-    // <ProtectedRoute>
     <>
       <CanvasNav />
 
@@ -191,7 +220,6 @@ const DrawingBoard = () => {
         <CanvasBoard setCanvas={setCanvas} />
       </div>
     </>
-    // </ProtectedRoute>
   );
 };
 export default DrawingBoard;

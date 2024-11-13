@@ -1,7 +1,7 @@
-import { Canvas, Circle, Group, Path, Polyline, Rect } from "fabric"
+import { Canvas, Circle, Group, Polyline, Rect, PencilBrush } from "fabric";
 
 export interface CustomGroup extends Group {
-  shapeType?: string
+  shapeType?: string;
 }
 
 export function useShapes(canvas: Canvas | null) {
@@ -10,9 +10,9 @@ export function useShapes(canvas: Canvas | null) {
     y: number,
     fill: string,
     stroke: string,
-    strokeWidth: number
+    strokeWidth: number,
   ) => {
-    if (!canvas) return
+    if (!canvas) return;
 
     const rect = new Rect({
       width: 100,
@@ -22,13 +22,13 @@ export function useShapes(canvas: Canvas | null) {
       fill: fill,
       stroke: stroke,
       strokeWidth: strokeWidth,
-    })
+    });
 
-    canvas.add(rect)
-  }
+    canvas.add(rect);
+  };
 
   const addCircle = (x: number, y: number) => {
-    if (!canvas) return
+    if (!canvas) return;
 
     const circle = new Circle({
       width: 100,
@@ -40,13 +40,13 @@ export function useShapes(canvas: Canvas | null) {
       stroke: "#333333",
       strokeWidth: 2,
       opacity: 100,
-    })
+    });
 
-    canvas.add(circle)
-  }
+    canvas.add(circle);
+  };
 
   const addPolygon = () => {
-    if (!canvas) return
+    if (!canvas) return;
     const polygon = new Polyline(
       [
         { x: 10, y: 10 },
@@ -60,28 +60,25 @@ export function useShapes(canvas: Canvas | null) {
         stroke: "red",
         left: 100,
         top: 100,
-      }
-    )
+      },
+    );
 
-    canvas.add(polygon)
-  }
+    canvas.add(polygon);
+  };
 
-  const addLine = (
-    // x: number,
-    // y: number,
-    stroke = "#333333",
-    strokeWidth: number
-  ) => {
-    if (!canvas) return
-    const path = new Path("M 0 0")
+  const addFreeDrawing = (brushWidth: number, brushColor: string) => {
+    if (!canvas) return;
 
-    path.set({
-      stroke: stroke,
-      strokeWidth: strokeWidth,
-    })
+    canvas.isDrawingMode = true;
+    canvas.freeDrawingBrush = new PencilBrush(canvas);
+    canvas.freeDrawingBrush.color = brushColor;
+    canvas.freeDrawingBrush.width = brushWidth;
+  };
 
-    canvas.add(path)
-  }
-
-  return { addRectangle, addCircle, addPolygon, addLine }
+  return {
+    addRectangle,
+    addCircle,
+    addPolygon,
+    addFreeDrawing,
+  };
 }

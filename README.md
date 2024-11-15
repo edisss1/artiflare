@@ -16,5 +16,4 @@ A modern, real-time collaborative drawing board designed to help teams brainstor
 
 - **Frontend**: React (TypeScript), Tailwind CSS
 - **State Management**: Redux
-- **Data Fetching**: React Query
-- **Backend**: Firebase Firestore and Firebase Authentication
+- **Backend**: Firebase 

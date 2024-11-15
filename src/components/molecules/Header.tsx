@@ -1,15 +1,17 @@
 import { Link } from "react-router-dom";
-import ThemeSwitch from "./ThemeSwitch";
+import ThemeSwitch from "../atoms/ThemeSwitch.tsx";
 import Bell from "../icons/Bell.tsx";
 import { useState } from "react";
 import NotificationsContainer from "../organisms/NotificationsContainer.tsx";
-import Button from "./Button.tsx";
+import Button from "../atoms/Button.tsx";
+import BurgerMenuIcon from "../icons/BurgerMenuIcon.tsx";
 
 type HeaderProps = {
   plan: string;
+  setIsMobileSidebarOpened: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Header = ({ plan }: HeaderProps) => {
+const Header = ({ plan, setIsMobileSidebarOpened }: HeaderProps) => {
   const [isContainerOpened, setIsContainerOpened] = useState(false);
 
   const handleNotificationsOpen = () => {
@@ -20,9 +22,16 @@ const Header = ({ plan }: HeaderProps) => {
     setIsContainerOpened(false);
   };
 
+  const handleMobileSideBarOpen = () => {
+    setIsMobileSidebarOpened(true);
+  };
+
   return (
-    <nav className="flex justify-between relative  w-full  items-center ps-9 py-2  dark:text-typography-dark text-typography-light  rounded-md ">
+    <nav className="flex justify-between relative  w-full  items-center ps-9 max-md:ps-2 py-2  dark:text-typography-dark text-typography-light  rounded-md ">
       <div className="flex gap-2 items-center">
+        <Button onClick={handleMobileSideBarOpen} className={""}>
+          <BurgerMenuIcon />
+        </Button>
         <Link to={"/app/dashboard"}>Artiflare</Link>
         <p className="uppercase bg-primary dark:bg-primary-dark rounded-sm dark:text-typography-dark text-typography-light px-4 py-1">
           {plan}

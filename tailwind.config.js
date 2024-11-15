@@ -6,9 +6,9 @@ export default {
     extend: {
       colors: {
         "bg-light": "#FFFFFF",
-        primary: "#E9ECEE",
+        primary: "#F3EFF5",
         secondary: "#F2C40C",
-        "primary-dark": "#121517",
+        "primary-dark": "#2C2A30",
         "bg-dark": "#333333",
         "typography-light": "#333333",
         "typography-dark": "#FFFFFF",

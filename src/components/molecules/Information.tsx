@@ -1,6 +1,6 @@
-import { informationContent } from "../../constants/informationContent"
-import InformationImage from "../atoms/InformationImage"
-import InformationText from "../atoms/InformationText"
+import { informationContent } from "../../constants/informationContent";
+import InformationImage from "../atoms/InformationImage";
+import InformationText from "../atoms/InformationText";
 
 const Information = () => {
   return (
@@ -8,14 +8,15 @@ const Information = () => {
       {informationContent.map((section, index) => (
         <div
           key={section.header}
-          className={`flex gap-4 justify-between ${
+          className={`flex max-md:flex-col-reverse gap-4 justify-between ${
             index === 1 ? "flex-row-reverse" : ""
-          }`}>
+          }`}
+        >
           <InformationText header={section.header} text={section.text} />
           <InformationImage src={section.src} />
         </div>
       ))}
     </section>
-  )
-}
-export default Information
+  );
+};
+export default Information;

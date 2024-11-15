@@ -1,4 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap");
+/*@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap");*/
+/*@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');*/
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -9,7 +11,7 @@
 } */
 
 body {
-  font-family: "Fira Code", monospace;
+  font-family: "Outfit", sans-serif;
   min-height: 100vh;
   @apply text-typography-light bg-bg-light dark:text-typography-dark  dark:bg-bg-dark transition-all duration-300 ease-in-out;
 }

@@ -104,6 +104,7 @@ export const createUserWithCredentials = createAsyncThunk(
 
       return user;
     } catch (err) {
+      console.error(err)
       throw err;
     }
   },

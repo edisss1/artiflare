@@ -14,11 +14,11 @@ const User = ({ position }: { position: string }) => {
   return (
     <Link
       to={`/app/settings/profile/${user?.uid}`}
-      className={`flex gap-2 hover:bg-bg-dark/40 dark:hover:bg-bg-light/40 py-2 px-2 transition-colors duration-200 ${position} rounded-sm items-center flex-col bg-primary dark:bg-primary-dark`}
+      className={`flex gap-2 hover:bg-bg-dark/40' dark:hover:bg-bg-light/40 py-2 px-2 transition-colors duration-200 ${position} rounded-sm items-center flex-col bg-primary dark:bg-primary-dark`}
     >
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center w-[calc(100%)] truncate ">
         <img className={"w-8 rounded-full"} src={userProfilePicture} alt="" />
-        <p className={"w-max"}>{user?.displayName || user?.email}</p>
+        <p className={"w-full max-w-[150px] truncate"}>{user?.displayName || user?.email}</p>
       </div>
     </Link>
   );

@@ -16,10 +16,14 @@ const Board = ({ id, title, createdBy, modifiedBy, updatedAt }: BoardProps) => {
     <div className="flex flex-col relative border-2 gap-2 px-4 py-2 group hover:bg-primary hover:text-typography-light   transition-colors duration-150 border-typography-light dark:border-typography-dark rounded-sm">
       <Link to={`/app/board/${id}`}>{title}</Link>
       <div className="flex gap-2 ">
-        <p>Created by {createdBy},</p>
-        <p className="">
-          Modified by {modifiedBy}, {updatedAt}
+        <p className={"max-w-[200px] truncate"}>Created by {createdBy},</p>
+        <div className={"flex gap-2"}>
+          <p className="max-w-[200px] truncate text-nowrap ">
+
+          Modified by {modifiedBy}
         </p>
+            <p>, {updatedAt}</p>
+        </div>
       </div>
       <div className="absolute top-[50%] right-4 -translate-y-[50%] flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
         <Button

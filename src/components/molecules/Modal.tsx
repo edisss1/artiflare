@@ -1,4 +1,5 @@
-import close from "../../assets/close.svg";
+import {closeModal} from "../../utils/closeModal.ts"
+import CloseIcon from "../icons/CloseIcon.tsx"
 
 interface ModalProps {
   modalRef: React.MutableRefObject<HTMLDialogElement | null>;
@@ -6,9 +7,7 @@ interface ModalProps {
 }
 
 const Modal = ({ modalRef, children }: ModalProps) => {
-  const closeModal = () => {
-    modalRef.current?.close();
-  };
+
 
   return (
     <dialog
@@ -16,11 +15,11 @@ const Modal = ({ modalRef, children }: ModalProps) => {
       ref={modalRef}
     >
       <button
-        onClick={closeModal}
+        onClick={() => closeModal(modalRef)}
         className="absolute right-4 top-4 text-lg font-semibold hover:bg-bg-dark/40 dark:hover:bg-bg-light/40 p-1 rounded-full transition-colors duration-100"
-        aria-label="Close modal"
+        aria-label="CloseIcon modal"
       >
-        <img className="w-5" src={close} alt="" />
+        <CloseIcon />
       </button>
       {children}
     </dialog>

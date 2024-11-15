@@ -32,16 +32,20 @@ const ShapeParameters = ({
   const [selectedObject, setSelectedObject] = useState<any>(null);
   const [settingsPosition, setSettingsPosition] = useState({ top: 0, left: 0 });
   const handleObjectSelection = (object: any) => {
-    if (!object) return;
+    if (!object || !canvas) return;
 
     const boundingRect = object.getBoundingRect();
+    const transform = canvas.viewportTransform;
+    const zoom = canvas.getZoom();
 
-    console.log(boundingRect);
+    // console.log(boundingRect);
 
     setSettingsPosition({
-      top: boundingRect.top,
-      left: boundingRect.left,
+      top: (boundingRect.top + transform[5]) / zoom,
+      left: (boundingRect.left + transform[4]) / zoom,
     });
+
+    console.log(settingsPosition);
 
     setSelectedObject(object);
 
@@ -184,7 +188,7 @@ const ShapeParameters = ({
       className={`${
         !selectedObject
           ? "hidden"
-          : "flex items-center bg-primary z-40 border-2 border-black p-4 -translate-y-[120%] -translate-x-[25%] text-typography-light"
+          : "flex items-center bg-primary z-40 border-2 border-black p-4 -translate-y-[200%] -translate-x-[50%] text-typography-light"
       }`}
     >
       {selectedObject && selectedObject.type === "rect" && (

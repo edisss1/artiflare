@@ -1,5 +1,5 @@
-import {closeModal} from "../../utils/closeModal.ts"
-import CloseIcon from "../icons/CloseIcon.tsx"
+import { closeModal } from "../../utils/closeModal.ts";
+import CloseIcon from "../icons/CloseIcon.tsx";
 
 interface ModalProps {
   modalRef: React.MutableRefObject<HTMLDialogElement | null>;
@@ -7,11 +7,9 @@ interface ModalProps {
 }
 
 const Modal = ({ modalRef, children }: ModalProps) => {
-
-
   return (
     <dialog
-      className="modal w-full max-w-[500px] p-9 dark:bg-bg-dark rounded-sm relative bg-bg-light dark:backdrop:bg-bg-light/25 backdrop:bg-bg-dark/30"
+      className="modal w-full max-w-[500px] p-9 text-typography-light dark:text-typography-dark dark:bg-bg-dark rounded-sm relative bg-bg-light dark:backdrop:bg-bg-light/25 backdrop:bg-bg-dark/30"
       ref={modalRef}
     >
       <button

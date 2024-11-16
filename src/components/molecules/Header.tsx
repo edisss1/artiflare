@@ -29,7 +29,7 @@ const Header = ({ plan, setIsMobileSidebarOpened }: HeaderProps) => {
   return (
     <nav className="flex justify-between relative  w-full  items-center ps-9 max-md:ps-2 py-2  dark:text-typography-dark text-typography-light  rounded-md ">
       <div className="flex gap-2 items-center">
-        <Button onClick={handleMobileSideBarOpen} className={""}>
+        <Button onClick={handleMobileSideBarOpen} className={"lg:hidden"}>
           <BurgerMenuIcon />
         </Button>
         <Link to={"/app/dashboard"}>Artiflare</Link>

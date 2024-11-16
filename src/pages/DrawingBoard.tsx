@@ -18,6 +18,9 @@ import {
 import ShapesIcon from "../components/icons/shapes/ShapesIcon.tsx";
 import RectangleIcon from "../components/icons/shapes/RectangleIcon.tsx";
 import CircleIcon from "../components/icons/shapes/CircleIcon.tsx";
+import TriangleIcon from "../components/icons/shapes/TriangleIcon.tsx";
+import RhombusIcon from "../components/icons/shapes/RhombusIcon.tsx";
+import StarIcon from "../components/icons/shapes/StarIcon.tsx";
 
 const DrawingBoard = () => {
   const [canvas, setCanvas] = useState<Canvas | null>(null);
@@ -30,12 +33,13 @@ const DrawingBoard = () => {
     fill,
     stroke,
     strokeWidth,
-    brushColor,
-    brushWidth,
+    // brushColor,
+    // brushWidth,
     isDrawingMode,
   } = useSelector((state: RootState) => state.shape);
 
-  const { addRectangle, addCircle, addFreeDrawing } = useShapes(canvas);
+  const { addRectangle, addCircle, addTriangle, addRhombus, addStar } =
+    useShapes(canvas);
 
   const user = useSelector((state: RootState) => state.auth.user);
 
@@ -61,15 +65,24 @@ const DrawingBoard = () => {
       switch (selectedShapeRef.current) {
         case "rectangle":
           addRectangle(pointer.x, pointer.y, fill, stroke, strokeWidth);
-
           break;
         case "circle":
           addCircle(pointer.x, pointer.y);
           break;
-        case "pencil":
-          addFreeDrawing(brushWidth, brushColor);
-          dispatch(setDrawingMode(true));
+        case "triangle":
+          addTriangle(pointer.x, pointer.y, fill, stroke, strokeWidth);
           break;
+        case "rhombus":
+          addRhombus(pointer.x, pointer.y, fill, stroke, strokeWidth);
+          break;
+        case "star":
+          addStar(pointer.x, pointer.y, fill, stroke, strokeWidth);
+          break;
+
+        // case "pencil":
+        //   addFreeDrawing(brushWidth, brushColor);
+        //   dispatch(setDrawingMode(true));
+        //   break;
       }
     }
   };
@@ -193,6 +206,9 @@ const DrawingBoard = () => {
           fn: () => updateSelectedShape("rectangle"),
         },
         { label: <CircleIcon />, fn: () => updateSelectedShape("circle") },
+        { label: <TriangleIcon />, fn: () => updateSelectedShape("triangle") },
+        { label: <RhombusIcon />, fn: () => updateSelectedShape("rhombus") },
+        { label: <StarIcon />, fn: () => updateSelectedShape("star") },
       ],
     },
     {

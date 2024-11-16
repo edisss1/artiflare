@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardLinksContainer from "../atoms/DashboardLinksContainer";
 import Search from "../atoms/Search";
 import User from "../atoms/User.tsx";
@@ -24,12 +24,22 @@ const DashboardSidebar = ({
     setIsMobileSidebarOpened(false);
   };
 
+  const windowWidth = window.innerWidth;
+
+  useEffect(() => {
+    windowWidth > 1280
+      ? setIsMobileSidebarOpened(true)
+      : setIsMobileSidebarOpened(false);
+
+    console.log(windowWidth);
+  }, [windowWidth]);
+
   return (
     <aside
       className={`w-full max-xl:absolute max-xl:z-40 max-xl:${!isMobileSidebarOpened ? "-translate-x-full opacity-0" : "translate-x-0 opacity-100"} h-screen py-9 px-4 min-w-fit max-w-[230px] bg-primary dark:bg-primary-dark dark:text-typography-dark border-r-2 border-r-typography-light min-h-screen relative transition-all duration-150 `}
     >
       <div className="gap-[clamp(1rem,40vh,5rem)] h-full flex flex-col relative">
-        <Button onClick={handleMobileSideBarClose} className={""}>
+        <Button onClick={handleMobileSideBarClose} className={"xl:hidden"}>
           <BurgerMenuIcon />
         </Button>
         <Search

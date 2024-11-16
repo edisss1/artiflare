@@ -28,7 +28,7 @@ const UserDeletionModalContent = () => {
       <Button
         onClick={handleUserDeletion}
         className={
-          "mt-8 border-2 border-danger px-4 py-1 rounded-sm hover:rounded-md hover:bg-danger hover:text-typography-dark transition-colors duration-150"
+          "mt-8 border-2 text-danger border-danger px-4 py-1 rounded-sm hover:rounded-md hover:bg-danger hover:text-typography-dark transition-colors duration-150"
         }
       >
         Delete

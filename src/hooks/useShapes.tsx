@@ -1,4 +1,12 @@
-import { Canvas, Circle, Group, Polyline, Rect, PencilBrush } from "fabric";
+import {
+  Canvas,
+  Circle,
+  Group,
+  Rect,
+  PencilBrush,
+  Triangle,
+  Polygon,
+} from "fabric";
 
 export interface CustomGroup extends Group {
   shapeType?: string;
@@ -45,25 +53,26 @@ export function useShapes(canvas: Canvas | null) {
     canvas.add(circle);
   };
 
-  const addPolygon = () => {
+  const addTriangle = (
+    x: number,
+    y: number,
+    fill: string,
+    stroke: string,
+    strokeWidth: number,
+  ) => {
     if (!canvas) return;
-    const polygon = new Polyline(
-      [
-        { x: 10, y: 10 },
-        { x: 50, y: 30 },
-        { x: 40, y: 70 },
-        { x: 60, y: 50 },
-        { x: 100, y: 150 },
-        { x: -40, y: -100 },
-      ],
-      {
-        stroke: "red",
-        left: 100,
-        top: 100,
-      },
-    );
+    const triangle = new Triangle({
+      width: 100,
+      height: 100,
+      fill: fill,
+      stroke: stroke,
+      strokeWidth: strokeWidth,
+      top: y,
+      left: x,
+      opacity: 100,
+    });
 
-    canvas.add(polygon);
+    canvas.add(triangle);
   };
 
   const addFreeDrawing = (brushWidth: number, brushColor: string) => {
@@ -75,10 +84,68 @@ export function useShapes(canvas: Canvas | null) {
     canvas.freeDrawingBrush.width = brushWidth;
   };
 
+  const addRhombus = (
+    x: number,
+    y: number,
+    fill: string,
+    stroke: string,
+    strokeWidth: number,
+  ) => {
+    if (!canvas) return;
+
+    const rhombusPoints = [
+      { x: x, y: y }, // Top vertex
+      { x: x + 100, y: y + 100 }, // Right vertex
+      { x: x, y: y + 200 }, // Bottom vertex
+      { x: x - 100, y: y + 100 }, // Left vertex
+    ];
+
+    const rhombus = new Polygon(rhombusPoints, {
+      fill: fill,
+      stroke: stroke,
+      strokeWidth: strokeWidth,
+    });
+
+    canvas.add(rhombus);
+  };
+
+  const addStar = (
+    x: number,
+    y: number,
+    fill: string,
+    stroke: string,
+    strokeWidth: number,
+  ) => {
+    if (!canvas) return;
+
+    const starPoints = [
+      { x: x, y: y - 100 }, // Top vertex (outer)
+      { x: x + 38, y: y - 30 }, // Inner right
+      { x: x + 95, y: y - 30 }, // Outer right
+      { x: x + 58, y: y + 20 }, // Inner bottom right
+      { x: x + 70, y: y + 80 }, // Outer bottom right
+      { x: x, y: y + 50 }, // Center bottom (inner bottom)
+      { x: x - 70, y: y + 80 }, // Outer bottom left
+      { x: x - 58, y: y + 20 }, // Inner bottom left
+      { x: x - 95, y: y - 30 }, // Outer left
+      { x: x - 38, y: y - 30 }, // Inner left
+    ];
+
+    const star = new Polygon(starPoints, {
+      fill: fill,
+      stroke: stroke,
+      strokeWidth: strokeWidth,
+    });
+
+    canvas.add(star);
+  };
+
   return {
     addRectangle,
     addCircle,
-    addPolygon,
     addFreeDrawing,
+    addTriangle,
+    addRhombus,
+    addStar,
   };
 }

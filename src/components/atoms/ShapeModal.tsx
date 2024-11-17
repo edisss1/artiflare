@@ -19,7 +19,7 @@ const ShapeModal = ({ shapeModalRef, fns }: ShapeModalProps) => {
           "grid grid-cols-4 gap-4 w-full max-w-[100px] items-center justify-center "
         }
       >
-        {fns.map((fn, index) => (
+        {fns.map((fn) => (
           <Button onClick={fn.fn} className={``}>
             {/*<img src={fn.label} alt={fn.label} />*/}
             {fn.label}

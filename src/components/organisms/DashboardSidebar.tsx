@@ -4,6 +4,9 @@ import Search from "../atoms/Search";
 import User from "../atoms/User.tsx";
 import BurgerMenuIcon from "../icons/BurgerMenuIcon.tsx";
 import Button from "../atoms/Button.tsx";
+import { AppDispatch } from "../../redux/store.ts";
+import { useDispatch } from "react-redux";
+import { signOutUser } from "../../redux/slices/authSlice.ts";
 
 interface DashboardSidebarProps {
   isMobileSidebarOpened: boolean;
@@ -15,6 +18,7 @@ const DashboardSidebar = ({
   setIsMobileSidebarOpened,
 }: DashboardSidebarProps) => {
   const [query, setQuery] = useState("");
+  const dispatch: AppDispatch = useDispatch();
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -22,6 +26,10 @@ const DashboardSidebar = ({
 
   const handleMobileSideBarClose = () => {
     setIsMobileSidebarOpened(false);
+  };
+
+  const handleSignOut = () => {
+    dispatch(signOutUser());
   };
 
   const windowWidth = window.innerWidth;
@@ -49,6 +57,9 @@ const DashboardSidebar = ({
         />
         <DashboardLinksContainer />
         <User position="absolute bottom-0" />
+        <Button onClick={handleSignOut} className={""}>
+          sign out (remove later)
+        </Button>
       </div>
     </aside>
   );

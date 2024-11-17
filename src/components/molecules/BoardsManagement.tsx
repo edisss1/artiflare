@@ -44,14 +44,14 @@ const BoardsManagement = () => {
           <div className="flex gap-4 text-typography-light">
             <Button
               onClick={() => alert("WIP")}
-              className="flex gap-2 items-center px-2 py-3 w-max bg-primary rounded-sm hover:shadow-lg transition-all duration-200 hover:shadow-primary/80"
+              className="flex gap-2 items-center px-2 py-3 w-max bg-primary rounded-md hover:shadow-lg transition-all duration-200 hover:shadow-primary/80"
             >
               <img src={team} alt="" />
               <p>Join a team</p>
             </Button>
             <Button
               onClick={toggleCreateBoardModal}
-              className="flex gap-2 items-center px-2 py-3 max-w-max bg-secondary rounded-sm hover:shadow-lg transition-all duration-200 hover:shadow-secondary/80 "
+              className="flex gap-2 items-center px-2 py-3 max-w-max bg-secondary rounded-md hover:shadow-lg transition-all duration-200 hover:shadow-secondary/80 "
             >
               <img src={add} alt="" />
               <p>Create new</p>

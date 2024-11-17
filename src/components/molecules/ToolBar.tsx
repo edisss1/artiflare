@@ -10,7 +10,7 @@ type ToolBarProps = {
 
 const ToolBar = ({ shapesList }: ToolBarProps) => {
   const shapeModalRefs = useRef(
-    shapesList.map(() => React.createRef<HTMLDivElement>(null)),
+    shapesList.map(() => React.createRef<HTMLDivElement>()),
   );
 
   const toggleModal = (index: number) => {

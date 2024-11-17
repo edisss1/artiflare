@@ -13,7 +13,7 @@ const Search = ({ placeholder, onChange, value }: SearchProps) => {
         placeholder={placeholder}
         onChange={onChange}
         value={value}
-        className="bg-transparent text-typography-dark border-2 py-1 border-typography-light rounded-sm flex-row-reverse flex  outline-none ps-8"
+        className="bg-transparent text-typography-dark border-2 py-1 border-typography-light rounded-md flex-row-reverse flex  outline-none ps-8"
         type="text"
       />
       <img

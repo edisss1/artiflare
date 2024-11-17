@@ -11,6 +11,7 @@ import { auth } from "../firestore/firebaseConfig";
 import { User as LoggedUser } from "../types/User.ts";
 import { Navigate } from "react-router-dom";
 import { setUser } from "../redux/slices/authSlice.ts";
+import Footer from "../components/organisms/Footer.tsx";
 
 const Home = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -48,6 +49,7 @@ const Home = () => {
       <Information />
       <WhyUs />
       <Pricing />
+      <Footer />
     </>
   );
 };

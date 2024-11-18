@@ -1,5 +1,5 @@
 import { Canvas } from "fabric";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   setWidth,
   setHeight,
@@ -7,12 +7,15 @@ import {
   setDiameter,
   setStroke,
 } from "../../redux/slices/shapeManagementSlice";
-import SettingsInput from "../atoms/SettingsInput";
-import Button from "../atoms/Button";
+import { handleObjectSelection } from "../../utils/handleObjectSelection.ts";
+import { AppDispatch } from "../../redux/store.ts";
+import { clearSettings } from "../../utils/clearSettings.ts";
+import RectParameters from "../molecules/RectParameters.tsx";
+import CircleParameters from "../molecules/CircleParameters.tsx";
 
 interface SettingProps {
   canvas: Canvas | null;
-  dispatch: any;
+  dispatch: AppDispatch;
   width: string | number;
   height: string | number;
   diameter: string | number;
@@ -31,39 +34,6 @@ const ShapeParameters = ({
 }: SettingProps) => {
   const [selectedObject, setSelectedObject] = useState<any>(null);
   const [settingsPosition, setSettingsPosition] = useState({ top: 0, left: 0 });
-  const handleObjectSelection = (object: any) => {
-    if (!object || !canvas) return;
-
-    const boundingRect = object.getBoundingRect();
-    const transform = canvas.viewportTransform;
-    const zoom = canvas.getZoom();
-
-    // console.log(boundingRect);
-
-    setSettingsPosition({
-      top: (boundingRect.top + transform[5]) / zoom,
-      left: (boundingRect.left + transform[4]) / zoom,
-    });
-
-    console.log(settingsPosition);
-
-    setSelectedObject(object);
-
-    switch (object.type) {
-      case "rect":
-        dispatch(setWidth(Math.round(object.width * object.scaleX)));
-        dispatch(setHeight(Math.round(object.height * object.scaleY)));
-        dispatch(setColor(object.fill));
-        dispatch(setDiameter(""));
-        break;
-      case "circle":
-        dispatch(setDiameter(Math.round(object.radius * 2 * object.scaleX)));
-        dispatch(setColor(object.fill));
-        dispatch(setWidth(""));
-        dispatch(setHeight(""));
-        break;
-    }
-  };
 
   const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const widthValue = parseInt(e.target.value.replace(/,/g, ""), 10);
@@ -127,28 +97,40 @@ const ShapeParameters = ({
     canvas?.renderAll();
   };
 
-  const clearSettings = () => {
-    dispatch(setWidth(""));
-    dispatch(setHeight(""));
-    dispatch(setDiameter(""));
-  };
-
   useEffect(() => {
     if (!canvas) return;
 
     canvas.on("selection:created", (e) => {
-      handleObjectSelection(e.selected[0]);
+      handleObjectSelection(
+        e.selected[0],
+        setSettingsPosition,
+        canvas,
+        setSelectedObject,
+        dispatch,
+      );
     });
     canvas.on("selection:updated", (e) => {
-      handleObjectSelection(e.selected[0]);
+      handleObjectSelection(
+        e.selected[0],
+        setSettingsPosition,
+        canvas,
+        setSelectedObject,
+        dispatch,
+      );
     });
     canvas.on("selection:cleared", () => {
       setSelectedObject(null);
-      clearSettings();
+      clearSettings(dispatch);
     });
 
     canvas.on("object:modified", (e) => {
-      handleObjectSelection(e.target);
+      handleObjectSelection(
+        e.target,
+        setSettingsPosition,
+        canvas,
+        setSelectedObject,
+        dispatch,
+      );
     });
   }, [canvas]);
 
@@ -159,16 +141,21 @@ const ShapeParameters = ({
     }
   };
 
-  const handleKeyPress = useCallback(
-    (e: globalThis.KeyboardEvent) => {
-      switch (e.key) {
-        case "Delete":
-          deleteSelectedObject();
-          break;
-      }
-    },
-    [deleteSelectedObject],
-  );
+  // const handleKeyPress =
+  //   (e: globalThis.KeyboardEvent) => {
+  //     switch (e.key) {
+  //       case "Delete":
+  //         deleteSelectedObject();
+  //         break;
+  //     }
+
+  const handleKeyPress = (e: globalThis.KeyboardEvent) => {
+    switch (e.key) {
+      case "Delete":
+        deleteSelectedObject();
+        break;
+    }
+  };
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
@@ -192,69 +179,42 @@ const ShapeParameters = ({
       }`}
     >
       {selectedObject && selectedObject.type === "rect" && (
-        <div className="flex gap-2 items-center">
-          <SettingsInput
-            type="number"
-            value={width}
-            onChange={(e) => handleWidthChange(e)}
-            id="width"
-            label="Width"
-          />
-          <SettingsInput
-            value={height}
-            onChange={(e) => handleHeightChange(e)}
-            id="height"
-            label="Height"
-            type="number"
-          />
-          <div className="flex gap-4">
-            <SettingsInput
-              value={fill}
-              onChange={(e) => handleColorChange(e)}
-              id="color"
-              label="Color"
-              type="color"
-              className=""
-            />
-            <SettingsInput
-              value={stroke}
-              onChange={(e) => handleStrokeChange(e)}
-              id="stroke"
-              label="Stroke"
-              type="color"
-              className="color-swatch"
-            />
-          </div>
-          <Button
-            className="border-2 border-typography-light mt-4 py-2 px-4 rounded-md hover:bg-bg-dark hover:text-typography-dark transition-all duration-150"
-            children="Delete"
-            onClick={deleteSelectedObject}
-          />
-        </div>
+        <RectParameters
+          rectWidthValue={width}
+          onChangeWidth={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleWidthChange(e)
+          }
+          rectHeightValue={height}
+          onChangeHeight={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleHeightChange(e)
+          }
+          rectFillValue={fill}
+          onChangeFill={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleColorChange(e)
+          }
+          rectStrokeValue={stroke}
+          onChangeStroke={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleStrokeChange(e)
+          }
+          onClick={deleteSelectedObject}
+        />
       )}
       {selectedObject && selectedObject.type === "circle" && (
-        <div className="flex gap-2 ">
-          <SettingsInput
-            value={diameter}
-            onChange={(e) => handleDiameterChange(e)}
-            type="number"
-            id="Diameter"
-            label="Diameter"
-          />
-          <SettingsInput
-            value={fill}
-            onChange={(e) => handleColorChange(e)}
-            id="color"
-            label="Color"
-            type="color"
-            className="bg-transparent outline-none border-none w-8 "
-          />
-          <Button
-            className="border-2 border-typography-light mt-4 py-2 px-4 rounded-md hover:bg-bg-dark hover:text-typography-dark transition-all duration-150"
-            children="Delete"
-            onClick={deleteSelectedObject}
-          />
-        </div>
+        <CircleParameters
+          circleDiameterValue={diameter}
+          circleFillValue={fill}
+          circleStrokeValue={stroke}
+          onClick={deleteSelectedObject}
+          onChangeDiameter={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleDiameterChange(e)
+          }
+          onChangeFill={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleColorChange(e)
+          }
+          onChangeStroke={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleStrokeChange(e)
+          }
+        />
       )}
     </aside>
   );

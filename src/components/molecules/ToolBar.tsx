@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import ShapeModal from "../atoms/ShapeModal.tsx";
 
 type ToolBarProps = {
@@ -9,14 +9,11 @@ type ToolBarProps = {
 };
 
 const ToolBar = ({ shapesList }: ToolBarProps) => {
-  const shapeModalRefs = useRef(
-    shapesList.map(() => React.createRef<HTMLDivElement>()),
-  );
+  const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
 
   const toggleModal = (index: number) => {
-    if (shapeModalRefs.current[index]) {
-      shapeModalRefs.current[index].current?.classList.toggle("hidden");
-    }
+    // Toggle modal visibility
+    setOpenModalIndex((prevIndex) => (prevIndex === index ? null : index));
   };
 
   return (
@@ -25,18 +22,14 @@ const ToolBar = ({ shapesList }: ToolBarProps) => {
         const fns = shape.fn;
 
         return (
-          <>
-            <button className={"relative"} onClick={() => toggleModal(index)}>
-              {shape.icon}
-            </button>
-            <ShapeModal
-              fns={fns}
-              shapeModalRef={shapeModalRefs.current[index]}
-            />
-          </>
+          <div key={index} className="relative">
+            <button onClick={() => toggleModal(index)}>{shape.icon}</button>
+            {openModalIndex === index && <ShapeModal fns={fns} />}
+          </div>
         );
       })}
     </aside>
   );
 };
+
 export default ToolBar;

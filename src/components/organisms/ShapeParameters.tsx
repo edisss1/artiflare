@@ -6,12 +6,14 @@ import {
   setColor,
   setDiameter,
   setStroke,
+  setAngle,
 } from "../../redux/slices/shapeManagementSlice";
 import { handleObjectSelection } from "../../utils/handleObjectSelection.ts";
 import { AppDispatch } from "../../redux/store.ts";
 import { clearSettings } from "../../utils/clearSettings.ts";
 import RectParameters from "../molecules/RectParameters.tsx";
 import CircleParameters from "../molecules/CircleParameters.tsx";
+import LineParameters from "../molecules/LineParameters.tsx";
 
 interface SettingProps {
   canvas: Canvas | null;
@@ -21,6 +23,7 @@ interface SettingProps {
   diameter: string | number;
   fill: string;
   stroke: string;
+  angle: number;
 }
 
 const ShapeParameters = ({
@@ -31,6 +34,7 @@ const ShapeParameters = ({
   fill,
   diameter,
   stroke,
+  angle,
 }: SettingProps) => {
   const [selectedObject, setSelectedObject] = useState<any>(null);
   const [settingsPosition, setSettingsPosition] = useState({ top: 0, left: 0 });
@@ -94,6 +98,15 @@ const ShapeParameters = ({
 
     if (!selectedObject) return;
     selectedObject.set({ stroke: strokeValue });
+    canvas?.renderAll();
+  };
+
+  const handleAngleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const angleValue = e.target.value;
+    dispatch(setAngle(Number(angleValue)));
+
+    if (!selectedObject) return;
+    selectedObject.set({ angle: angleValue });
     canvas?.renderAll();
   };
 
@@ -213,6 +226,22 @@ const ShapeParameters = ({
           }
           onChangeStroke={(e: React.ChangeEvent<HTMLInputElement>) =>
             handleStrokeChange(e)
+          }
+        />
+      )}
+      {selectedObject && selectedObject.type === "line" && (
+        <LineParameters
+          lineStrokeValue={stroke}
+          onChangeStroke={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleStrokeChange(e)
+          }
+          onChangeWidth={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleWidthChange(e)
+          }
+          lineWidthValue={width}
+          lineAngleValue={angle}
+          onChangeAngle={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleAngleChange(e)
           }
         />
       )}

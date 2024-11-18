@@ -6,6 +6,7 @@ import {
   PencilBrush,
   Triangle,
   Polygon,
+  Line,
 } from "fabric";
 
 export interface CustomGroup extends Group {
@@ -140,6 +141,24 @@ export function useShapes(canvas: Canvas | null) {
     canvas.add(star);
   };
 
+  const addLine = (
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    stroke: string,
+    strokeWidth: number,
+    angle: number,
+  ) => {
+    if (!canvas) return;
+    const line = new Line([x1, y1, x2, y2], {
+      stroke: stroke,
+      strokeWidth: strokeWidth,
+      angle: angle,
+    });
+    canvas.add(line);
+  };
+
   return {
     addRectangle,
     addCircle,
@@ -147,5 +166,6 @@ export function useShapes(canvas: Canvas | null) {
     addTriangle,
     addRhombus,
     addStar,
+    addLine,
   };
 }

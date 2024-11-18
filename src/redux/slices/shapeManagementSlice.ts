@@ -12,6 +12,7 @@ interface ShapeManagementState {
   isDrawingMode: boolean;
   brushColor: string;
   brushWidth: number;
+  angle: number;
 }
 
 const initialState: ShapeManagementState = {
@@ -26,6 +27,7 @@ const initialState: ShapeManagementState = {
   isDrawingMode: false,
   brushColor: "#000000",
   brushWidth: 5,
+  angle: 0,
 };
 
 const shapeManagementSlice = createSlice({
@@ -65,6 +67,9 @@ const shapeManagementSlice = createSlice({
     setBrushWidth(state, action: PayloadAction<number>) {
       state.brushWidth = action.payload;
     },
+    setAngle(state, action: PayloadAction<number>) {
+      state.angle = action.payload;
+    },
   },
 });
 
@@ -79,6 +84,7 @@ export const {
   setBrushColor,
   setDrawingMode,
   setBrushWidth,
+  setAngle,
 } = shapeManagementSlice.actions;
 
 export default shapeManagementSlice.reducer;

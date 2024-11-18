@@ -21,6 +21,7 @@ import CircleIcon from "../components/icons/shapes/CircleIcon.tsx";
 import TriangleIcon from "../components/icons/shapes/TriangleIcon.tsx";
 import RhombusIcon from "../components/icons/shapes/RhombusIcon.tsx";
 import StarIcon from "../components/icons/shapes/StarIcon.tsx";
+import LineIcon from "../components/icons/shapes/LineIcon.tsx";
 
 const DrawingBoard = () => {
   const [canvas, setCanvas] = useState<Canvas | null>(null);
@@ -36,9 +37,10 @@ const DrawingBoard = () => {
     // brushColor,
     // brushWidth,
     isDrawingMode,
+    angle,
   } = useSelector((state: RootState) => state.shape);
 
-  const { addRectangle, addCircle, addTriangle, addRhombus, addStar } =
+  const { addRectangle, addCircle, addTriangle, addRhombus, addStar, addLine } =
     useShapes(canvas);
 
   const user = useSelector((state: RootState) => state.auth.user);
@@ -46,6 +48,8 @@ const DrawingBoard = () => {
   const { boardID } = useParams();
 
   const status = useSelector((state: RootState) => state.boards.status);
+
+  const lineStartRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     console.log("Status: ", status);
@@ -78,11 +82,34 @@ const DrawingBoard = () => {
         case "star":
           addStar(pointer.x, pointer.y, fill, stroke, strokeWidth);
           break;
+        case "line":
+          if (!lineStartRef.current) {
+            lineStartRef.current = { x: pointer.x, y: pointer.y };
+          } else {
+            const { x: x1, y: y1 } = lineStartRef.current;
 
-        // case "pencil":
-        //   addFreeDrawing(brushWidth, brushColor);
-        //   dispatch(setDrawingMode(true));
-        //   break;
+            let x2 = pointer.x;
+            let y2 = pointer.y;
+
+            if (e.e.shiftKey) {
+              const deltaX = x2 - x1;
+              const deltaY = y2 - y1;
+              const lineAngle = Math.atan2(deltaY, deltaX);
+
+              const snapAngle =
+                Math.round(lineAngle / (Math.PI / 4)) * (Math.PI / 4);
+
+              const length = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+
+              x2 = x1 + length * Math.cos(snapAngle);
+              y2 = y1 + length * Math.sin(snapAngle);
+
+              addLine(x1, y1, x2, y2, stroke, strokeWidth, angle, width);
+
+              lineStartRef.current = null;
+            }
+          }
+          break;
       }
     }
   };
@@ -213,7 +240,10 @@ const DrawingBoard = () => {
     },
     {
       icon: "🖌️",
-      fn: [{ label: "🖌️", fn: () => updateSelectedShape("pencil") }],
+      fn: [
+        { label: "🖌️", fn: () => updateSelectedShape("pencil") },
+        { label: <LineIcon />, fn: () => updateSelectedShape("line") },
+      ],
     },
   ];
 
@@ -232,6 +262,7 @@ const DrawingBoard = () => {
           canvas={canvas}
           dispatch={dispatch}
           stroke={stroke}
+          angle={angle}
         />
         <CanvasBoard setCanvas={setCanvas} />
       </div>

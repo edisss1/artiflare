@@ -1,7 +1,6 @@
-import collab from "../assets/5 Collaboration Trends to Expect in 2016 1.webp"
-import management from "../assets/Effortless project management 1.webp"
-import intuitive from "../assets/Businessman using a computer analysis for process and workflow automation with flowchart, a businessman in background 1.webp"
-
+import collab from "../assets/collab.webp";
+import management from "../assets/management.webp";
+import tools from "../assets/tools.webp";
 export const informationContent = [
   {
     header: "Real-time Collaboration",
@@ -16,6 +15,6 @@ export const informationContent = [
   {
     header: "Intuitive Drawing Tools",
     text: "Access a variety of tools that help bring your ideas to life. From pens and shapes to color pickers and erasers",
-    src: intuitive,
+    src: tools,
   },
-]
+];

@@ -6,9 +6,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* * {
-  transition: all 0.1s linear;
-} */
+/*{*/
+/*  transition: all 0.1s linear;*/
+/*}*/
 
 body {
   font-family: "Outfit", sans-serif;
@@ -30,10 +30,7 @@ body {
   background-repeat: repeat;
 }
 
-.grid-pattern__white {
-  background-image: url("/src/assets/grid-white.svg");
-  background-repeat: repeat;
-}
+
 
 .color-swatch {
   -moz-appearance: none;

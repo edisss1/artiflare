@@ -1,171 +1,185 @@
 import {
-  Canvas,
-  Circle,
-  Group,
-  Rect,
-  PencilBrush,
-  Triangle,
-  Polygon,
-  Line,
-} from "fabric";
-
-export interface CustomGroup extends Group {
-  shapeType?: string;
-}
+    Canvas,
+    Circle,
+    Rect,
+    PencilBrush,
+    Triangle,
+    Polygon,
+    Line,
+    FabricText
+} from "fabric"
 
 export function useShapes(canvas: Canvas | null) {
-  const addRectangle = (
-    x: number,
-    y: number,
-    fill: string,
-    stroke: string,
-    strokeWidth: number,
-  ) => {
-    if (!canvas) return;
+    const addRectangle = (
+        x: number,
+        y: number,
+        fill: string,
+        stroke: string,
+        strokeWidth: number
+    ) => {
+        if (!canvas) return
 
-    const rect = new Rect({
-      width: 100,
-      height: 100,
-      left: x,
-      top: y,
-      fill: fill,
-      stroke: stroke,
-      strokeWidth: strokeWidth,
-    });
+        const rect = new Rect({
+            width: 100,
+            height: 100,
+            left: x,
+            top: y,
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth
+        })
 
-    canvas.add(rect);
-  };
+        canvas.add(rect)
+    }
 
-  const addCircle = (x: number, y: number) => {
-    if (!canvas) return;
+    const addCircle = (x: number, y: number) => {
+        if (!canvas) return
 
-    const circle = new Circle({
-      width: 100,
-      height: 100,
-      radius: 50,
-      top: y,
-      left: x,
-      fill: null,
-      stroke: "#333333",
-      strokeWidth: 2,
-      opacity: 100,
-    });
+        const circle = new Circle({
+            width: 100,
+            height: 100,
+            radius: 50,
+            top: y,
+            left: x,
+            fill: null,
+            stroke: "#333333",
+            strokeWidth: 2,
+            opacity: 100
+        })
 
-    canvas.add(circle);
-  };
+        canvas.add(circle)
+    }
 
-  const addTriangle = (
-    x: number,
-    y: number,
-    fill: string,
-    stroke: string,
-    strokeWidth: number,
-  ) => {
-    if (!canvas) return;
-    const triangle = new Triangle({
-      width: 100,
-      height: 100,
-      fill: fill,
-      stroke: stroke,
-      strokeWidth: strokeWidth,
-      top: y,
-      left: x,
-      opacity: 100,
-    });
+    const addTriangle = (
+        x: number,
+        y: number,
+        fill: string,
+        stroke: string,
+        strokeWidth: number
+    ) => {
+        if (!canvas) return
+        const triangle = new Triangle({
+            width: 100,
+            height: 100,
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            top: y,
+            left: x,
+            opacity: 100
+        })
 
-    canvas.add(triangle);
-  };
+        canvas.add(triangle)
+    }
 
-  const addFreeDrawing = (brushWidth: number, brushColor: string) => {
-    if (!canvas) return;
+    const addRhombus = (
+        x: number,
+        y: number,
+        fill: string,
+        stroke: string,
+        strokeWidth: number
+    ) => {
+        if (!canvas) return
 
-    canvas.isDrawingMode = true;
-    canvas.freeDrawingBrush = new PencilBrush(canvas);
-    canvas.freeDrawingBrush.color = brushColor;
-    canvas.freeDrawingBrush.width = brushWidth;
-  };
+        const rhombusPoints = [
+            { x: x, y: y }, // Top vertex
+            { x: x + 100, y: y + 100 }, // Right vertex
+            { x: x, y: y + 200 }, // Bottom vertex
+            { x: x - 100, y: y + 100 } // Left vertex
+        ]
 
-  const addRhombus = (
-    x: number,
-    y: number,
-    fill: string,
-    stroke: string,
-    strokeWidth: number,
-  ) => {
-    if (!canvas) return;
+        const rhombus = new Polygon(rhombusPoints, {
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth
+        })
 
-    const rhombusPoints = [
-      { x: x, y: y }, // Top vertex
-      { x: x + 100, y: y + 100 }, // Right vertex
-      { x: x, y: y + 200 }, // Bottom vertex
-      { x: x - 100, y: y + 100 }, // Left vertex
-    ];
+        canvas.add(rhombus)
+    }
 
-    const rhombus = new Polygon(rhombusPoints, {
-      fill: fill,
-      stroke: stroke,
-      strokeWidth: strokeWidth,
-    });
+    const addStar = (
+        x: number,
+        y: number,
+        fill: string,
+        stroke: string,
+        strokeWidth: number
+    ) => {
+        if (!canvas) return
 
-    canvas.add(rhombus);
-  };
+        const starPoints = [
+            { x: x, y: y - 100 }, // Top vertex (outer)
+            { x: x + 38, y: y - 30 }, // Inner right
+            { x: x + 95, y: y - 30 }, // Outer right
+            { x: x + 58, y: y + 20 }, // Inner bottom right
+            { x: x + 70, y: y + 80 }, // Outer bottom right
+            { x: x, y: y + 50 }, // Center bottom (inner bottom)
+            { x: x - 70, y: y + 80 }, // Outer bottom left
+            { x: x - 58, y: y + 20 }, // Inner bottom left
+            { x: x - 95, y: y - 30 }, // Outer left
+            { x: x - 38, y: y - 30 } // Inner left
+        ]
 
-  const addStar = (
-    x: number,
-    y: number,
-    fill: string,
-    stroke: string,
-    strokeWidth: number,
-  ) => {
-    if (!canvas) return;
+        const star = new Polygon(starPoints, {
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth
+        })
 
-    const starPoints = [
-      { x: x, y: y - 100 }, // Top vertex (outer)
-      { x: x + 38, y: y - 30 }, // Inner right
-      { x: x + 95, y: y - 30 }, // Outer right
-      { x: x + 58, y: y + 20 }, // Inner bottom right
-      { x: x + 70, y: y + 80 }, // Outer bottom right
-      { x: x, y: y + 50 }, // Center bottom (inner bottom)
-      { x: x - 70, y: y + 80 }, // Outer bottom left
-      { x: x - 58, y: y + 20 }, // Inner bottom left
-      { x: x - 95, y: y - 30 }, // Outer left
-      { x: x - 38, y: y - 30 }, // Inner left
-    ];
+        canvas.add(star)
+    }
 
-    const star = new Polygon(starPoints, {
-      fill: fill,
-      stroke: stroke,
-      strokeWidth: strokeWidth,
-    });
+    const addLine = (
+        x1: number,
+        y1: number,
+        x2: number,
+        y2: number,
+        stroke: string,
+        strokeWidth: number,
+        angle: number
+    ) => {
+        if (!canvas) return
+        const line = new Line([x1, y1, x2, y2], {
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            angle: angle
+        })
+        canvas.add(line)
+    }
 
-    canvas.add(star);
-  };
+    const addFreeDrawing = (
+        brushWidth: number,
+        brushColor: string,
+        freeDrawingMode: boolean
+    ) => {
+        if (!canvas) return
 
-  const addLine = (
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number,
-    stroke: string,
-    strokeWidth: number,
-    angle: number,
-  ) => {
-    if (!canvas) return;
-    const line = new Line([x1, y1, x2, y2], {
-      stroke: stroke,
-      strokeWidth: strokeWidth,
-      angle: angle,
-    });
-    canvas.add(line);
-  };
+        const pencilBrush = new PencilBrush(canvas)
+        pencilBrush.color = brushColor
+        pencilBrush.width = brushWidth
+        canvas.freeDrawingBrush = pencilBrush
+        canvas.isDrawingMode = freeDrawingMode
+    }
 
-  return {
-    addRectangle,
-    addCircle,
-    addFreeDrawing,
-    addTriangle,
-    addRhombus,
-    addStar,
-    addLine,
-  };
+    const addText = (text: string, x: number, y: number) => {
+        if (!canvas) return
+        const textObject = new FabricText(text, {
+            left: x,
+            top: y,
+            fill: "#000000",
+            fontSize: 20,
+            fontFamily: "Outfit, sans-serif"
+        })
+        canvas.add(textObject)
+    }
+
+    return {
+        addRectangle,
+        addCircle,
+        addFreeDrawing,
+        addTriangle,
+        addRhombus,
+        addStar,
+        addLine,
+        addText
+    }
 }

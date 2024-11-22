@@ -111,6 +111,6 @@ body {
     grid-template-rows: 0fr;
 }
 
-/* .expanded {
-    grid-template-rows: repeat(2, 1fr);
-} */
+.modal-input:user-invalid {
+    @apply border-danger;
+}

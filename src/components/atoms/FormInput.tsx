@@ -4,6 +4,7 @@ interface FormInputProps {
     placeholder: string
     type: string
     bg?: string
+    maxWidth?: string
 }
 
 const FormInput = ({
@@ -11,11 +12,12 @@ const FormInput = ({
     onChange,
     placeholder,
     type,
-    bg
+    bg,
+    maxWidth
 }: FormInputProps) => {
     return (
         <input
-            className={`${bg} w-full py-[0.9375rem] ps-3 border-2 border-typography-light dark:border-typography-dark rounded-md outline-none`}
+            className={`${bg} ${maxWidth} w-full py-[0.9375rem] ps-3 border-2 border-typography-light dark:border-typography-dark rounded-md outline-none`}
             value={value}
             onChange={onChange}
             placeholder={placeholder}

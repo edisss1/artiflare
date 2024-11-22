@@ -26,6 +26,7 @@ import CanvasNav from "../components/molecules/CanvasNav.tsx"
 import TextIcon from "../components/icons/shapes/TextIcon.tsx"
 import PencilIcon from "../components/icons/shapes/PencilIcon.tsx"
 import { updateSelectedShape } from "../utils/updateSelectedShape.ts"
+import ChatContainer from "../components/molecules/ChatContainer.tsx"
 
 const DrawingBoard = () => {
     const [canvas, setCanvas] = useState<Canvas | null>(null)
@@ -151,7 +152,6 @@ const DrawingBoard = () => {
                     user
                 })
             )
-        } else {
         }
         console.log("Board saved")
     }, [canvas, boardID, user, dispatch])
@@ -347,6 +347,7 @@ const DrawingBoard = () => {
                     angle={angle}
                 />
                 <User position="absolute bottom-[1rem] left-[5%] z-10 " />
+                <ChatContainer />
                 <CanvasBoard setCanvas={setCanvas} />
             </div>
         </>

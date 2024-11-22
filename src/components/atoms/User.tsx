@@ -7,14 +7,14 @@ const User = ({ position }: { position: string }) => {
     const user = useSelector((state: RootState) => state.auth.user)
     let userProfilePicture = user?.img
 
-    if (userProfilePicture === null || undefined) {
+    if (userProfilePicture === null || userProfilePicture === undefined) {
         userProfilePicture = userIcon
     }
 
     return (
         <Link
             to={`/app/settings/profile/${user?.uid}`}
-            className={`flex gap-2 hover:bg-bg-dark/40' dark:hover:bg-bg-light/40 py-2 px-2 transition-colors duration-200 ${position} rounded-md items-center flex-col bg-primary dark:bg-primary-dark`}
+            className={`flex gap-2 hover:bg-bg-dark/40 dark:hover:bg-bg-light/40 py-2 px-2 transition-colors duration-200 ${position} rounded-md items-center flex-col bg-primary dark:bg-primary-dark`}
         >
             <div className="flex gap-2 items-center w-[calc(100%)] truncate ">
                 <img

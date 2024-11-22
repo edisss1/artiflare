@@ -1,6 +1,6 @@
 /*@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap");*/
 /*@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');*/
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -11,100 +11,106 @@
 /*}*/
 
 body {
-  font-family: "Outfit", sans-serif;
-  min-height: 100vh;
-  @apply text-typography-light bg-bg-light dark:text-typography-dark  dark:bg-bg-dark transition-all duration-300 ease-in-out;
+    font-family: "Outfit", sans-serif;
+    min-height: 100vh;
+    @apply text-typography-light bg-bg-light dark:text-typography-dark  dark:bg-bg-dark transition-all duration-300 ease-in-out;
 }
 
 .dashboard {
-  display: grid;
-  grid-template-columns: 0.5fr 3fr;
-  grid-template-areas:
-    "aside nav nav"
-    "aside main main"
-    "aside main main";
+    display: grid;
+    grid-template-columns: 0.5fr 3fr;
+    grid-template-areas:
+        "aside nav nav"
+        "aside main main"
+        "aside main main";
 }
 
 .grid-pattern {
-  background-image: url("/src/assets/ooorganize.svg");
-  background-repeat: repeat;
+    background-image: url("/src/assets/ooorganize.svg");
+    background-repeat: repeat;
 }
 
-
-
 .color-swatch {
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-  @apply w-8 h-8 rounded-[50%] cursor-pointer p-0 border-2 border-bg-dark;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    @apply w-8 h-8 rounded-[50%] cursor-pointer p-0 border-2 border-bg-dark;
 }
 
 .lds-ring,
 .lds-ring div {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 .lds-ring {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
 }
 .lds-ring div {
-  box-sizing: border-box;
-  display: block;
-  position: absolute;
-  width: 64px;
-  height: 64px;
-  margin: 8px;
-  border: 4px solid currentColor;
-  border-radius: 50%;
-  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: currentColor transparent transparent transparent;
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border: 4px solid currentColor;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: currentColor transparent transparent transparent;
 }
 .lds-ring div:nth-child(1) {
-  animation-delay: -0.45s;
+    animation-delay: -0.45s;
 }
 .lds-ring div:nth-child(2) {
-  animation-delay: -0.3s;
+    animation-delay: -0.3s;
 }
 .lds-ring div:nth-child(3) {
-  animation-delay: -0.15s;
+    animation-delay: -0.15s;
 }
 @keyframes lds-ring {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .modal {
-  transition: display 0.2s allow-discrete, overlay 1s allow-discrete;
+    transition: display 0.2s allow-discrete, overlay 1s allow-discrete;
 
-  animation: close 0.2s forwards;
-  &[open] {
-    animation: open 0.2s forwards;
-  }
+    animation: close 0.2s forwards;
+    &[open] {
+        animation: open 0.2s forwards;
+    }
 }
 
 .modal::backdrop {
-  transition: opacity 0.2s linear;
+    transition: opacity 0.2s linear;
 }
 
 @keyframes open {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 @keyframes close {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
 }
+
+.chat-grid {
+    grid-template-rows: 0fr;
+}
+
+/* .expanded {
+    grid-template-rows: repeat(2, 1fr);
+} */

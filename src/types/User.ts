@@ -3,7 +3,6 @@ export interface User {
     img: string | null
     displayName: string | null
     email: string | null
-    teams: string[]
+    teams: { teamID: string; role: "admin" | "member" | "owner" }[]
     boards: string[]
-    roleInTeam?: "admin" | "member" | "owner"
 }

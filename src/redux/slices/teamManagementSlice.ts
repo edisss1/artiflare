@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Team } from "../../types/Team"
+import { Team, TeamMember } from "../../types/Team"
 import { db } from "../../firestore/firebaseConfig"
 import {
     addDoc,
@@ -48,7 +48,13 @@ export const createTeam = createAsyncThunk(
             const teamsRef = collection(db, "teams")
             const teamData: Team = {
                 name: teamTitle,
-                members: [],
+                members: [
+                    {
+                        uid: user.uid,
+                        role: "owner",
+                        displayName: user.displayName || user.email
+                    }
+                ],
                 creatorID: user.uid,
                 creatorName: user.displayName || user.email,
                 teamType: teamType
@@ -57,8 +63,10 @@ export const createTeam = createAsyncThunk(
             const docRef = await addDoc(teamsRef, teamData)
 
             await updateDoc(doc(db, "users", user.uid), {
-                teams: arrayUnion(docRef.id),
-                role: "owner"
+                teams: arrayUnion({
+                    teamID: docRef.id,
+                    role: "owner"
+                })
             })
 
             return { id: docRef.id, ...teamData }
@@ -116,7 +124,7 @@ export const joinTeam = createAsyncThunk(
 )
 
 export const inviteUserToTeam = async (
-    userId: string,
+    user: TeamMember,
     teamId: string,
     inviteeId: string
 ) => {
@@ -126,28 +134,30 @@ export const inviteUserToTeam = async (
     if (teamDoc.exists()) {
         const teamData = teamDoc.data() as Team
 
-        const userDocRef = doc(db, "users", userId)
+        const userDocRef = doc(db, "users", user.uid)
         const userDoc = await getDoc(userDocRef)
+        const teamDocRef = doc(db, "teams", teamId)
 
         if (userDoc.exists()) {
             const userData = userDoc.data() as User
 
-            if (userData.roleInTeam === "owner") {
+            if (userData.teams.some((team) => team.role === "owner")) {
                 console.error("User is already an owner of the team")
                 return
             }
 
-            if (userData.teams.includes(teamId)) {
+            if (userData.teams.some((team) => team.teamID === teamId)) {
                 console.error("User is already a member of the team")
                 return
             }
 
             userData.teams = userData.teams || []
-            userData.teams.push(teamId)
+            userData.teams.push({ teamID: teamId, role: "member" })
 
             await updateDoc(userDocRef, { teams: userData.teams })
+            await updateDoc(teamDocRef, { members: teamData.members })
         } else {
-            console.error(`User with ID ${userId} does not exist`)
+            console.error(`User with ID ${user.uid} does not exist`)
             return
         }
 
@@ -157,13 +167,13 @@ export const inviteUserToTeam = async (
         if (inviteeDoc.exists()) {
             const inviteeData = inviteeDoc.data() as User
 
-            if (inviteeData.teams.includes(teamId)) {
+            if (inviteeData.teams.some((team) => team.teamID === teamId)) {
                 console.error("Invitee is already a member of the team")
                 return
             }
 
             inviteeData.teams = inviteeData.teams || []
-            inviteeData.teams.push(teamId)
+            inviteeData.teams.push({ teamID: teamId, role: "member" })
 
             await updateDoc(inviteeDocRef, { teams: inviteeData.teams })
         } else {
@@ -172,7 +182,7 @@ export const inviteUserToTeam = async (
         }
 
         teamData.members = teamData.members || []
-        teamData.members.push(userId)
+        teamData.members.push()
 
         await updateDoc(teamDocRef, { members: teamData.members })
     } else {

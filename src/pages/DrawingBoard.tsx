@@ -346,7 +346,7 @@ const DrawingBoard = () => {
                     stroke={stroke}
                     angle={angle}
                 />
-                <User position="absolute bottom-[1rem] left-[5%] z-10 " />
+                <User position="absolute bottom-8 left-[5%] z-40 " />
                 <ChatContainer />
                 <CanvasBoard setCanvas={setCanvas} />
             </div>

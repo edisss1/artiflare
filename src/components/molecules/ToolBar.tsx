@@ -23,7 +23,7 @@ const ToolBar = ({ shapesList }: ToolBarProps) => {
                 return (
                     <div key={index} className="flex flex-col items-center">
                         <button
-                            className="relative"
+                            className="relative hover:bg-bg-dark/30 p-1 rounded-md transition-colors duration-150"
                             onClick={() => toggleModal(index)}
                         >
                             {shape.icon}

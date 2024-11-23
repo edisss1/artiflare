@@ -1,9 +1,13 @@
-import { useState } from "react"
 import { teamTypeOptions } from "../../constants/teamTypeOptions"
 import Button from "./Button"
 import FormInput from "./FormInput"
 import Select from "./Select"
 import { TeamType } from "../../types/TeamType"
+import { useState } from "react"
+import { useSelector } from "react-redux"
+import { AppDispatch, RootState } from "../../redux/store"
+import { useDispatch } from "react-redux"
+import { createTeam } from "../../redux/slices/teamManagementSlice"
 
 interface CreateTeamModalContentProps {
     setIsCreateModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -12,14 +16,29 @@ interface CreateTeamModalContentProps {
 const CreateTeamModalContent = ({
     setIsCreateModal
 }: CreateTeamModalContentProps) => {
-    const [teamType, setTeamType] = useState<TeamType>({ teamType: "private" })
+    const [teamType, setTeamType] = useState<TeamType["teamType"]>("private")
+    const [teamTitle, setTeamTitle] = useState<string>("")
+    const dispatch: AppDispatch = useDispatch()
+
+    const user = useSelector((state: RootState) => state.auth.user)
 
     const handleJoinTeamModal = () => {
         setIsCreateModal(false)
     }
 
     const handleTeamTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setTeamType({ teamType: e.target.value } as TeamType)
+        setTeamType(e.target.value as TeamType["teamType"])
+    }
+
+    const handleTeamNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTeamTitle(e.target.value)
+    }
+
+    const handleCreateNewTeam = () => {
+        if (user) {
+            dispatch(createTeam({ teamTitle, teamType, user }))
+        }
+        console.log("team created")
     }
 
     return (
@@ -30,12 +49,13 @@ const CreateTeamModalContent = ({
             <div className="flex flex-col items-center w-full max-w-[300px]">
                 <div className="flex flex-col gap-2 w-full max-w-[300px]">
                     <FormInput
-                        value=""
-                        onChange={() => {}}
+                        value={teamTitle}
+                        onChange={(e) => handleTeamNameChange(e)}
                         placeholder="Enter a name for your team"
                         type="text"
                     />
                     <Select
+                        value={teamType}
                         options={teamTypeOptions}
                         onChange={handleTeamTypeChange}
                     />
@@ -53,7 +73,10 @@ const CreateTeamModalContent = ({
                     </Button>
                 </div>
             </div>
-            <Button className="px-6 absolute bottom-6 border-2 border-typography-light dark:border-typography-dark py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:bg-bg-light dark:hover:text-typography-light transition-colors duration-150">
+            <Button
+                onClick={handleCreateNewTeam}
+                className="px-6 absolute bottom-6 border-2 border-typography-light dark:border-typography-dark py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:bg-bg-light dark:hover:text-typography-light transition-colors duration-150"
+            >
                 Create
             </Button>
         </div>

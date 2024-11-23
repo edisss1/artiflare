@@ -3,6 +3,7 @@ import ChevronIcon from "../icons/ChevronIcon"
 interface SelectProps {
     options: { label: string; value: string }[]
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
+    value: string
 }
 
 const Select = ({ options, onChange }: SelectProps) => {

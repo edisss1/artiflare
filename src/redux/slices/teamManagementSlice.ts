@@ -16,14 +16,20 @@ import { User } from "../../types/User"
 
 interface TeamState {
     teams: Team[]
-    newTeam: Team | null
+    newTeam: Team
     status: "idle" | "loading" | "succeeded" | "failed"
     error: string | undefined
 }
 
 const initialState: TeamState = {
     teams: [],
-    newTeam: null,
+    newTeam: {
+        name: "",
+        members: [],
+        creatorID: "",
+        creatorName: "",
+        teamType: ""
+    },
     status: "idle",
     error: undefined
 }

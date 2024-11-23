@@ -3,5 +3,5 @@ export interface Team {
     members: string[]
     creatorID: string
     creatorName: string | null
-    teamType: "private" | "invite-only" | "public"
+    teamType: "private" | "invite-only" | "public" | ""
 }

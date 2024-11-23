@@ -1,3 +1,3 @@
-export interface TeamType {
+export type TeamType = {
     teamType: "private" | "invite-only" | "public"
 }

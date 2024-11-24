@@ -30,20 +30,36 @@ const initialState: BoardState = {
 
 export const createBoard = createAsyncThunk(
     "board/createBoard",
-    async ({ user, boardTitle }: { user: User | null; boardTitle: string }) => {
+    async ({
+        user,
+        boardTitle,
+        teamID
+    }: {
+        user: User | null
+        boardTitle: string
+        teamID: string
+    }) => {
         try {
             const boardsRef = collection(db, "boards")
 
             if (!user) return
 
-            const boardData = {
+            const boardData: Board = {
                 boardTitle,
                 userUID: user.uid,
+                teamID: teamID,
                 createdAt: new Date().toDateString(),
                 updatedAt: new Date().toDateString(),
                 createdBy: user.displayName || user.email,
                 modifiedBy: user.displayName || user.email,
-                data: {}
+                data: {},
+                members: [
+                    {
+                        uid: user.uid,
+                        role: "owner",
+                        displayName: user.displayName || user.email
+                    }
+                ]
             }
 
             const docRef = await addDoc(boardsRef, boardData)
@@ -120,11 +136,8 @@ export const updateBoard = createAsyncThunk(
             const boardRef = doc(db, "boards", boardID)
             await updateDoc(boardRef, {
                 data: newBoardData,
-                updatedAt: `${new Date().getDay()}.${
-                    new Date().getMonth() + 1
-                }.${new Date().getFullYear()}, ${new Date().getHours()}:${new Date()
-                    .getMinutes()
-                    .toString()
+                updatedAt: `${new Date().toDateString()}, ${new Date()
+                    .toTimeString()
                     .padStart(2, "0")}`,
                 modifiedBy: user.displayName || user.email
             })

@@ -16,6 +16,7 @@ import { User } from "../../types/User"
 
 interface TeamState {
     teams: Team[]
+    currentTeam: string | undefined
     newTeam: Team
     status: "idle" | "loading" | "succeeded" | "failed"
     error: string | undefined
@@ -30,6 +31,7 @@ const initialState: TeamState = {
         creatorName: "",
         teamType: ""
     },
+    currentTeam: "",
     status: "idle",
     error: undefined
 }
@@ -214,7 +216,13 @@ export const searchUsers = async (queryString: string) => {
 const teamManagementSlice = createSlice({
     name: "teamManagement",
     initialState,
-    reducers: {},
+    reducers: {
+        setCurrentTeam: (state, action: PayloadAction<Team["id"]>) => {
+            if (state.currentTeam) {
+                state.currentTeam = action.payload
+            }
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(
@@ -256,5 +264,7 @@ const teamManagementSlice = createSlice({
             })
     }
 })
+
+export const { setCurrentTeam } = teamManagementSlice.actions
 
 export default teamManagementSlice.reducer

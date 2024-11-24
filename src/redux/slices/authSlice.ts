@@ -8,7 +8,7 @@ import {
 } from "firebase/auth"
 import { GoogleAuthProvider } from "firebase/auth"
 import { auth, db } from "../../firestore/firebaseConfig"
-import { deleteDoc, doc, setDoc } from "firebase/firestore"
+import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore"
 import { createUserWithEmailAndPassword } from "firebase/auth/cordova"
 import { User } from "../../types/User.ts"
 
@@ -33,13 +33,17 @@ export const signInWithGoogle = createAsyncThunk(
         try {
             const result = await signInWithPopup(auth, provider)
 
+            const userDocRef = doc(db, "users", result.user.uid)
+            const userDoc = await getDoc(userDocRef)
+            const userData = userDoc.data()
+
             const user: User = {
                 uid: result.user.uid,
                 img: result.user.photoURL,
                 displayName: result.user.displayName,
                 email: result.user.email,
-                teams: [],
-                boards: []
+                teams: userData?.teams || [],
+                boards: userData?.boards || []
             }
 
             await setDoc(doc(db, "users", user.uid), user)

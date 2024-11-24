@@ -1,12 +1,55 @@
 import { NavLink } from "react-router-dom"
+import Select from "../atoms/Select"
+import { useSelector } from "react-redux"
+import { AppDispatch, RootState } from "../../redux/store"
+import { useDispatch } from "react-redux"
+import {
+    getTeams,
+    setCurrentTeam
+} from "../../redux/slices/teamManagementSlice"
+import { useEffect } from "react"
 
 interface SettingsLinksProps {
     uid: string | undefined
 }
 
 const SettingsLinks = ({ uid }: SettingsLinksProps) => {
+    const dispatch: AppDispatch = useDispatch()
+    const currentTeam = useSelector(
+        (state: RootState) => state.teamManagement.currentTeam
+    )
+    const teams = useSelector((state: RootState) => state.teamManagement.teams)
+    const user = useSelector((state: RootState) => state.auth.user)
+
+    useEffect(() => {
+        if (user?.teams && user) {
+            dispatch(getTeams(user))
+        }
+        console.log(user)
+    }, [])
+
+    const teamOptions = teams.map((team) => {
+        return {
+            label: team.name,
+            value: team.id!
+        }
+    })
+
+    console.log(teamOptions)
+
+    const handleCurrentTeamChange = (
+        e: React.ChangeEvent<HTMLSelectElement>
+    ) => {
+        dispatch(setCurrentTeam(e.target.value))
+    }
+
     return (
         <aside className="flex flex-col bg-primary dark:bg-primary-dark text-typography-light dark:text-typography-dark w-full max-w-[300px] p-4 rounded-md h-full min-h-[500px]  ">
+            <Select
+                value={currentTeam ? currentTeam : ""}
+                options={teamOptions}
+                onChange={handleCurrentTeamChange}
+            />
             <NavLink className={"mb-4"} to={`profile/${uid}`}>
                 Profile settings
             </NavLink>

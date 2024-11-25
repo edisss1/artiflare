@@ -13,10 +13,11 @@ import {
     where
 } from "firebase/firestore"
 import { User } from "../../types/User"
+import { AppDispatch } from "../store"
 
 interface TeamState {
     teams: Team[]
-    currentTeam: string | undefined
+    currentTeam: string | null
     newTeam: Team
     status: "idle" | "loading" | "succeeded" | "failed"
     error: string | undefined
@@ -31,7 +32,7 @@ const initialState: TeamState = {
         creatorName: "",
         teamType: ""
     },
-    currentTeam: "",
+    currentTeam: null,
     status: "idle",
     error: undefined
 }
@@ -40,11 +41,13 @@ export const createTeam = createAsyncThunk(
     async ({
         teamTitle,
         user,
-        teamType
+        teamType,
+        dispatch
     }: {
         teamTitle: string
         user: User
         teamType: "private" | "invite-only" | "public"
+        dispatch: AppDispatch
     }) => {
         try {
             const teamsRef = collection(db, "teams")
@@ -70,6 +73,7 @@ export const createTeam = createAsyncThunk(
                     role: "owner"
                 })
             })
+            dispatch(setCurrentTeam(docRef.id))
 
             return { id: docRef.id, ...teamData }
         } catch (err) {
@@ -220,9 +224,7 @@ const teamManagementSlice = createSlice({
     initialState,
     reducers: {
         setCurrentTeam: (state, action: PayloadAction<Team["id"]>) => {
-            if (state.currentTeam) {
-                state.currentTeam = action.payload
-            }
+            state.currentTeam = action.payload!
         }
     },
     extraReducers: (builder) => {

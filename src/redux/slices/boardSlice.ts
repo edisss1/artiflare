@@ -38,7 +38,7 @@ export const createBoard = createAsyncThunk(
     }: {
         user: User | null
         boardTitle: string
-        currentTeam: string | undefined
+        currentTeam: string | null
     }) => {
         try {
             const boardsRef = collection(db, "boards")

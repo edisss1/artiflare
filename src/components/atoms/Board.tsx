@@ -13,7 +13,7 @@ interface BoardProps {
 
 const Board = ({ id, title, createdBy, modifiedBy, updatedAt }: BoardProps) => {
     return (
-        <div className="flex flex-col relative border-2 gap-2 px-4 py-2 group hover:bg-primary dark:hover:bg-primary-dark/70 dark:hover:text-typography-dark    transition-colors duration-150 border-typography-light dark:border-typography-dark/40 rounded-sm">
+        <div className="flex flex-col relative border-2 gap-2 px-4 py-2 group hover:bg-primary dark:hover:bg-primary-dark/70 dark:hover:text-typography-dark    transition-colors duration-150 border-typography-light dark:border-typography-dark/40 rounded-md">
             <Link
                 className="max-w-[200px] truncate text-lg"
                 to={`/app/board/${id}`}

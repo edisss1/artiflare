@@ -36,7 +36,7 @@ const CreateTeamModalContent = ({
 
     const handleCreateNewTeam = () => {
         if (user) {
-            dispatch(createTeam({ teamTitle, teamType, user }))
+            dispatch(createTeam({ teamTitle, teamType, user, dispatch }))
         }
         console.log("team created")
     }

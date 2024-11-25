@@ -16,8 +16,8 @@ const BoardsManagement = () => {
     const joinTeamModalRef = useRef<HTMLDialogElement | null>(null)
     const [boardTitle, setBoardTitle] = useState("")
     const [isCreateModal, setIsCreateModal] = useState(false)
-    const { currentTeam } = useSelector(
-        (state: RootState) => state.teamManagement
+    const currentTeam = useSelector(
+        (state: RootState) => state.teamManagement.currentTeam
     )
     const teams = useSelector((state: RootState) => state.teamManagement.teams)
 

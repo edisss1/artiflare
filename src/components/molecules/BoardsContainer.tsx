@@ -1,18 +1,19 @@
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import Board from "../atoms/Board"
-import { fetchAllUserBoards } from "../../redux/slices/boardSlice"
 import { useEffect } from "react"
+import { fetchAllUserBoards } from "../../redux/slices/boardSlice"
 
 const BoardsContainer = () => {
     const dispatch: AppDispatch = useDispatch()
-    const { boards } = useSelector((state: RootState) => state.boards)
-    const status = useSelector((state: RootState) => state.boards.status)
+    const { boards, status } = useSelector((state: RootState) => state.boards)
     const user = useSelector((state: RootState) => state.auth.user)
 
     useEffect(() => {
         if (user) {
-            dispatch(fetchAllUserBoards(user.uid))
+            const unsubscribe = dispatch(fetchAllUserBoards(user.uid))
+
+            return () => unsubscribe()
         }
     }, [])
 

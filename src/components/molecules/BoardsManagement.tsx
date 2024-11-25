@@ -16,6 +16,13 @@ const BoardsManagement = () => {
     const joinTeamModalRef = useRef<HTMLDialogElement | null>(null)
     const [boardTitle, setBoardTitle] = useState("")
     const [isCreateModal, setIsCreateModal] = useState(false)
+    const { currentTeam } = useSelector(
+        (state: RootState) => state.teamManagement
+    )
+    const teams = useSelector((state: RootState) => state.teamManagement.teams)
+
+    console.log("Current selected team: ", currentTeam)
+    console.log("All teams: ", teams)
 
     const toggleCreateBoardModal = () => {
         createBoardModalRef.current?.showModal()
@@ -27,7 +34,7 @@ const BoardsManagement = () => {
 
     const createNewBoard = async () => {
         if (boardTitle && user) {
-            dispatch(createBoard({ user, boardTitle }))
+            dispatch(createBoard({ user, boardTitle, currentTeam }))
             createBoardModalRef.current?.close()
         }
     }

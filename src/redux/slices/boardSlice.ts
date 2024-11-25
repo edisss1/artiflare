@@ -7,12 +7,13 @@ import {
     collection,
     doc,
     getDoc,
-    getDocs,
+    onSnapshot,
     query,
     updateDoc,
     where
 } from "firebase/firestore"
 import { db } from "../../firestore/firebaseConfig"
+import { AppDispatch } from "../store"
 
 interface BoardState {
     boards: Board[]
@@ -33,11 +34,11 @@ export const createBoard = createAsyncThunk(
     async ({
         user,
         boardTitle,
-        teamID
+        currentTeam
     }: {
         user: User | null
         boardTitle: string
-        teamID: string
+        currentTeam: string | undefined
     }) => {
         try {
             const boardsRef = collection(db, "boards")
@@ -47,7 +48,7 @@ export const createBoard = createAsyncThunk(
             const boardData: Board = {
                 boardTitle,
                 userUID: user.uid,
-                teamID: teamID,
+                teamID: currentTeam!,
                 createdAt: new Date().toDateString(),
                 updatedAt: new Date().toDateString(),
                 createdBy: user.displayName || user.email,
@@ -76,25 +77,27 @@ export const createBoard = createAsyncThunk(
     }
 )
 
-export const fetchAllUserBoards = createAsyncThunk(
-    "board/fetchAllUserBoards",
-    async (userUID: string) => {
+export const fetchAllUserBoards =
+    (userUID: string) => (dispatch: AppDispatch) => {
         try {
             const boardsRef = collection(db, "boards")
             const q = query(boardsRef, where("userUID", "==", userUID))
-            const querySnap = await getDocs(q)
-            const boards: Board[] = []
-            querySnap.forEach((snap) => {
-                const boardData = snap.data() as Board
-                boards.push({ id: snap.id, ...boardData })
-            })
 
-            return boards
+            return onSnapshot(q, (snapshot) => {
+                const boards: Board[] = snapshot.docs.map(
+                    (doc) =>
+                        ({
+                            id: doc.id,
+                            ...doc.data()
+                        } as Board)
+                )
+
+                dispatch(updateBoards(boards))
+            })
         } catch (err) {
             throw err
         }
     }
-)
 
 export const getBoardByID = createAsyncThunk(
     "board/getBoardByID",
@@ -158,6 +161,9 @@ const boardSlice = createSlice({
         },
         setBoard: (state, action) => {
             state.currentBoard = action.payload
+        },
+        updateBoards: (state, action: PayloadAction<Board[]>) => {
+            state.boards = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -205,20 +211,9 @@ const boardSlice = createSlice({
                     state.currentBoard.updatedAt = new Date().toDateString()
                 }
             })
-            .addCase(updateBoard.rejected, (state, action) => {
-                state.error = action.error.message
-                state.status = "failed"
-            })
-            .addCase(fetchAllUserBoards.fulfilled, (state, action) => {
-                state.boards = action.payload
-                state.status = "succeeded"
-            })
-            .addCase(fetchAllUserBoards.pending, (state) => {
-                state.status = "loading"
-            })
     }
 })
 
-export const { setBoard } = boardSlice.actions
+export const { setBoard, updateBoards } = boardSlice.actions
 
 export default boardSlice.reducer

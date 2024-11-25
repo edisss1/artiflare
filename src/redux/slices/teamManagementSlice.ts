@@ -88,14 +88,35 @@ export const getTeams = createAsyncThunk(
                 where("members", "array-contains", user.uid)
             )
 
+            console.log("q: ", q)
+
             const querySnap = await getDocs(q)
 
-            const teams: Team[] = []
+            const teams: Team[] = querySnap.docs.map((doc) => ({
+                id: doc.id,
+                name: doc.data().name,
+                members: doc.data().members,
+                creatorID: doc.data().creatorID,
+                creatorName: doc.data().creatorName,
+                teamType: doc.data().teamType
+            }))
 
-            querySnap.forEach((snap) => {
-                const teamData = snap.data() as Team
-                teams.push(teamData)
-            })
+            if (!teams.length) {
+                const teamsRef = collection(db, "teams")
+                const teamsQuery = query(teamsRef)
+                const teamsQuerySnap = await getDocs(teamsQuery)
+                const allTeams: Team[] = teamsQuerySnap.docs.map((doc) => ({
+                    id: doc.id,
+                    name: doc.data().name,
+                    members: doc.data().members,
+                    creatorID: doc.data().creatorID,
+                    creatorName: doc.data().creatorName,
+                    teamType: doc.data().teamType
+                }))
+                return allTeams.filter((team) =>
+                    team.members.some((member) => member.uid === user.uid)
+                )
+            }
 
             return teams
         } catch (err) {

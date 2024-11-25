@@ -10,7 +10,7 @@ const SettingsSelect = ({ onChange, options }: SettingsSelectProps) => {
     return (
         <div className={`relative text-typography-light `}>
             <select
-                className="appearance-none w-full outline-none bg-transparent mb-4 py-[0.9375rem] ps-3 rounded-md"
+                className="appearance-none w-full outline-none bg-transparent  py-[0.9375rem] ps-3 rounded-md"
                 onChange={onChange}
             >
                 {options.map((option) => (

@@ -1,16 +1,16 @@
+import React from "react"
 import ChevronIcon from "../icons/ChevronIcon"
 
-interface SelectProps {
-    options: { label: string; value: string }[]
+interface SettingsSelectProps {
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
-    value: string
+    options: { label: string; value: string }[]
 }
 
-const Select = ({ options, onChange }: SelectProps) => {
+const SettingsSelect = ({ onChange, options }: SettingsSelectProps) => {
     return (
         <div className={`relative text-typography-light `}>
             <select
-                className="appearance-none w-full border-2  border-typography-light py-[0.9375rem] ps-3 rounded-md"
+                className="appearance-none w-full outline-none bg-transparent mb-4 py-[0.9375rem] ps-3 rounded-md"
                 onChange={onChange}
             >
                 {options.map((option) => (
@@ -23,4 +23,4 @@ const Select = ({ options, onChange }: SelectProps) => {
         </div>
     )
 }
-export default Select
+export default SettingsSelect

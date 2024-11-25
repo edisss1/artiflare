@@ -20,7 +20,7 @@ const BoardsContainer = () => {
         const startIndex = (currentPage - 1) * boardsPerPage
         const endIndex = startIndex + boardsPerPage
         return boards.slice(startIndex, endIndex)
-    }, [currentPage, boardsPerPage])
+    }, [currentPage, boardsPerPage, boards])
 
     useEffect(() => {
         if (user) {

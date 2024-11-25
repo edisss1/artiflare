@@ -83,42 +83,23 @@ export const getTeams = createAsyncThunk(
     "teamManagement/getTeams",
     async (user: User) => {
         try {
-            const q = query(
-                collection(db, "teams"),
-                where("members", "array-contains", user.uid)
-            )
-
-            console.log("q: ", q)
-
-            const querySnap = await getDocs(q)
-
-            const teams: Team[] = querySnap.docs.map((doc) => ({
+            const teamsRef = collection(db, "teams")
+            const teamsQuery = query(teamsRef)
+            const teamsQuerySnap = await getDocs(teamsQuery)
+            const teams: Team[] = teamsQuerySnap.docs.map((doc) => ({
                 id: doc.id,
                 name: doc.data().name,
-                members: doc.data().members,
                 creatorID: doc.data().creatorID,
                 creatorName: doc.data().creatorName,
+                members: doc.data().members,
                 teamType: doc.data().teamType
             }))
 
-            if (!teams.length) {
-                const teamsRef = collection(db, "teams")
-                const teamsQuery = query(teamsRef)
-                const teamsQuerySnap = await getDocs(teamsQuery)
-                const allTeams: Team[] = teamsQuerySnap.docs.map((doc) => ({
-                    id: doc.id,
-                    name: doc.data().name,
-                    members: doc.data().members,
-                    creatorID: doc.data().creatorID,
-                    creatorName: doc.data().creatorName,
-                    teamType: doc.data().teamType
-                }))
-                return allTeams.filter((team) =>
-                    team.members.some((member) => member.uid === user.uid)
-                )
-            }
+            const userTeams = teams.filter((team) =>
+                team.members.some((member) => member.uid === user.uid)
+            )
 
-            return teams
+            return userTeams
         } catch (err) {
             throw new Error(err as string)
         }

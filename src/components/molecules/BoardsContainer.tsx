@@ -9,8 +9,11 @@ const BoardsContainer = () => {
     const dispatch: AppDispatch = useDispatch()
     const { boards } = useSelector((state: RootState) => state.boards)
     const user = useSelector((state: RootState) => state.auth.user)
-    const [boardsPerPage, setBoardsPerPage] = useState(4)
     const [currentPage, setCurrentPage] = useState(1)
+    const boardsPerPage = useSelector(
+        (state: RootState) => state.boards.boardsPerPage
+    )
+
     const totalPages = Math.ceil(boards.length / boardsPerPage)
 
     const paginatedBoards = useMemo(() => {

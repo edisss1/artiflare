@@ -34,7 +34,7 @@ const UserSettingsPanel = () => {
     }
 
     return (
-        <div>
+        <div className="p-4">
             <SettingsHeader>Profile details</SettingsHeader>
             <div className={`flex justify-between w-full max-w-[90%]`}>
                 <div className={"grid gap-2 place-items-start"}>

@@ -8,6 +8,10 @@ import {
 } from "../../redux/slices/teamManagementSlice"
 import { useEffect } from "react"
 import SettingsSelect from "../atoms/SettingsSelect"
+import ProfileSettingsIcon from "../icons/ProfileSettingsIcon"
+import SettingsLink from "../atoms/SettingsLink"
+import TeamProfileIcon from "../icons/TeamProfileIcon"
+import TeamMembersIcon from "../icons/TeamMembersIcon"
 
 interface SettingsLinksProps {
     uid: string | undefined
@@ -55,27 +59,31 @@ const SettingsLinks = ({ uid }: SettingsLinksProps) => {
                     options={teamOptions}
                 />
             </div>
-            <NavLink className={"mb-4"} to={`profile/${uid}`}>
-                Profile settings
-            </NavLink>
+            <SettingsLink
+                icon={<ProfileSettingsIcon />}
+                to={"Profile settings"}
+                path={`/app/settings/profile/${uid}`}
+            />
             <div className={"flex flex-col gap-6"}>
                 <div>
-                    <h2 className={"font-medium"}>Account</h2>
+                    <h2 className={"font-medium mb-2"}>Account</h2>
                     <div>
-                        <NavLink to={`/app/settings/team/${currentTeam}`}>
-                            Team profile
-                        </NavLink>
+                        <SettingsLink
+                            path={`/app/settings/team/${currentTeam}`}
+                            to="Team profile"
+                            icon={<TeamProfileIcon />}
+                        />
                     </div>
                 </div>
 
                 <div>
-                    <h2 className={"font-medium"}>User management</h2>
+                    <h2 className={"font-medium mb-2"}>User management</h2>
                     <div>
-                        <NavLink
-                            to={`/app/settings/team/${currentTeam}/members`}
-                        >
-                            Team members
-                        </NavLink>
+                        <SettingsLink
+                            path="/app/settings/team/${currentTeam}/members"
+                            to="Team members"
+                            icon={<TeamMembersIcon />}
+                        />
                     </div>
                 </div>
             </div>

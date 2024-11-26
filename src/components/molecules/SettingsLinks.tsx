@@ -1,4 +1,3 @@
-import { NavLink } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch } from "react-redux"
@@ -49,7 +48,7 @@ const SettingsLinks = ({ uid }: SettingsLinksProps) => {
 
     return (
         <aside className="flex flex-col bg-primary dark:bg-primary-dark text-typography-light dark:text-typography-dark w-full max-w-[300px] p-4 rounded-md h-full min-h-[500px]  ">
-            <div className="flex  items-center justify-between mb-4 dark:p-2 dark:bg-primary dark:rounded-md transition-all">
+            <div className="flex items-center  mb-4 dark:p-2 dark:bg-primary dark:rounded-md transition-all">
                 <div
                     role="change to image later"
                     className="w-12 bg-gray-500 aspect-square rounded-md"
@@ -80,7 +79,7 @@ const SettingsLinks = ({ uid }: SettingsLinksProps) => {
                     <h2 className={"font-medium mb-2"}>User management</h2>
                     <div>
                         <SettingsLink
-                            path="/app/settings/team/${currentTeam}/members"
+                            path={`/app/settings/team/${currentTeam}/members`}
                             to="Team members"
                             icon={<TeamMembersIcon />}
                         />

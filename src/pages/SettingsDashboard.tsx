@@ -15,7 +15,7 @@ const SettingsDashboard = () => {
                 <SettingsPanel uid={user?.uid} />
                 <div
                     className={
-                        "w-full max-w-[900px] bg-primary p-4 rounded-md dark:bg-primary-dark dark:text-typography-dark"
+                        "w-full max-w-[900px] bg-primary  rounded-md dark:bg-primary-dark dark:text-typography-dark"
                     }
                 >
                     <Outlet />

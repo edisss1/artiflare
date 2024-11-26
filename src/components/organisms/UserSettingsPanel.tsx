@@ -11,6 +11,7 @@ import {
     setNewDisplayName,
     updateUserName
 } from "../../redux/slices/userManagementSlice.ts"
+import SettingsHeader from "../atoms/SettingsHeader.tsx"
 
 const UserSettingsPanel = () => {
     const user = useSelector((state: RootState) => state.auth.user)
@@ -34,7 +35,7 @@ const UserSettingsPanel = () => {
 
     return (
         <div>
-            <h2 className={"mb-12"}>Profile details</h2>
+            <SettingsHeader>Profile details</SettingsHeader>
             <div className={`flex justify-between w-full max-w-[90%]`}>
                 <div className={"grid gap-2 place-items-start"}>
                     <SettingsInput

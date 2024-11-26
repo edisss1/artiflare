@@ -17,6 +17,9 @@ const SettingsLinks = ({ uid }: SettingsLinksProps) => {
     const dispatch: AppDispatch = useDispatch()
     const teams = useSelector((state: RootState) => state.teamManagement.teams)
     const user = useSelector((state: RootState) => state.auth.user)
+    const currentTeam = useSelector(
+        (state: RootState) => state.teamManagement.currentTeam
+    )
 
     useEffect(() => {
         if (user?.teams && user) {
@@ -42,7 +45,7 @@ const SettingsLinks = ({ uid }: SettingsLinksProps) => {
 
     return (
         <aside className="flex flex-col bg-primary dark:bg-primary-dark text-typography-light dark:text-typography-dark w-full max-w-[300px] p-4 rounded-md h-full min-h-[500px]  ">
-            <div className="flex gap-2 items-center mb-4">
+            <div className="flex  items-center justify-between mb-4 dark:p-2 dark:bg-primary dark:rounded-md transition-all">
                 <div
                     role="change to image later"
                     className="w-12 bg-gray-500 aspect-square rounded-md"
@@ -59,14 +62,20 @@ const SettingsLinks = ({ uid }: SettingsLinksProps) => {
                 <div>
                     <h2 className={"font-medium"}>Account</h2>
                     <div>
-                        <NavLink to={""}>Team profile</NavLink>
+                        <NavLink to={`/app/settings/team/${currentTeam}`}>
+                            Team profile
+                        </NavLink>
                     </div>
                 </div>
 
                 <div>
                     <h2 className={"font-medium"}>User management</h2>
                     <div>
-                        <NavLink to={""}>Team members</NavLink>
+                        <NavLink
+                            to={`/app/settings/team/${currentTeam}/members`}
+                        >
+                            Team members
+                        </NavLink>
                     </div>
                 </div>
             </div>

@@ -18,7 +18,7 @@ const Pagination = ({
         <div className="flex gap-4 w-full items-center justify-center">
             {currentPage !== 1 && (
                 <Button
-                    className="border-2 border-typography-light px-4 py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark transition-all duration-150"
+                    className="border-2 border-typography-light px-4 py-1 rounded-md hover:bg-bg-dark dark:hover:bg-bg-light dark:hover:text-typography-light hover:text-typography-dark transition-all duration-150"
                     onClick={() => handlePageChange(currentPage - 1)}
                 >
                     Previous
@@ -30,7 +30,7 @@ const Pagination = ({
                         onClick={() => handlePageChange(page)}
                         className={`${
                             currentPage === index + 1 &&
-                            "bg-typography-light text-typography-dark"
+                            "bg-bg-dark dark:bg-bg-light dark:text-typography-light text-typography-dark "
                         } w-8 aspect-square flex items-center justify-center rounded-md`}
                     >
                         {page}
@@ -39,7 +39,7 @@ const Pagination = ({
             )}
             {currentPage !== totalPages && (
                 <Button
-                    className="border-2 border-typography-light px-4 py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark transition-all duration-150"
+                    className="border-2 border-typography-light px-4 py-1 rounded-md hover:bg-bg-dark dark:hover:bg-bg-light dark:hover:text-typography-light hover:text-typography-dark transition-all duration-150"
                     onClick={() => handlePageChange(currentPage + 1)}
                 >
                     Next

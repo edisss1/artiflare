@@ -5,4 +5,5 @@ export interface User {
     email: string | null
     teams: { teamID: string; role: "admin" | "member" | "owner" }[]
     boards: string[]
+    currentSelectedTeam: string
 }

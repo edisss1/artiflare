@@ -21,6 +21,7 @@ interface BoardState {
     status: "idle" | "loading" | "succeeded" | "failed"
     error: string | undefined
     boardsPerPage: number
+    sortedBy: string
 }
 
 const initialState: BoardState = {
@@ -28,7 +29,8 @@ const initialState: BoardState = {
     currentBoard: undefined,
     status: "idle",
     error: undefined,
-    boardsPerPage: 4
+    boardsPerPage: 4,
+    sortedBy: "last-opened"
 }
 
 export const createBoard = createAsyncThunk(
@@ -169,6 +171,9 @@ const boardSlice = createSlice({
         },
         setBoardsPerPage: (state, action: PayloadAction<number>) => {
             state.boardsPerPage = action.payload
+        },
+        updateSortedBy: (state, action: PayloadAction<string>) => {
+            state.sortedBy = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -219,6 +224,7 @@ const boardSlice = createSlice({
     }
 })
 
-export const { setBoard, updateBoards, setBoardsPerPage } = boardSlice.actions
+export const { setBoard, updateBoards, setBoardsPerPage, updateSortedBy } =
+    boardSlice.actions
 
 export default boardSlice.reducer

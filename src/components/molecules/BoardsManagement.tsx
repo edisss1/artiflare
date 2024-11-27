@@ -3,11 +3,12 @@ import add from "../../assets/Add.svg"
 import team from "../../assets/Team.svg"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch, useSelector } from "react-redux"
-import { createBoard } from "../../redux/slices/boardSlice"
+import { createBoard, updateSortedBy } from "../../redux/slices/boardSlice"
 import Modal from "./Modal"
 import { useRef, useState } from "react"
 import CreateBoardModalContent from "../atoms/CreateBoardModalContent"
 import TeamManagementModal from "./TeamManagementModal"
+import { sortByOptions } from "../../constants/sortByOptions"
 
 const BoardsManagement = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -20,6 +21,9 @@ const BoardsManagement = () => {
         (state: RootState) => state.teamManagement.currentTeam
     )
     const teams = useSelector((state: RootState) => state.teamManagement.teams)
+    const { sortedBy } = useSelector(
+        (setBoardTitle: RootState) => setBoardTitle.boards
+    )
 
     console.log("Current selected team: ", currentTeam)
     console.log("All teams: ", teams)
@@ -41,6 +45,10 @@ const BoardsManagement = () => {
 
     const toggleJoinTeamModal = () => {
         joinTeamModalRef.current?.showModal()
+    }
+
+    const handleSortedByChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        dispatch(updateSortedBy(e.target.value))
     }
 
     return (
@@ -81,12 +89,22 @@ const BoardsManagement = () => {
                 <div className="flex gap-2 items-center mt-9">
                     <p>Sort by</p>
                     <select
+                        onChange={(e) => handleSortedByChange(e)}
                         className="p-2 bg-bg-light dark:bg-bg-dark border-2 max-w-fit  border-typography-light dark:border-typography-dark rounded-md"
                         name=""
                         id=""
                     >
-                        <option value="">Last opened</option>
-                        <option value="">Recently modified</option>
+                        {sortByOptions.map((option) => (
+                            <option
+                                key={option.value}
+                                value={option.value}
+                                selected={option.value === sortedBy}
+                            >
+                                {option.label}
+                            </option>
+                        ))}
+                        {/* <option value="">Last opened</option>
+                        <option value="">Recently modified</option> */}
                     </select>
                 </div>
             </div>

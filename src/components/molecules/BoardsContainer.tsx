@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import Board from "../atoms/Board"
 import { useEffect, useMemo, useState } from "react"
-import { fetchAllUserBoards } from "../../redux/slices/boardSlice"
+import { fetchAllUserBoards, updateBoards } from "../../redux/slices/boardSlice"
 import Pagination from "../atoms/Pagination"
 
 const BoardsContainer = () => {
@@ -13,13 +13,28 @@ const BoardsContainer = () => {
     const boardsPerPage = useSelector(
         (state: RootState) => state.boards.boardsPerPage
     )
+    const { sortedBy } = useSelector((state: RootState) => state.boards)
+    const boardsForSort = [...boards]
 
     const totalPages = Math.ceil(boards.length / boardsPerPage)
+
+    const sortedBoards = useMemo(() => {
+        switch (sortedBy) {
+            case "last-opened":
+                return boardsForSort.sort((a, b) =>
+                    a.updatedAt > b.updatedAt ? -1 : 1
+                )
+            case "newest-first":
+                return boardsForSort.sort((a, b) =>
+                    a.updatedAt < b.updatedAt ? -1 : 1
+                )
+        }
+    }, [sortedBy, boardsForSort])
 
     const paginatedBoards = useMemo(() => {
         const startIndex = (currentPage - 1) * boardsPerPage
         const endIndex = startIndex + boardsPerPage
-        return boards.slice(startIndex, endIndex)
+        return sortedBoards?.slice(startIndex, endIndex)
     }, [currentPage, boardsPerPage, boards])
 
     useEffect(() => {
@@ -30,10 +45,14 @@ const BoardsContainer = () => {
         }
     }, [])
 
+    useEffect(() => {
+        dispatch(updateBoards(sortedBoards!))
+    }, [sortedBy, dispatch])
+
     console.log("Boards: ", boards)
     return (
         <div className="flex flex-col gap-4 relative">
-            {paginatedBoards.map((board) => (
+            {paginatedBoards?.map((board) => (
                 <Board
                     createdBy={board.createdBy}
                     updatedAt={board.updatedAt}

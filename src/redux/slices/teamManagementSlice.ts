@@ -73,7 +73,13 @@ export const createTeam = createAsyncThunk(
                     role: "owner"
                 })
             })
-            dispatch(setCurrentTeam(docRef.id))
+            const currentTeamID = docRef.id
+            dispatch(
+                updateCurrentSelectedTeam({
+                    selectedTeamID: currentTeamID,
+                    user
+                })
+            )
 
             return { id: docRef.id, ...teamData }
         } catch (err) {
@@ -219,14 +225,38 @@ export const searchUsers = async (queryString: string) => {
 
     return users
 }
+
+// export const updateCurrentSelectedTeam = async (teamId: string) => {
+//     const teamDocRef = doc(db, "teams", teamId)
+//     const teamDoc = await getDoc(teamDocRef)
+//     if (teamDoc.exists()) {
+//         const teamData = teamDoc.data() as Team
+//         return teamData
+//     }
+// }
+
+export const updateCurrentSelectedTeam = createAsyncThunk(
+    "teamManagement/updateCurrentSelectedTeam",
+    async ({
+        selectedTeamID,
+        user
+    }: {
+        selectedTeamID: string
+        user: User | null
+    }) => {
+        const userDocRef = doc(db, "users", user!.uid)
+        const userDoc = await getDoc(userDocRef)
+        if (userDoc.exists()) {
+            await updateDoc(userDocRef, { currentSelectedTeam: selectedTeamID })
+        }
+        return selectedTeamID
+    }
+)
+
 const teamManagementSlice = createSlice({
     name: "teamManagement",
     initialState,
-    reducers: {
-        setCurrentTeam: (state, action: PayloadAction<Team["id"]>) => {
-            state.currentTeam = action.payload!
-        }
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(
@@ -266,9 +296,17 @@ const teamManagementSlice = createSlice({
                 state.status = "loading"
                 state.error = undefined
             })
+            .addCase(updateCurrentSelectedTeam.fulfilled, (state, action) => {
+                state.currentTeam = action.payload
+            })
+            .addCase(updateCurrentSelectedTeam.pending, (state) => {
+                state.status = "loading"
+            })
+            .addCase(updateCurrentSelectedTeam.rejected, (state) => {
+                state.error = "Failed to update current team"
+                state.status = "failed"
+            })
     }
 })
-
-export const { setCurrentTeam } = teamManagementSlice.actions
 
 export default teamManagementSlice.reducer

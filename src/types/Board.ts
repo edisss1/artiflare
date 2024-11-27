@@ -5,8 +5,8 @@ export interface Board {
     boardTitle: string
     teamID: string
     userUID: string
-    createdAt: string | null
-    updatedAt: string | null
+    createdAt: string
+    updatedAt: string
     createdBy: string | null
     modifiedBy: string | null
     data: {}

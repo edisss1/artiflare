@@ -3,7 +3,7 @@ import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch } from "react-redux"
 import {
     getTeams,
-    setCurrentTeam
+    updateCurrentSelectedTeam
 } from "../../redux/slices/teamManagementSlice"
 import { useEffect } from "react"
 import SettingsSelect from "../atoms/SettingsSelect"
@@ -43,7 +43,10 @@ const SettingsLinks = ({ uid }: SettingsLinksProps) => {
     const handleCurrentTeamChange = (
         e: React.ChangeEvent<HTMLSelectElement>
     ) => {
-        dispatch(setCurrentTeam(e.target.value))
+        const selectedTeamID = e.target.value
+        dispatch(updateCurrentSelectedTeam({ selectedTeamID, user }))
+        console.log("Current team changed to: ", e.target.value)
+        console.log(user)
     }
 
     return (

@@ -1,16 +1,16 @@
-import { useParams } from "react-router-dom"
 import SettingsHeader from "../atoms/SettingsHeader"
 import { RootState } from "../../redux/store"
 import { useSelector } from "react-redux"
 import SearchMembers from "../atoms/SearchMembers"
+import MembersDisplay from "../molecules/MembersDisplay"
 
 const TeamMembersSettingsPanel = () => {
-    const { currentTeamID } = useParams()
+    const user = useSelector((state: RootState) => state.auth.user)
     const teams = useSelector((state: RootState) => state.teamManagement.teams)
 
-    const currentTeam = teams.find((team) => team.id === currentTeamID)
-
-    console.log(currentTeam)
+    const currentTeam = teams.find(
+        (team) => team.id === user?.currentSelectedTeam
+    )
 
     return (
         <div className="">
@@ -31,6 +31,7 @@ const TeamMembersSettingsPanel = () => {
                 </p>
             </div>
             <SearchMembers />
+            <MembersDisplay currentTeam={currentTeam} />
         </div>
     )
 }

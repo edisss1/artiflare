@@ -20,9 +20,6 @@ const SettingsLinks = ({ uid }: SettingsLinksProps) => {
     const dispatch: AppDispatch = useDispatch()
     const teams = useSelector((state: RootState) => state.teamManagement.teams)
     const user = useSelector((state: RootState) => state.auth.user)
-    const currentTeam = useSelector(
-        (state: RootState) => state.teamManagement.currentTeam
-    )
 
     useEffect(() => {
         if (user?.teams && user) {
@@ -71,7 +68,7 @@ const SettingsLinks = ({ uid }: SettingsLinksProps) => {
                     <h2 className={"font-medium mb-2"}>Account</h2>
                     <div>
                         <SettingsLink
-                            path={`/app/settings/team/${currentTeam}`}
+                            path={`/app/settings/team/${user?.currentSelectedTeam}`}
                             to="Team profile"
                             icon={<TeamProfileIcon />}
                         />
@@ -82,7 +79,7 @@ const SettingsLinks = ({ uid }: SettingsLinksProps) => {
                     <h2 className={"font-medium mb-2"}>User management</h2>
                     <div>
                         <SettingsLink
-                            path={`/app/settings/team/${currentTeam}/members`}
+                            path={`/app/settings/team/${user?.currentSelectedTeam}/members`}
                             to="Team members"
                             icon={<TeamMembersIcon />}
                         />

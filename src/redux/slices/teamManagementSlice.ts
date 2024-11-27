@@ -17,7 +17,7 @@ import { AppDispatch } from "../store"
 
 interface TeamState {
     teams: Team[]
-    currentTeam: string | null
+    currentTeamID: string | undefined
     newTeam: Team
     status: "idle" | "loading" | "succeeded" | "failed"
     error: string | undefined
@@ -32,7 +32,7 @@ const initialState: TeamState = {
         creatorName: "",
         teamType: ""
     },
-    currentTeam: null,
+    currentTeamID: undefined,
     status: "idle",
     error: undefined
 }
@@ -57,7 +57,9 @@ export const createTeam = createAsyncThunk(
                     {
                         uid: user.uid,
                         role: "owner",
-                        displayName: user.displayName || user.email
+                        displayName: user.displayName || user.email,
+                        img: user.img,
+                        email: user.email
                     }
                 ],
                 creatorID: user.uid,
@@ -249,7 +251,18 @@ export const updateCurrentSelectedTeam = createAsyncThunk(
         if (userDoc.exists()) {
             await updateDoc(userDocRef, { currentSelectedTeam: selectedTeamID })
         }
-        return selectedTeamID
+    }
+)
+
+export const getCurrentSelectedTeam = createAsyncThunk(
+    "teamManagement/getCurrentSelectedTeam",
+    async (user: User | null) => {
+        const userDocRef = doc(db, "users", user!.uid)
+        const userDoc = await getDoc(userDocRef)
+        if (userDoc.exists()) {
+            const userData = userDoc.data() as User
+            return userData.currentSelectedTeam
+        }
     }
 )
 
@@ -296,8 +309,9 @@ const teamManagementSlice = createSlice({
                 state.status = "loading"
                 state.error = undefined
             })
-            .addCase(updateCurrentSelectedTeam.fulfilled, (state, action) => {
-                state.currentTeam = action.payload
+            .addCase(updateCurrentSelectedTeam.fulfilled, (state) => {
+                state.status = "succeeded"
+                state.error = undefined
             })
             .addCase(updateCurrentSelectedTeam.pending, (state) => {
                 state.status = "loading"
@@ -305,6 +319,9 @@ const teamManagementSlice = createSlice({
             .addCase(updateCurrentSelectedTeam.rejected, (state) => {
                 state.error = "Failed to update current team"
                 state.status = "failed"
+            })
+            .addCase(getCurrentSelectedTeam.fulfilled, (state, action) => {
+                state.currentTeamID = action.payload
             })
     }
 })

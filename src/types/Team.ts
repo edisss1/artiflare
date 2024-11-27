@@ -2,6 +2,8 @@ export interface TeamMember {
     role: "owner" | "admin" | "member"
     uid: string
     displayName: string | null
+    img: string | null
+    email: string | null
 }
 
 export interface Team {

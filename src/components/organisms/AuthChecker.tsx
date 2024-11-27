@@ -24,7 +24,8 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                     img: firebaseUser.photoURL,
                     displayName: firebaseUser.displayName,
                     teams: userData?.teams || [],
-                    boards: userData?.boards || []
+                    boards: userData?.boards || [],
+                    currentSelectedTeam: userData?.currentSelectedTeam || ""
                 }
                 dispatch(setUser(loggedUser))
             } else {

@@ -16,7 +16,7 @@ interface SettingsLinksProps {
     uid: string | undefined
 }
 
-const SettingsLinks = ({ uid }: SettingsLinksProps) => {
+const SettingsPanel = ({ uid }: SettingsLinksProps) => {
     const dispatch: AppDispatch = useDispatch()
     const teams = useSelector((state: RootState) => state.teamManagement.teams)
     const user = useSelector((state: RootState) => state.auth.user)
@@ -34,8 +34,6 @@ const SettingsLinks = ({ uid }: SettingsLinksProps) => {
             value: team.id!
         }
     })
-
-    console.log(teamOptions)
 
     const handleCurrentTeamChange = (
         e: React.ChangeEvent<HTMLSelectElement>
@@ -89,4 +87,4 @@ const SettingsLinks = ({ uid }: SettingsLinksProps) => {
         </aside>
     )
 }
-export default SettingsLinks
+export default SettingsPanel

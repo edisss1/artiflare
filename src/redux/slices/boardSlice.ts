@@ -62,7 +62,9 @@ export const createBoard = createAsyncThunk(
                     {
                         uid: user.uid,
                         role: "owner",
-                        displayName: user.displayName || user.email
+                        displayName: user.displayName || user.email,
+                        img: user.img,
+                        email: user.email
                     }
                 ]
             }

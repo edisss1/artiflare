@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
 import SettingsNav from "../components/organisms/SettingsNav"
-import SettingsPanel from "../components/molecules/SettingsLinks.tsx"
+import SettingsPanel from "../components/molecules/SettingsPanel.tsx"
 import { useSelector } from "react-redux"
 import { RootState } from "../redux/store.ts"
 import ProtectedRoute from "../components/organisms/ProtectedRoute.tsx"

@@ -62,11 +62,13 @@ const BoardsContainer = () => {
                     key={board.id}
                 />
             ))}
-            <Pagination
-                setCurrentPage={setCurrentPage}
-                totalPages={totalPages}
-                currentPage={currentPage}
-            />
+            {totalPages > 1 && (
+                <Pagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                />
+            )}
         </div>
     )
 }

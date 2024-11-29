@@ -20,7 +20,7 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-    user: null,
+    user: JSON.parse(localStorage.getItem("user") || "null"),
     status: "loading",
     password: "",
     email: ""
@@ -48,6 +48,8 @@ export const signInWithGoogle = createAsyncThunk(
             }
 
             await setDoc(doc(db, "users", user.uid), user)
+
+            localStorage.setItem("user", JSON.stringify(user))
 
             return user
         } catch (error) {
@@ -83,6 +85,8 @@ export const signInWithCredentials = createAsyncThunk(
 
             await setDoc(doc(db, "users", user.uid), user)
 
+            localStorage.setItem("user", JSON.stringify(user))
+
             return user
         } catch (err) {
             console.error(err)
@@ -113,6 +117,8 @@ export const createUserWithCredentials = createAsyncThunk(
 
             await setDoc(doc(db, "users", user.uid), user)
 
+            localStorage.setItem("user", JSON.stringify(user))
+
             return user
         } catch (err) {
             console.error(err)
@@ -123,6 +129,8 @@ export const createUserWithCredentials = createAsyncThunk(
 
 export const signOutUser = createAsyncThunk("auth/signOutUser", async () => {
     await signOut(auth)
+
+    localStorage.removeItem("user")
 })
 
 export const deleteUserFromDatabase = createAsyncThunk(
@@ -164,6 +172,11 @@ const authSlice = createSlice({
         setUser: (state, action: PayloadAction<User | null>) => {
             state.user = action.payload
             state.status = action.payload ? "authenticated" : "unauthenticated"
+            if (action.payload) {
+                localStorage.setItem("user", JSON.stringify(action.payload))
+            } else {
+                localStorage.removeItem("user")
+            }
         },
         clearUser: (state) => {
             state.user = null

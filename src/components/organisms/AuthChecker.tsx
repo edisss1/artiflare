@@ -6,10 +6,12 @@ import { User as LoggedUser } from "../../types/User"
 import { setUser } from "../../redux/slices/authSlice"
 import { RootState } from "../../redux/store"
 import { doc, getDoc } from "firebase/firestore"
+import Loading from "../atoms/Loading"
+import { Navigate } from "react-router-dom"
 
 const AuthChecker = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useDispatch()
-    const user = useSelector((state: RootState) => state.auth.user)
+    const { user, status } = useSelector((state: RootState) => state.auth)
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -28,6 +30,7 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                     currentSelectedTeam: userData?.currentSelectedTeam || ""
                 }
                 dispatch(setUser(loggedUser))
+                console.log(loggedUser)
             } else {
                 dispatch(setUser(null))
             }

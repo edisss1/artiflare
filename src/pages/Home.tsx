@@ -16,41 +16,41 @@ import Loading from "../components/atoms/Loading.tsx"
 import { doc, getDoc } from "firebase/firestore"
 
 const Home = () => {
-    const dispatch: AppDispatch = useDispatch()
-    const { user, status } = useSelector((state: RootState) => state.auth)
+    // const dispatch: AppDispatch = useDispatch()
+    // const { user, status } = useSelector((state: RootState) => state.auth)
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-            if (firebaseUser && user) {
-                const userDocRef = doc(db, "users", firebaseUser.uid)
-                const userDoc = await getDoc(userDocRef)
-                const userData = userDoc.data()
+    // useEffect(() => {
+    //     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    //         if (firebaseUser && user) {
+    //             const userDocRef = doc(db, "users", firebaseUser.uid)
+    //             const userDoc = await getDoc(userDocRef)
+    //             const userData = userDoc.data()
 
-                const loggedUser: LoggedUser = {
-                    uid: firebaseUser.uid,
-                    email: firebaseUser.email,
-                    img: firebaseUser.photoURL,
-                    displayName: firebaseUser.displayName,
-                    teams: userData?.teams || [],
-                    boards: userData?.boards || [],
-                    currentSelectedTeam: userData?.currentSelectedTeam
-                }
-                dispatch(setUser(loggedUser))
-            } else {
-                dispatch(setUser(null))
-            }
-        })
+    //             const loggedUser: LoggedUser = {
+    //                 uid: firebaseUser.uid,
+    //                 email: firebaseUser.email,
+    //                 img: firebaseUser.photoURL,
+    //                 displayName: firebaseUser.displayName,
+    //                 teams: userData?.teams || [],
+    //                 boards: userData?.boards || [],
+    //                 currentSelectedTeam: userData?.currentSelectedTeam
+    //             }
+    //             dispatch(setUser(loggedUser))
+    //         } else {
+    //             dispatch(setUser(null))
+    //         }
+    //     })
 
-        return () => unsubscribe()
-    }, [dispatch])
+    //     return () => unsubscribe()
+    // }, [dispatch])
 
-    if (status === "loading") {
-        return <Loading />
-    }
+    // if (status === "loading") {
+    //     return <Loading />
+    // }
 
-    if (user) {
-        return <Navigate to={"/app/dashboard"} />
-    }
+    // if (user) {
+    //     return <Navigate to={"/app/dashboard"} />
+    // }
 
     return (
         <>

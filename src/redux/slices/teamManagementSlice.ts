@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Team, TeamMember } from "../../types/Team"
-import { db } from "../../firestore/firebaseConfig"
+import { db, storage } from "../../firestore/firebaseConfig"
 import {
     addDoc,
     arrayUnion,
@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore"
 import { User } from "../../types/User"
 import { AppDispatch } from "../store"
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 
 interface TeamState {
     teams: Team[]
@@ -285,6 +286,25 @@ export const getCurrentSelectedTeam = createAsyncThunk(
     }
 )
 
+export const uploadTeamLogo = createAsyncThunk(
+    "teamManagement/uploadTeamLogo",
+    async ({ teamID, file }: { teamID: string; file: File }) => {
+        try {
+            const storageRef = ref(storage, `teamLogos/${teamID}`)
+            await uploadBytes(storageRef, file)
+            const downloadURL = await getDownloadURL(storageRef)
+
+            const teamDocRef = doc(db, "teams", teamID)
+
+            await updateDoc(teamDocRef, { logo: downloadURL })
+
+            return downloadURL
+        } catch (err) {
+            throw new Error(err as string)
+        }
+    }
+)
+
 const teamManagementSlice = createSlice({
     name: "teamManagement",
     initialState,
@@ -343,6 +363,10 @@ const teamManagementSlice = createSlice({
                 state.currentTeamID = action.payload
             })
             .addCase(updateTeamName.fulfilled, (state) => {
+                state.status = "succeeded"
+            })
+            .addCase(uploadTeamLogo.fulfilled, (state) => {
+                state.error = undefined
                 state.status = "succeeded"
             })
     }

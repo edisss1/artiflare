@@ -6,13 +6,11 @@ import { User as LoggedUser } from "../../types/User"
 import { setUser } from "../../redux/slices/authSlice"
 import { RootState } from "../../redux/store"
 import { doc, getDoc } from "firebase/firestore"
-import { useNavigate } from "react-router-dom"
 import Loading from "../atoms/Loading"
 
 const AuthChecker = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useDispatch()
     const { user, status } = useSelector((state: RootState) => state.auth)
-    const navigate = useNavigate()
 
     useEffect(() => {
         console.log("AuthChecker: Initializing auth state check.")
@@ -51,10 +49,6 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
 
     if (status === "loading") {
         return <Loading />
-    }
-
-    if (user) {
-        navigate("/app/dashboard")
     }
 
     return <>{children}</>

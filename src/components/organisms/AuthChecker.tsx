@@ -7,10 +7,17 @@ import { setUser } from "../../redux/slices/authSlice"
 import { RootState } from "../../redux/store"
 import { doc, getDoc } from "firebase/firestore"
 import Loading from "../atoms/Loading"
+import { useLocation, useNavigate } from "react-router-dom"
 
 const AuthChecker = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useDispatch()
     const { user, status } = useSelector((state: RootState) => state.auth)
+    const location = useLocation()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        console.log("AuthChecker: Location changed to", location)
+    }, [location])
 
     useEffect(() => {
         console.log("AuthChecker: Initializing auth state check.")
@@ -43,6 +50,22 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
 
         return () => unsubscribe()
     }, [dispatch])
+
+    useEffect(() => {
+        if (status === "authenticated" && user) {
+            if (
+                location.pathname === "/auth/signup" ||
+                location.pathname === "/auth/login" ||
+                location.pathname === "/"
+            ) {
+                navigate("/app/dashboard", { replace: true })
+            }
+        } else if (status === "unauthenticated") {
+            if (!location.pathname.startsWith("/auth")) {
+                navigate("/auth/signup", { replace: true })
+            }
+        }
+    }, [status, user, location.pathname, navigate])
 
     console.log("AuthChecker: Loading state is", status)
     console.log("AuthChecker: User state is", user)

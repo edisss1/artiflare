@@ -3,7 +3,7 @@ import { SettingsIconProps } from "../../types/SettingsIconProps"
 const ProfileSettingsIcon = ({ className }: SettingsIconProps) => {
     return (
         <svg
-            className={className}
+            className={`${className} [&>*]:fill-bg-dark dark:[&>*]:fill-bg-light `}
             width="20"
             height="20"
             viewBox="0 0 20 20"

@@ -51,7 +51,12 @@ const BoardsContainer = () => {
 
     console.log("Boards: ", boards)
     return (
-        <div className="flex flex-col gap-4 relative">
+        <div className="flex flex-col gap-4 relative ">
+            {paginatedBoards?.length === 0 && (
+                <p className="text-center text-xl font-medium mt-8 ">
+                    You don't have any boards yet
+                </p>
+            )}
             {paginatedBoards?.map((board) => (
                 <Board
                     createdBy={board.createdBy}

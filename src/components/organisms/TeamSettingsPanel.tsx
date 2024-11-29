@@ -1,12 +1,51 @@
+import { useDispatch } from "react-redux"
+import { AppDispatch, RootState } from "../../redux/store"
 import Button from "../atoms/Button"
 import SettingsHeader from "../atoms/SettingsHeader"
+import SettingsInput from "../atoms/SettingsInput"
+import { updateTeamName } from "../../redux/slices/teamManagementSlice"
+import { useSelector } from "react-redux"
+import { useState } from "react"
 
 const TeamSettingsPanel = () => {
+    const dispatch: AppDispatch = useDispatch()
+    const user = useSelector((state: RootState) => state.auth.user)
+
+    const [newTeamName, setNewTeamName] = useState<string>("")
+
+    const handleNewTeamName = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewTeamName(e.target.value)
+    }
+
+    const handleTeamNameUpdate = () => {
+        dispatch(
+            updateTeamName({
+                currentTeam: user?.currentSelectedTeam,
+                newTeamName: newTeamName!
+            })
+        )
+    }
+
     return (
         <div className="p-4">
             <SettingsHeader>Team profile</SettingsHeader>
             <div className={`flex justify-between w-full max-w-[90%]`}>
-                <div className={"grid gap-2 place-items-start"}></div>
+                <div className={"grid gap-2 place-items-start"}>
+                    <SettingsInput
+                        value={newTeamName}
+                        onChange={(e) => handleNewTeamName(e)}
+                        id="teamName"
+                        type="text"
+                        label="Team Name"
+                    />
+
+                    <Button
+                        className="mt-4 border-2 border-typography-light dark:border-typography-dark px-2 py-1 rounded-md hover:bg-bg-dark dark:hover:bg-bg-light dark:hover:text-typography-light hover:text-typography-dark transition-colors duration-150"
+                        onClick={handleTeamNameUpdate}
+                    >
+                        Change
+                    </Button>
+                </div>
                 <div className={"flex flex-col gap-2 items-center"}>
                     <h3>Your photo</h3>
 

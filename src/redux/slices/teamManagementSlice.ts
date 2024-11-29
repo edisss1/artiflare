@@ -21,6 +21,7 @@ interface TeamState {
     newTeam: Team
     status: "idle" | "loading" | "succeeded" | "failed"
     error: string | undefined
+    newTeamName: string
 }
 
 const initialState: TeamState = {
@@ -30,11 +31,13 @@ const initialState: TeamState = {
         members: [],
         creatorID: "",
         creatorName: "",
-        teamType: ""
+        teamType: "",
+        logo: ""
     },
     currentTeamID: undefined,
     status: "idle",
-    error: undefined
+    error: undefined,
+    newTeamName: ""
 }
 export const createTeam = createAsyncThunk(
     "teamManagement/createTeam",
@@ -64,7 +67,8 @@ export const createTeam = createAsyncThunk(
                 ],
                 creatorID: user.uid,
                 creatorName: user.displayName || user.email,
-                teamType: teamType
+                teamType: teamType,
+                logo: ""
             }
 
             const docRef = await addDoc(teamsRef, teamData)
@@ -104,7 +108,8 @@ export const getTeams = createAsyncThunk(
                 creatorID: doc.data().creatorID,
                 creatorName: doc.data().creatorName,
                 members: doc.data().members,
-                teamType: doc.data().teamType
+                teamType: doc.data().teamType,
+                logo: doc.data().logo
             }))
 
             const userTeams = teams.filter((team) =>
@@ -228,14 +233,28 @@ export const searchUsers = async (queryString: string) => {
     return users
 }
 
-// export const updateCurrentSelectedTeam = async (teamId: string) => {
-//     const teamDocRef = doc(db, "teams", teamId)
-//     const teamDoc = await getDoc(teamDocRef)
-//     if (teamDoc.exists()) {
-//         const teamData = teamDoc.data() as Team
-//         return teamData
-//     }
-// }
+export const updateTeamName = createAsyncThunk(
+    "teamManagement/updateTeamName",
+    async ({
+        currentTeam,
+        newTeamName
+    }: {
+        currentTeam: string | undefined
+        newTeamName: string
+    }) => {
+        if (!currentTeam) return
+        const teamDocRef = doc(db, "teams", currentTeam)
+
+        try {
+            await updateDoc(teamDocRef, {
+                name: newTeamName
+            })
+        } catch (err) {
+            console.error(err)
+            throw new Error(err as string)
+        }
+    }
+)
 
 export const updateCurrentSelectedTeam = createAsyncThunk(
     "teamManagement/updateCurrentSelectedTeam",
@@ -322,6 +341,9 @@ const teamManagementSlice = createSlice({
             })
             .addCase(getCurrentSelectedTeam.fulfilled, (state, action) => {
                 state.currentTeamID = action.payload
+            })
+            .addCase(updateTeamName.fulfilled, (state) => {
+                state.status = "succeeded"
             })
     }
 })

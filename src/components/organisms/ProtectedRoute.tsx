@@ -10,9 +10,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     const user = useSelector((state: RootState) => state.auth.user)
 
     if (!user) {
-        return <Navigate to="/auth/signup" />
-    } else {
-        return <Navigate to="/app/dashboard" />
+        return <Navigate to="/auth/signup" replace />
     }
 
     return children

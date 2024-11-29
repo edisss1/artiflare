@@ -5,7 +5,6 @@ import SettingsDashboard from "./pages/SettingsDashboard"
 import UserSettingsPanel from "./components/organisms/UserSettingsPanel.tsx"
 import TeamSettingsPanel from "./components/organisms/TeamSettingsPanel.tsx"
 import TeamMembersSettingsPanel from "./components/organisms/TeamMembersSettingsPanel.tsx"
-import ProtectedRoute from "./components/organisms/ProtectedRoute.tsx"
 const Home = lazy(() => import("./pages/Home"))
 const Auth = lazy(() => import("./pages/Auth"))
 const Login = lazy(() => import("./components/molecules/Login"))
@@ -20,9 +19,9 @@ function Router() {
                 <Route
                     path="/"
                     element={
-                        <ProtectedRoute>
-                            <Home />
-                        </ProtectedRoute>
+                        // <ProtectedRoute>
+                        <Home />
+                        // </ProtectedRoute>
                     }
                 />
                 <Route path="/auth" element={<Auth />}>

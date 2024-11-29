@@ -6,16 +6,22 @@ import { User as LoggedUser } from "../../types/User"
 import { setUser } from "../../redux/slices/authSlice"
 import { RootState } from "../../redux/store"
 import { doc, getDoc } from "firebase/firestore"
+import { useNavigate } from "react-router-dom"
 import Loading from "../atoms/Loading"
-import { Navigate } from "react-router-dom"
 
 const AuthChecker = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useDispatch()
     const { user, status } = useSelector((state: RootState) => state.auth)
+    const navigate = useNavigate()
 
     useEffect(() => {
+        console.log("AuthChecker: Initializing auth state check.")
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-            if (firebaseUser && user) {
+            if (firebaseUser) {
+                console.log(
+                    "AuthChecker: User detected. (firebaseUser)",
+                    firebaseUser
+                )
                 const userDocRef = doc(db, "users", firebaseUser.uid)
                 const userDoc = await getDoc(userDocRef)
                 const userData = userDoc.data()
@@ -32,12 +38,24 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                 dispatch(setUser(loggedUser))
                 console.log(loggedUser)
             } else {
+                console.log("AuthChecker: No user detected.")
                 dispatch(setUser(null))
             }
         })
 
         return () => unsubscribe()
     }, [dispatch])
+
+    console.log("AuthChecker: Loading state is", status)
+    console.log("AuthChecker: User state is", user)
+
+    if (status === "loading") {
+        return <Loading />
+    }
+
+    if (user) {
+        navigate("/app/dashboard")
+    }
 
     return <>{children}</>
 }

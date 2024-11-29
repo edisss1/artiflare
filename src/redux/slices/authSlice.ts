@@ -12,6 +12,29 @@ import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore"
 import { createUserWithEmailAndPassword } from "firebase/auth/cordova"
 import { User } from "../../types/User.ts"
 
+const loadUserFromLocalStorage = (): User | null => {
+    const firebaseAuthKey = Object.keys(localStorage).find((key) =>
+        key.startsWith("firebase:authUser:")
+    )
+
+    if (firebaseAuthKey) {
+        const firebaseAuthUser = localStorage.getItem(firebaseAuthKey)
+        if (firebaseAuthUser) {
+            const parsedUser: User = JSON.parse(firebaseAuthUser)
+            return {
+                uid: parsedUser.uid,
+                email: parsedUser.email,
+                img: parsedUser.img,
+                displayName: parsedUser.displayName,
+                teams: parsedUser.teams,
+                boards: parsedUser.boards,
+                currentSelectedTeam: parsedUser.currentSelectedTeam
+            } as User
+        }
+    }
+    return null
+}
+
 interface AuthState {
     user: User | null
     status: "idle" | "authenticated" | "unauthenticated" | "loading"
@@ -20,7 +43,7 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-    user: JSON.parse(localStorage.getItem("user") || "null"),
+    user: loadUserFromLocalStorage(),
     status: "loading",
     password: "",
     email: ""
@@ -48,8 +71,6 @@ export const signInWithGoogle = createAsyncThunk(
             }
 
             await setDoc(doc(db, "users", user.uid), user)
-
-            localStorage.setItem("user", JSON.stringify(user))
 
             return user
         } catch (error) {
@@ -85,8 +106,6 @@ export const signInWithCredentials = createAsyncThunk(
 
             await setDoc(doc(db, "users", user.uid), user)
 
-            localStorage.setItem("user", JSON.stringify(user))
-
             return user
         } catch (err) {
             console.error(err)
@@ -117,8 +136,6 @@ export const createUserWithCredentials = createAsyncThunk(
 
             await setDoc(doc(db, "users", user.uid), user)
 
-            localStorage.setItem("user", JSON.stringify(user))
-
             return user
         } catch (err) {
             console.error(err)
@@ -129,8 +146,6 @@ export const createUserWithCredentials = createAsyncThunk(
 
 export const signOutUser = createAsyncThunk("auth/signOutUser", async () => {
     await signOut(auth)
-
-    localStorage.removeItem("user")
 })
 
 export const deleteUserFromDatabase = createAsyncThunk(
@@ -172,11 +187,6 @@ const authSlice = createSlice({
         setUser: (state, action: PayloadAction<User | null>) => {
             state.user = action.payload
             state.status = action.payload ? "authenticated" : "unauthenticated"
-            if (action.payload) {
-                localStorage.setItem("user", JSON.stringify(action.payload))
-            } else {
-                localStorage.removeItem("user")
-            }
         },
         clearUser: (state) => {
             state.user = null

@@ -63,7 +63,8 @@ export const createTeam = createAsyncThunk(
                         role: "owner",
                         displayName: user.displayName || user.email,
                         img: user.img,
-                        email: user.email
+                        email: user.email,
+                        lastAccessAt: new Date().toDateString()
                     }
                 ],
                 creatorID: user.uid,
@@ -155,8 +156,6 @@ export const inviteUserToTeam = async (
 
     if (teamDoc.exists()) {
         const teamData = teamDoc.data() as Team
-
-        if (!user) return
 
         const userDocRef = doc(db, "users", user.uid)
         const userDoc = await getDoc(userDocRef)

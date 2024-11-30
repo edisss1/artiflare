@@ -4,6 +4,7 @@ export interface TeamMember {
     displayName: string | null
     img: string | null
     email: string | null
+    lastAccessAt?: string
 }
 
 export interface Team {

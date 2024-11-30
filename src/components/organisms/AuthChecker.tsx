@@ -5,7 +5,7 @@ import { auth, db } from "../../firestore/firebaseConfig"
 import { User as LoggedUser } from "../../types/User"
 import { setUser } from "../../redux/slices/authSlice"
 import { RootState } from "../../redux/store"
-import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore"
+import { doc, getDoc, updateDoc } from "firebase/firestore"
 import Loading from "../atoms/Loading"
 import { useLocation, useNavigate } from "react-router-dom"
 
@@ -31,22 +31,21 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                 const userDoc = await getDoc(userDocRef)
                 const userData = userDoc.data()
 
-                await updateDoc(userDocRef, {
-                    lastAccess: serverTimestamp()
-                })
-
                 const loggedUser: LoggedUser = {
                     uid: firebaseUser.uid,
                     email: firebaseUser.email,
-                    img: firebaseUser.photoURL ?? "",
-                    displayName: firebaseUser.displayName ?? "Unknown",
+                    img: firebaseUser.photoURL,
+                    displayName: firebaseUser.displayName,
                     teams: userData?.teams || [],
                     boards: userData?.boards || [],
                     currentSelectedTeam: userData?.currentSelectedTeam || "",
-                    lastAccess: userData?.lastAccess,
-                    createdAt: userData?.createdAt,
-                    lastLoginAt: userData?.lastLoginAt
+                    lastAccessAt: new Date().toDateString()
                 }
+
+                await updateDoc(userDocRef, {
+                    lastAccessAt: new Date().toDateString()
+                })
+
                 dispatch(setUser(loggedUser))
                 console.log(loggedUser)
             } else {

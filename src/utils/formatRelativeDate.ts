@@ -1,20 +1,17 @@
-import { Timestamp } from "firebase/firestore"
-
 export const formatRelativeDate = (
-    lastAccess: Timestamp | undefined
+    lastAccess: string | Date | undefined
 ): string => {
-    if (typeof lastAccess === "undefined") return "Never"
-
-    const lastAccessDate = lastAccess.toDate()
+    const lastAccessDate =
+        typeof lastAccess === "string" ? new Date(lastAccess) : lastAccess
     const now = new Date()
 
-    if (isNaN(lastAccessDate.getTime())) {
-        return "Invalid date"
-    }
+    if (!lastAccessDate) return "Never"
 
+    // Get local date representations without time
     const lastAccessLocalDate = new Date(lastAccessDate.toLocaleDateString())
     const nowLocalDate = new Date(now.toLocaleDateString())
 
+    // Calculate difference in days
     const diffTime = nowLocalDate.getTime() - lastAccessLocalDate.getTime()
     const diffDays = diffTime / (1000 * 60 * 60 * 24)
 
@@ -25,14 +22,16 @@ export const formatRelativeDate = (
     } else if (diffDays < 7) {
         return `${Math.floor(diffDays)} days ago`
     } else {
+        // Format as specific date
         return new Intl.DateTimeFormat("it-IT", {
+            weekday: "short",
             month: "short",
             day: "numeric",
             year: "numeric",
             hour: "numeric",
             minute: "numeric",
             second: "numeric",
-            hour12: false
+            hour12: true
         }).format(lastAccessDate)
     }
 }

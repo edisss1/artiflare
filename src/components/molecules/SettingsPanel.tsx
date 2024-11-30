@@ -11,6 +11,7 @@ import ProfileSettingsIcon from "../icons/ProfileSettingsIcon"
 import SettingsLink from "../atoms/SettingsLink"
 import TeamProfileIcon from "../icons/TeamProfileIcon"
 import TeamMembersIcon from "../icons/TeamMembersIcon"
+import { useNavigate } from "react-router-dom"
 
 interface SettingsLinksProps {
     uid: string | undefined
@@ -20,6 +21,8 @@ const SettingsPanel = ({ uid }: SettingsLinksProps) => {
     const dispatch: AppDispatch = useDispatch()
     const teams = useSelector((state: RootState) => state.teamManagement.teams)
     const user = useSelector((state: RootState) => state.auth.user)
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (user?.teams && user) {
@@ -42,6 +45,8 @@ const SettingsPanel = ({ uid }: SettingsLinksProps) => {
         dispatch(updateCurrentSelectedTeam({ selectedTeamID, user }))
         console.log("Current team changed to: ", e.target.value)
         console.log(user)
+
+        navigate(`/app/settings/team/${selectedTeamID}`)
     }
 
     return (

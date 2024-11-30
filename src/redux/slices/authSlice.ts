@@ -67,7 +67,8 @@ export const signInWithGoogle = createAsyncThunk(
                 email: result.user.email,
                 teams: userData?.teams || [],
                 boards: userData?.boards || [],
-                currentSelectedTeam: userData?.currentSelectedTeam || ""
+                currentSelectedTeam: userData?.currentSelectedTeam || "",
+                lastAccessAt: new Date().toDateString()
             }
 
             await setDoc(doc(db, "users", user.uid), user)
@@ -101,7 +102,8 @@ export const signInWithCredentials = createAsyncThunk(
                 email: result.user.email,
                 teams: [],
                 boards: [],
-                currentSelectedTeam: ""
+                currentSelectedTeam: "",
+                lastAccessAt: new Date().toDateString()
             }
 
             await setDoc(doc(db, "users", user.uid), user)
@@ -131,7 +133,8 @@ export const createUserWithCredentials = createAsyncThunk(
                 email: result.user.email,
                 teams: [],
                 boards: [],
-                currentSelectedTeam: ""
+                currentSelectedTeam: "",
+                lastAccessAt: new Date().toDateString()
             }
 
             await setDoc(doc(db, "users", user.uid), user)

@@ -6,4 +6,5 @@ export interface User {
     teams: { teamID: string; role: "admin" | "member" | "owner" }[]
     boards: string[]
     currentSelectedTeam: string
+    lastAccessAt?: string
 }

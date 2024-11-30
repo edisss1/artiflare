@@ -1,4 +1,5 @@
 import { Team } from "../../types/Team"
+import { formatRelativeDate } from "../../utils/formatRelativeDate"
 
 interface MembersDisplayProps {
     currentTeam: Team | undefined
@@ -29,7 +30,7 @@ const MembersDisplay = ({ currentTeam }: MembersDisplayProps) => {
                         <span className="capitalize">{member.role}</span>
                     </div>
                     <div className="col-start-3">
-                        <span></span>
+                        <span>{formatRelativeDate(member.lastAccessAt)}</span>
                     </div>
                 </div>
             ))}

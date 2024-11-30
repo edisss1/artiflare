@@ -16,13 +16,15 @@ const TeamSettingsPanel = () => {
     const user = useSelector((state: RootState) => state.auth.user)
     const teams = useSelector((state: RootState) => state.teamManagement.teams)
 
-    const [logoFile, setLogoFile] = useState<File | null>(null)
+    // const [logoFile, setLogoFile] = useState<File | null>(null)
 
     const currentTeam = teams.find(
         (team) => team.id === user?.currentSelectedTeam
     )
 
-    const [newTeamName, setNewTeamName] = useState<string>("")
+    const [newTeamName, setNewTeamName] = useState<string | undefined>(
+        currentTeam?.name
+    )
 
     const handleNewTeamName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewTeamName(e.target.value)
@@ -52,6 +54,7 @@ const TeamSettingsPanel = () => {
             <div className={`flex justify-between w-full max-w-[90%]`}>
                 <div className={"grid gap-2 place-items-start"}>
                     <SettingsInput
+                        defaultValue={newTeamName}
                         value={newTeamName}
                         onChange={(e) => handleNewTeamName(e)}
                         id="teamName"
@@ -68,7 +71,7 @@ const TeamSettingsPanel = () => {
                 </div>
                 <div className={"flex flex-col gap-2 items-center"}>
                     <h3>Team logo</h3>
-                    <div className="w-full max-w-[164px] aspect-square [&>*]:rounded-md">
+                    <div className=" w-full min-w-[160px] aspect-square [&>*]:rounded-md">
                         {currentTeam?.logo ? (
                             <img
                                 src={currentTeam?.logo}

@@ -2,14 +2,20 @@ import { useSelector } from "react-redux"
 import { RootState } from "../../redux/store.ts"
 import userIcon from "../../assets/UserIcon.svg"
 import { Link } from "react-router-dom"
+import { useEffect } from "react"
 
 const User = ({ position }: { position: string }) => {
     const user = useSelector((state: RootState) => state.auth.user)
     let userProfilePicture = user?.img
+    let displayName = user?.displayName
 
     if (userProfilePicture === null || userProfilePicture === undefined) {
         userProfilePicture = userIcon
     }
+
+    useEffect(() => {
+        displayName = user?.displayName
+    }, [user?.displayName])
 
     return (
         <Link
@@ -22,9 +28,7 @@ const User = ({ position }: { position: string }) => {
                     src={userProfilePicture}
                     alt=""
                 />
-                <p className={"w-full max-w-[150px] truncate"}>
-                    {user?.displayName || user?.email}
-                </p>
+                <p className={"w-full max-w-[150px] truncate"}>{displayName}</p>
             </div>
         </Link>
     )

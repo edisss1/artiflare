@@ -13,7 +13,7 @@ const MembersDisplay = ({ currentTeam }: MembersDisplayProps) => {
                 <h3>Last access</h3>
             </div>
             {currentTeam?.members.map((member) => (
-                <div className="grid grid-cols-3 ">
+                <div className="grid grid-cols-3 items-center">
                     <div className="flex items-center gap-2">
                         <img
                             className="w-8 h-8 rounded-full"
@@ -24,6 +24,12 @@ const MembersDisplay = ({ currentTeam }: MembersDisplayProps) => {
                             <p className="text-sm">{member.displayName}</p>
                             <p className="text-xs">{member.email}</p>
                         </div>
+                    </div>
+                    <div className="col-start-2">
+                        <span className="capitalize">{member.role}</span>
+                    </div>
+                    <div className="col-start-3">
+                        <span></span>
                     </div>
                 </div>
             ))}

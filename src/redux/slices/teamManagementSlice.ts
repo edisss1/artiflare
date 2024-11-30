@@ -156,6 +156,8 @@ export const inviteUserToTeam = async (
     if (teamDoc.exists()) {
         const teamData = teamDoc.data() as Team
 
+        if (!user) return
+
         const userDocRef = doc(db, "users", user.uid)
         const userDoc = await getDoc(userDocRef)
         const teamDocRef = doc(db, "teams", teamId)

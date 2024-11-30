@@ -49,8 +49,8 @@ const SettingsPanel = ({ uid }: SettingsLinksProps) => {
             <div className="flex items-center  mb-4 dark:p-2 dark:bg-primary dark:rounded-md transition-all">
                 <div
                     role="change to image later"
-                    className="w-12 bg-gray-500 aspect-square rounded-md"
-                ></div>
+                    className="w-12 h-12 bg-gray-500 aspect-square rounded-md"
+                />
                 <SettingsSelect
                     onChange={handleCurrentTeamChange}
                     options={teamOptions}

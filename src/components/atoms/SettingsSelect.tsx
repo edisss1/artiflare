@@ -8,7 +8,7 @@ interface SettingsSelectProps {
 
 const SettingsSelect = ({ onChange, options }: SettingsSelectProps) => {
     return (
-        <div className={`relative text-typography-light `}>
+        <div className={`relative text-typography-light min-w-[200px]`}>
             <select
                 className="appearance-none w-full outline-none bg-transparent truncate w-calc(100%)  py-[0.9375rem] ps-3 rounded-md"
                 onChange={onChange}

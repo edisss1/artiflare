@@ -1,5 +1,7 @@
 import Anchor from "../atoms/Anchor"
+import ScrollTo from "../atoms/ScrollTo"
 import ThemeSwitch from "../atoms/ThemeSwitch"
+import ChevronIcon from "../icons/ChevronIcon"
 
 const NavBar = () => {
     return (
@@ -21,6 +23,10 @@ const NavBar = () => {
 
                 <ThemeSwitch />
             </div>
+            <ScrollTo x={0} y={0}>
+                <ChevronIcon className="rotate-180" />
+                <p>Back to top</p>
+            </ScrollTo>
         </nav>
     )
 }

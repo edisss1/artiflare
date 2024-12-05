@@ -6,7 +6,7 @@ import { User as LoggedUser } from "../../types/User"
 import { setUser } from "../../redux/slices/authSlice"
 import { RootState } from "../../redux/store"
 import { doc, getDoc, updateDoc } from "firebase/firestore"
-import Loading from "../atoms/Loading"
+import Loading from "./Loading"
 import { useLocation, useNavigate } from "react-router-dom"
 
 const AuthChecker = ({ children }: { children: React.ReactNode }) => {

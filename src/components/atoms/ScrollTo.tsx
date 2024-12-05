@@ -25,10 +25,9 @@ const ScrollTo = ({ x, y, children }: ScrollToProps) => {
 
     return (
         <div
-            id="target"
             className={`fixed right-8 bottom-12 ${
-                !isScrolled ? "hidden" : "block"
-            } hover:bg-bg-dark/60 px-4 py-1 rounded-md transition-colors duration-150`}
+                !isScrolled ? "opacity-0" : "opacity-100"
+            } hover:bg-bg-dark/60 px-4 py-2 rounded-md transition-all duration-150`}
         >
             <button
                 onClick={() => scrollToCoords(x, y)}

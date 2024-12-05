@@ -17,7 +17,7 @@ const ThemeSwitch = () => {
 
     return (
         <button
-            className="max-w-85 w-full relative [&>*]:w-10 flex items-center justify-center "
+            className="max-w-8 w-full relative [&>*]:w-10 flex items-center justify-center "
             onClick={toggleDarkMode}
         >
             <SunIcon darkMode={darkMode} />

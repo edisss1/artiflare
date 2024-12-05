@@ -28,7 +28,7 @@ const SettingsPanel = ({ uid }: SettingsLinksProps) => {
         if (user?.teams && user) {
             dispatch(getTeams(user))
         }
-        console.log(user)
+        console.log("Selected team ", user?.currentSelectedTeam)
     }, [])
 
     const teamOptions = teams.map((team) => {
@@ -37,6 +37,8 @@ const SettingsPanel = ({ uid }: SettingsLinksProps) => {
             value: team.id!
         }
     })
+
+    console.log(user?.currentSelectedTeam)
 
     const handleCurrentTeamChange = (
         e: React.ChangeEvent<HTMLSelectElement>

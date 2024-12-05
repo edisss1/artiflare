@@ -8,9 +8,19 @@ import {
 } from "firebase/auth"
 import { GoogleAuthProvider } from "firebase/auth"
 import { auth, db } from "../../firestore/firebaseConfig"
-import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore"
+import {
+    addDoc,
+    arrayUnion,
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc
+} from "firebase/firestore"
 import { createUserWithEmailAndPassword } from "firebase/auth/cordova"
 import { User } from "../../types/User.ts"
+import { Team } from "../../types/Team.ts"
 
 const loadUserFromLocalStorage = (): User | null => {
     const firebaseAuthKey = Object.keys(localStorage).find((key) =>
@@ -49,6 +59,39 @@ const initialState: AuthState = {
     email: ""
 }
 
+const createDefaultTeam = async (user: User) => {
+    const teamsRef = collection(db, "teams")
+    const teamData: Team = {
+        name: `${user.displayName ? `${user.displayName}'s` : ""} Team`,
+        members: [
+            {
+                uid: user.uid,
+                role: "owner",
+                displayName: user.displayName || user.email,
+                img: user.img,
+                email: user.email
+            }
+        ],
+        creatorID: user.uid,
+        creatorName: user.displayName || user.email,
+        teamType: "private",
+        logo: ""
+    }
+
+    const teamDoc = await addDoc(teamsRef, teamData)
+
+    const userRef = doc(db, "users", user.uid)
+    await updateDoc(userRef, {
+        teams: arrayUnion({
+            teamID: teamDoc.id,
+            role: "owner"
+        }),
+        currentSelectedTeam: teamDoc.id
+    })
+
+    return teamDoc.id
+}
+
 export const signInWithGoogle = createAsyncThunk(
     "auth/signInWithGoogle",
     async () => {
@@ -72,6 +115,11 @@ export const signInWithGoogle = createAsyncThunk(
             }
 
             await setDoc(doc(db, "users", user.uid), user)
+
+            if (!user.teams.length) {
+                const defaultTeamID = await createDefaultTeam(user)
+                user.currentSelectedTeam = defaultTeamID
+            }
 
             return user
         } catch (error) {
@@ -108,6 +156,11 @@ export const signInWithCredentials = createAsyncThunk(
 
             await setDoc(doc(db, "users", user.uid), user)
 
+            if (!user.teams.length) {
+                const defaultTeamID = await createDefaultTeam(user)
+                user.currentSelectedTeam = defaultTeamID
+            }
+
             return user
         } catch (err) {
             console.error(err)
@@ -135,6 +188,11 @@ export const createUserWithCredentials = createAsyncThunk(
                 boards: [],
                 currentSelectedTeam: "",
                 lastAccessAt: new Date().toDateString()
+            }
+
+            if (!user.teams.length) {
+                const defaultTeamID = await createDefaultTeam(user)
+                user.currentSelectedTeam = defaultTeamID
             }
 
             await setDoc(doc(db, "users", user.uid), user)

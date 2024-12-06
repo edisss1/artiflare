@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import Button from "./Button"
 import favorite from "../../assets/Favorite.svg"
 import more from "../../assets/More.svg"
+import { formatRelativeDate } from "../../utils/formatRelativeDate"
 
 interface BoardProps {
     id: string | undefined
@@ -26,9 +27,9 @@ const Board = ({ id, title, createdBy, modifiedBy, updatedAt }: BoardProps) => {
                 </p>
                 <div className={"flex gap-2"}>
                     <p className="max-w-[200px] truncate text-nowrap ">
-                        Modified by {modifiedBy}
+                        Modified {formatRelativeDate(updatedAt!).toLowerCase()}{" "}
+                        by {modifiedBy}
                     </p>
-                    <p>, {updatedAt}</p>
                 </div>
             </div>
             <div className="absolute top-[50%] right-4 -translate-y-[50%] flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-150">

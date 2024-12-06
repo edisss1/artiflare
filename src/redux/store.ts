@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit"
 import shapeManagementReducer from "./slices/shapeManagementSlice"
 import authReducer from "./slices/authSlice"
 import boardReducer from "./slices/boardSlice"
-import useManagementReducer from "./slices/userManagementSlice.ts"
+import userManagementReducer from "./slices/userManagementSlice.ts"
 import teamManagementReducer from "./slices/teamManagementSlice"
 
 export const store = configureStore({
@@ -10,7 +10,7 @@ export const store = configureStore({
         shape: shapeManagementReducer,
         auth: authReducer,
         boards: boardReducer,
-        userManagement: useManagementReducer,
+        userManagement: userManagementReducer,
         teamManagement: teamManagementReducer
     }
 })

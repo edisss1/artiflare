@@ -14,7 +14,7 @@ import { updateUserName } from "../../redux/slices/userManagementSlice.ts"
 const UserSettingsPanel = () => {
     const user = useSelector((state: RootState) => state.auth.user)
     const dispatch: AppDispatch = useDispatch()
-    const { newDisplayName, newCompanyName } = useSelector(
+    const { newDisplayName } = useSelector(
         (state: RootState) => state.userManagement
     )
 
@@ -36,8 +36,6 @@ const UserSettingsPanel = () => {
             <SettingsHeader>Profile details</SettingsHeader>
             <UserInfoSettings
                 user={user}
-                newDisplayName={newDisplayName}
-                newCompanyName={newCompanyName}
                 handleUserDisplayNameChange={handleUserDisplayNameChange}
                 handleSignOut={handleSignOut}
                 userIcon={userIcon}

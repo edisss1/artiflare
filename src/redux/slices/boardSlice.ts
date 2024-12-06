@@ -66,7 +66,8 @@ export const createBoard = createAsyncThunk(
                         img: user.img,
                         email: user.email
                     }
-                ]
+                ],
+                isFavorite: false
             }
 
             const docRef = await addDoc(boardsRef, boardData)
@@ -158,6 +159,18 @@ export const updateBoard = createAsyncThunk(
     }
 )
 
+const addBoardToFavorites = createAsyncThunk(
+    "board/addBoardToFavorites",
+    async (boardID: string) => {
+        try {
+            const boardRef = doc(db, "boards", boardID)
+            await updateDoc(boardRef, { isFavorite: true })
+        } catch (err) {
+            throw new Error(err as string)
+        }
+    }
+)
+
 const boardSlice = createSlice({
     name: "board",
     initialState,
@@ -222,6 +235,18 @@ const boardSlice = createSlice({
                     state.currentBoard.data = action.payload.newBoardData
                     state.currentBoard.updatedAt = new Date().toDateString()
                 }
+            })
+            .addCase(addBoardToFavorites.fulfilled, (state) => {
+                state.status = "succeeded"
+                state.error = undefined
+            })
+            .addCase(addBoardToFavorites.rejected, (state, action) => {
+                state.status = "failed"
+                state.error = action.error.message
+            })
+            .addCase(addBoardToFavorites.pending, (state) => {
+                state.status = "loading"
+                state.error = undefined
             })
     }
 })

@@ -28,7 +28,6 @@ const SettingsPanel = ({ uid }: SettingsLinksProps) => {
         if (user?.teams && user) {
             dispatch(getTeams(user))
         }
-        console.log("Selected team ", user?.currentSelectedTeam)
     }, [])
 
     const teamOptions = teams.map((team) => {
@@ -45,8 +44,6 @@ const SettingsPanel = ({ uid }: SettingsLinksProps) => {
     ) => {
         const selectedTeamID = e.target.value
         dispatch(updateCurrentSelectedTeam({ selectedTeamID, user }))
-        console.log("Current team changed to: ", e.target.value)
-        console.log(user)
 
         navigate(`/app/settings/team/${selectedTeamID}`)
     }

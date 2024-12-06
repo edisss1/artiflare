@@ -11,4 +11,5 @@ export interface Board {
     modifiedBy: string | null
     data: {}
     members: TeamMember[]
+    isFavorite: boolean
 }

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import Typewriter from "../atoms/Typewriter"
 
 const CallToAction = () => {
     return (
@@ -8,7 +9,7 @@ const CallToAction = () => {
                     "max-w-[800px] flex gap-[clamp(1rem,10vw,2.25rem)] flex-col col-start-3 col-span-2 max-md:col-start-1 w-full max-md:px-2"
                 }
             >
-                <h2 className="w-full max-w-[700px]  text-[clamp(1rem,6vw,1.6rem)] ">
+                {/* <h2 className="w-full max-w-[700px]  text-[clamp(1rem,6vw,1.6rem)] ">
                     Start collaborating
                     <span
                         className={
@@ -18,7 +19,11 @@ const CallToAction = () => {
                         creatively
                     </span>
                     with your team in real time
-                </h2>
+                </h2> */}
+                <Typewriter
+                    text="Start collaborating creatively with your team in real time"
+                    delay={20}
+                />
                 <Link
                     className="bg-secondary w-fit hover:shadow-xl hover:shadow-secondary/50  transition-all duration-150 rounded-md text-typography-light px-6 py-4"
                     to={"/auth/signup"}

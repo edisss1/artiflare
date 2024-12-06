@@ -116,9 +116,11 @@ export const signInWithGoogle = createAsyncThunk(
 
             await setDoc(doc(db, "users", user.uid), user)
 
-            if (!user.teams.length) {
+            if (!user.teams.length && user) {
                 const defaultTeamID = await createDefaultTeam(user)
-                user.currentSelectedTeam = defaultTeamID
+                setTimeout(() => {
+                    user.currentSelectedTeam = defaultTeamID
+                }, 1000)
             }
 
             return user
@@ -156,9 +158,11 @@ export const signInWithCredentials = createAsyncThunk(
 
             await setDoc(doc(db, "users", user.uid), user)
 
-            if (!user.teams.length) {
+            if (!user.teams.length && user) {
                 const defaultTeamID = await createDefaultTeam(user)
-                user.currentSelectedTeam = defaultTeamID
+                setTimeout(() => {
+                    user.currentSelectedTeam = defaultTeamID
+                }, 1000)
             }
 
             return user
@@ -190,9 +194,11 @@ export const createUserWithCredentials = createAsyncThunk(
                 lastAccessAt: new Date().toDateString()
             }
 
-            if (!user.teams.length) {
+            if (!user.teams.length && user) {
                 const defaultTeamID = await createDefaultTeam(user)
-                user.currentSelectedTeam = defaultTeamID
+                setTimeout(() => {
+                    user.currentSelectedTeam = defaultTeamID
+                }, 1000)
             }
 
             await setDoc(doc(db, "users", user.uid), user)

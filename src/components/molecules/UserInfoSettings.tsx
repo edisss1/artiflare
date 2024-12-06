@@ -3,15 +3,11 @@ import { User } from "../../types/User"
 import Button from "../atoms/Button"
 import SettingsInput from "../atoms/SettingsInput"
 import { AppDispatch } from "../../redux/store"
-import {
-    setNewCompanyName,
-    setNewDisplayName
-} from "../../redux/slices/userManagementSlice"
+import { setNewDisplayName } from "../../redux/slices/userManagementSlice"
 import { useState } from "react"
 
 interface UserInfoSettingsProps {
     user: User | null
-    newCompanyName: string
     handleUserDisplayNameChange: () => void
     handleSignOut: (dispatch: AppDispatch) => void
     userIcon: string
@@ -19,7 +15,6 @@ interface UserInfoSettingsProps {
 
 const UserInfoSettings = ({
     user,
-    newCompanyName,
     handleUserDisplayNameChange,
     handleSignOut,
     userIcon
@@ -45,16 +40,7 @@ const UserInfoSettings = ({
                     onChange={handleUserNameChange}
                     type={"text"}
                 />
-                <SettingsInput
-                    className={"rounded-md w-full max-w-[200px] "}
-                    label={"Company name"}
-                    id={`company-name`}
-                    value={newCompanyName}
-                    onChange={(e) =>
-                        dispatch(setNewCompanyName(e.target.value))
-                    }
-                    type={"text"}
-                />
+
                 <div className="flex items-center gap-4">
                     <Button
                         onClick={handleUserDisplayNameChange}

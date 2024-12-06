@@ -21,6 +21,7 @@ import {
 import { createUserWithEmailAndPassword } from "firebase/auth/cordova"
 import { User } from "../../types/User.ts"
 import { Team } from "../../types/Team.ts"
+import { navigateTo } from "../../utils/navigate.ts"
 
 const loadUserFromLocalStorage = (): User | null => {
     const firebaseAuthKey = Object.keys(localStorage).find((key) =>
@@ -213,6 +214,7 @@ export const createUserWithCredentials = createAsyncThunk(
 
 export const signOutUser = createAsyncThunk("auth/signOutUser", async () => {
     await signOut(auth)
+    navigateTo("/")
 })
 
 export const deleteUserFromDatabase = createAsyncThunk(

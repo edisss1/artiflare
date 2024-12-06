@@ -15,10 +15,12 @@ export default {
                 danger: "#FF0505"
             },
             keyframes: {
-                extend: { "0%": "h-0", "100%": "h-auto" }
+                extend: { "0%": "h-0", "100%": "h-auto" },
+                appear: { "0%": "opacity-0", "100%": "opacity-100" }
             },
             animation: {
-                extend: "extend 0.3s ease-in-out"
+                extend: "extend 0.3s ease-in-out",
+                appear: "appear 0.3 ease-in"
             }
         }
     },

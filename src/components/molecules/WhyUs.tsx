@@ -1,26 +1,20 @@
-import { useEffect, useRef, useState } from "react"
+import { useRef } from "react"
 import { whyUsContent } from "../../constants/whyUsContent"
 import WhyUsSection from "../atoms/WhyUsSection"
+import { useObserver } from "../../hooks/useObserver"
 
 const WhyUs = () => {
-    const [isIntersecting, setIsIntersecting] = useState(false)
-
-    const containerRef = useRef<HTMLDivElement | null>(null)
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(([entry]) => {
-            setIsIntersecting(entry.isIntersecting)
-        })
-
-        observer.observe(containerRef.current as Element)
-
-        return () => observer.disconnect()
-    }, [])
+    const observableElementRef = useRef<HTMLDivElement | null>(null)
+    const isVisible = useObserver({ observableElementRef })
 
     return (
         <div
-            ref={containerRef}
-            className="w-full  flex flex-col text-typography-light dark:text-typography-dark items-center  bg-primary dark:bg-primary-dark/90 gap-16 py-12 m-0"
+            ref={observableElementRef}
+            className={`w-full ${
+                isVisible
+                    ? "opacity-100 translate-y-0 "
+                    : "opacity-0 translate-y-16"
+            } transition-all duration-1000  flex flex-col text-typography-light dark:text-typography-dark items-center  bg-primary dark:bg-primary-dark/90 gap-16 py-12 m-0`}
         >
             <h3 className="text-3xl font-bold relative after:content[''] after:w-full after:h-px after:bg-bg-dark dark:after:bg-bg-light after:absolute after:left-0 after:top-[120%]">
                 Why choose Artiflare?

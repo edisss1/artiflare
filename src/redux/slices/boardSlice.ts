@@ -5,6 +5,7 @@ import {
     addDoc,
     arrayUnion,
     collection,
+    deleteDoc,
     doc,
     getDoc,
     onSnapshot,
@@ -171,6 +172,21 @@ const addBoardToFavorites = createAsyncThunk(
     }
 )
 
+export const deleteBoard = createAsyncThunk(
+    "board/deleteBoard",
+    async (boardID: string | undefined) => {
+        if (!boardID) return
+
+        try {
+            const boardDocRef = doc(db, "boards", boardID)
+
+            await deleteDoc(boardDocRef)
+        } catch (err) {
+            throw new Error(err as string)
+        }
+    }
+)
+
 const boardSlice = createSlice({
     name: "board",
     initialState,
@@ -246,6 +262,10 @@ const boardSlice = createSlice({
             })
             .addCase(addBoardToFavorites.pending, (state) => {
                 state.status = "loading"
+                state.error = undefined
+            })
+            .addCase(deleteBoard.fulfilled, (state) => {
+                state.status = "succeeded"
                 state.error = undefined
             })
     }

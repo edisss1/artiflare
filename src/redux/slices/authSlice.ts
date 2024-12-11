@@ -15,8 +15,11 @@ import {
     deleteDoc,
     doc,
     getDoc,
+    getDocs,
+    query,
     setDoc,
-    updateDoc
+    updateDoc,
+    where
 } from "firebase/firestore"
 import { createUserWithEmailAndPassword } from "firebase/auth/cordova"
 import { User } from "../../types/User.ts"
@@ -228,7 +231,7 @@ export const deleteUserFromDatabase = createAsyncThunk(
         }
 
         try {
-            // Check for Google provider reauthentication
+            // Reauthenticate if the user is signed in with Google
             if (
                 currentUser.providerData.some(
                     (data) => data.providerId === "google.com"
@@ -241,10 +244,32 @@ export const deleteUserFromDatabase = createAsyncThunk(
             const userRef = doc(db, "users", currentUser.uid)
             await deleteDoc(userRef)
 
+            const userBoardsRef = query(
+                collection(db, "boards"),
+                where("userUID", "==", currentUser.uid)
+            )
+            const userBoardsSnapshot = await getDocs(userBoardsRef)
+            const boardDeletions = userBoardsSnapshot.docs.map((doc) =>
+                deleteDoc(doc.ref)
+            )
+
+            const userTeamsRef = query(
+                collection(db, "teams"),
+                where("creatorID", "==", currentUser.uid)
+            )
+            const userTeamsSnapshot = await getDocs(userTeamsRef)
+            const teamDeletions = userTeamsSnapshot.docs.map((doc) =>
+                deleteDoc(doc.ref)
+            )
+
+            await Promise.all([...boardDeletions, ...teamDeletions])
+
             await deleteUser(currentUser)
         } catch (err) {
-            console.error("Error deleting user:", err)
-            return rejectWithValue(err)
+            console.error("Error deleting user:", (err as Error).message)
+            return rejectWithValue(
+                (err as Error).message || "Error deleting user."
+            )
         }
     }
 )

@@ -64,7 +64,7 @@ export const createTeam = createAsyncThunk(
                         displayName: user.displayName || user.email,
                         img: user.img,
                         email: user.email,
-                        lastAccessAt: new Date().toDateString()
+                        lastAccessAt: user.lastAccessAt!
                     }
                 ],
                 creatorID: user.uid,

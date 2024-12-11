@@ -73,7 +73,8 @@ const createDefaultTeam = async (user: User) => {
                 role: "owner",
                 displayName: user.displayName || user.email,
                 img: user.img,
-                email: user.email
+                email: user.email,
+                lastAccessAt: user.lastAccessAt!
             }
         ],
         creatorID: user.uid,
@@ -85,13 +86,15 @@ const createDefaultTeam = async (user: User) => {
     const teamDoc = await addDoc(teamsRef, teamData)
 
     const userRef = doc(db, "users", user.uid)
-    await updateDoc(userRef, {
+    const updatedUserData = {
         teams: arrayUnion({
             teamID: teamDoc.id,
             role: "owner"
         }),
         currentSelectedTeam: teamDoc.id
-    })
+    }
+
+    await updateDoc(userRef, updatedUserData)
 
     return teamDoc.id
 }

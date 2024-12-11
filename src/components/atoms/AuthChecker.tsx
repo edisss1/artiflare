@@ -38,8 +38,8 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                     displayName: firebaseUser.displayName,
                     teams: userData?.teams || [],
                     boards: userData?.boards || [],
-                    currentSelectedTeam: userData?.currentSelectedTeam || "",
-                    lastAccessAt: new Date().toDateString()
+                    currentSelectedTeam: userData?.currentSelectedTeam,
+                    lastAccessAt: userData?.lastAccessAt
                 }
 
                 await updateDoc(userDocRef, {

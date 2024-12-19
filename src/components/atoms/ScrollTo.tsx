@@ -24,18 +24,14 @@ const ScrollTo = ({ x, y, children }: ScrollToProps) => {
     }, [])
 
     return (
-        <div
-            className={`fixed right-8 bottom-12 ${
+        <button
+            onClick={() => scrollToCoords(x, y)}
+            className={`flex gap-1 items-center justify-center fixed right-8 bottom-12 ${
                 !isScrolled ? "opacity-0" : "opacity-100"
-            } hover:bg-bg-dark/60 px-4 py-2 rounded-md transition-all duration-150`}
+            } hover:bg-bg-dark/60 px-4 py-2 rounded-md transition-all duration-150 `}
         >
-            <button
-                onClick={() => scrollToCoords(x, y)}
-                className="flex gap-1 items-center justify-center"
-            >
-                {children}
-            </button>
-        </div>
+            {children}
+        </button>
     )
 }
 export default ScrollTo

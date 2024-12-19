@@ -65,7 +65,8 @@ export const createBoard = createAsyncThunk(
                         role: "owner",
                         displayName: user.displayName || user.email,
                         img: user.img,
-                        email: user.email
+                        email: user.email,
+                        lastAccessAt: user.lastAccessAt!
                     }
                 ],
                 isFavorite: false

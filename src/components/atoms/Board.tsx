@@ -21,7 +21,7 @@ const Board = ({ id, title, createdBy, modifiedBy, updatedAt }: BoardProps) => {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false)
 
     return (
-        <div className="flex flex-col relative border-2 gap-2 px-4 py-2 group hover:bg-primary dark:hover:bg-primary-dark/70 dark:hover:text-typography-dark    transition-colors duration-150 border-typography-light dark:border-typography-dark/40 rounded-md">
+        <div className="flex  flex-col relative border-2 gap-2 px-4 py-2 group hover:bg-primary dark:hover:bg-primary-dark/70 dark:hover:text-typography-dark    transition-colors duration-150 border-typography-light dark:border-typography-dark/40 rounded-md">
             <Link
                 className="max-w-[200px] truncate text-lg"
                 to={`/app/board/${id}`}
@@ -33,7 +33,7 @@ const Board = ({ id, title, createdBy, modifiedBy, updatedAt }: BoardProps) => {
                     Created by {createdBy},
                 </p>
                 <div className={"flex gap-2"}>
-                    <p className="max-w-[200px] truncate text-nowrap ">
+                    <p className="max-w-[400px] truncate text-nowrap ">
                         Modified {formatRelativeDate(updatedAt!).toLowerCase()}{" "}
                         by {modifiedBy}
                     </p>

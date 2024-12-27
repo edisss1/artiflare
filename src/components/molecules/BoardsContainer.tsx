@@ -53,7 +53,7 @@ const BoardsContainer = () => {
     return (
         <div className="flex flex-col gap-4 relative ">
             {paginatedBoards?.length === 0 && (
-                <p className="text-center text-xl font-medium mt-8 ">
+                <p className="text-center text-sm font-normal opacity-70 mt-8 ">
                     You don't have any boards yet
                 </p>
             )}

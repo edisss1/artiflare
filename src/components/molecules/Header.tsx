@@ -43,9 +43,12 @@ const Header = ({ plan, setIsMobileSidebarOpened }: HeaderProps) => {
                 </p>
             </div>
             <div className="flex items-center gap-6 ">
-                <Button className="capitalize px-2 py-1  text-typography-light bg-secondary rounded-md  ">
-                    upgrade
-                </Button>
+                {plan === "free" && (
+                    <Button className="capitalize px-2 py-1  text-typography-light bg-secondary rounded-md  ">
+                        upgrade
+                    </Button>
+                )}
+
                 <div className="flex gap-4 items-center justify-center">
                     <Button onClick={handleNotificationsOpen} className={"w-8"}>
                         <Bell />

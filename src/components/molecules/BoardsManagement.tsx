@@ -71,9 +71,9 @@ const BoardsManagement = () => {
                 />
             </Modal>
             <div className="grid grid-rows-2 max-md:place-items-center mt-[clamp(1.5rem,40vh,5rem)] mb-9">
-                <div className="flex items-center max-lg:flex-col justify-between">
+                <div className="flex items-center w-full justify-between">
                     <h2 className="text-xl">Your boards</h2>
-                    <div className="flex gap-4 text-typography-light">
+                    <div className="flex gap-4 max-md:flex-col text-typography-light">
                         <Button
                             onClick={toggleJoinTeamModal}
                             className="flex gap-2 items-center px-2 py-3 w-max bg-primary rounded-md hover:shadow-lg transition-all duration-200 hover:shadow-primary/80"

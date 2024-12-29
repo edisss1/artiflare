@@ -15,6 +15,9 @@ export const formatRelativeDate = (
     const diffTime = nowLocalDate.getTime() - lastAccessLocalDate.getTime()
     const diffDays = diffTime / (1000 * 60 * 60 * 24)
 
+    console.log("diffDays: ", diffDays)
+    console.log("diffTime: ", diffTime)
+
     if (diffDays === 0) {
         return "Today"
     } else if (diffDays === 1) {
@@ -22,8 +25,7 @@ export const formatRelativeDate = (
     } else if (diffDays < 7) {
         return `${Math.floor(diffDays)} days ago`
     } else {
-        // Format as specific date
-        return new Intl.DateTimeFormat("it-IT", {
+        return new Intl.DateTimeFormat("en-UK", {
             weekday: "short",
             month: "short",
             day: "numeric",

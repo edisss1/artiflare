@@ -17,7 +17,7 @@ const SettingsNav = ({ handleOpenPanel }: SettingsNavProps) => {
             </Button>
             <div className="flex gap-8 lg:w-full lg:justify-between">
                 <Link
-                    className="flex gap-4 w- items-center"
+                    className="flex gap-2 w-8 items-center"
                     to={"/app/dashboard"}
                 >
                     <BoardsIcon />

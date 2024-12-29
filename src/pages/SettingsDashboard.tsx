@@ -1,18 +1,23 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useLocation } from "react-router-dom"
 import SettingsNav from "../components/organisms/SettingsNav"
 import SettingsPanel from "../components/molecules/SettingsPanel.tsx"
 import { useSelector } from "react-redux"
 import { RootState } from "../redux/store.ts"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const SettingsDashboard = () => {
     const user = useSelector((state: RootState) => state.auth.user)
     const [isPanelVisible, setIsPanelVisible] = useState(false)
+    const location = useLocation()
 
     const handleOpenPanel = () => {
         setIsPanelVisible((prev) => !prev)
         console.log(isPanelVisible)
     }
+
+    useEffect(() => {
+        setIsPanelVisible(false)
+    }, [location])
 
     return (
         <>

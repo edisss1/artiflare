@@ -15,7 +15,7 @@ const Dashboard = () => {
             />
             <div className="w-full py-4 px-8">
                 <Header
-                    plan="free"
+                    plan="pro"
                     setIsMobileSidebarOpened={setIsMobileSidebarOpened}
                 />
                 <BoardsManagement />

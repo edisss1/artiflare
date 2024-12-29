@@ -28,18 +28,22 @@ const Board = ({ id, title, createdBy, modifiedBy, updatedAt }: BoardProps) => {
             >
                 {title}
             </Link>
-            <div className="flex gap-2 max-xl:flex-col ">
+            <div className="flex max-lg:flex-col gap-2 max-xl:flex-col ">
                 <p className={"max-w-[200px] truncate"}>
                     Created by {createdBy},
                 </p>
                 <div className={"flex gap-2"}>
-                    <p className="max-w-[400px] truncate text-nowrap ">
+                    <p className="max-w-[400px] truncate text-nowrap max-md:text-balance ">
                         Modified {formatRelativeDate(updatedAt!).toLowerCase()}{" "}
                         by {modifiedBy}
                     </p>
                 </div>
             </div>
-            <div className="absolute top-[50%] right-4 -translate-y-[50%] flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+            <div
+                className={`absolute top-[50%] right-4 -translate-y-[50%] flex items-center gap-4 opacity-0 ${
+                    isPopoverOpen && "opacity-100"
+                } max-xl:opacity-100 group-hover:opacity-100 transition-opacity duration-150`}
+            >
                 <Button
                     onClick={() => alert("WIP")}
                     className="hover:bg-slate-200 transition-colors duration-150 w-8 h-8 flex items-center justify-center rounded-sm"
@@ -54,9 +58,12 @@ const Board = ({ id, title, createdBy, modifiedBy, updatedAt }: BoardProps) => {
                 >
                     <img className="w-6" src={more} alt="" />
                 </Button>
-                <Popover popoverRef={popoverRef}>
-                    <PopoverBoardContent boardID={id} />
-                </Popover>
+                <Popover
+                    popoverRef={popoverRef}
+                    isPopoverOpen={isPopoverOpen}
+                    setIsPopoverOpen={setIsPopoverOpen}
+                    content={<PopoverBoardContent boardID={id} />}
+                />
             </div>
         </div>
     )

@@ -75,3 +75,13 @@ body {
 .modal-input:user-invalid {
     @apply border-danger;
 }
+
+@media (max-width: 1280px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "nav"
+            "main"
+            "aside";
+    }
+}

@@ -1,40 +1,44 @@
-import { useEffect, useState } from "react"
-import { handleClickOutside } from "../../utils/handleClickOutside"
+import React, { useEffect } from "react"
 
 interface PopoverProps {
-    children: React.ReactNode
+    content: React.ReactNode
     popoverRef: React.MutableRefObject<HTMLDivElement | null>
+    isPopoverOpen: boolean
+    setIsPopoverOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Popover = ({ children, popoverRef }: PopoverProps) => {
-    const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+const Popover = ({
+    popoverRef,
+    isPopoverOpen,
+    setIsPopoverOpen,
+    content
+}: PopoverProps) => {
+    const handleClickOutside = (e: MouseEvent) => {
+        if (
+            popoverRef.current &&
+            !popoverRef.current.contains(e.target as Node)
+        ) {
+            setIsPopoverOpen(false)
+        }
+    }
 
     useEffect(() => {
-        document.addEventListener("mousedown", (e) =>
-            handleClickOutside(e, popoverRef, isPopoverOpen, setIsPopoverOpen)
-        )
+        document.addEventListener("mousedown", handleClickOutside)
 
-        return () =>
-            document.removeEventListener("mousedown", (e) =>
-                handleClickOutside(
-                    e,
-                    popoverRef,
-                    isPopoverOpen,
-                    setIsPopoverOpen
-                )
-            )
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside)
+        }
     }, [])
 
     return (
         <div
+            className={`${
+                isPopoverOpen ? "block" : "hidden"
+            } absolute top-full left-[50%]  -translate-x-[50%] bg-primary p-4 w-[170px] shadow-lg rounded-md`}
             ref={popoverRef}
-            className={` ${
-                !isPopoverOpen
-                    ? "opacity-0 hidden -z-40"
-                    : "opacity-100 block z-40"
-            } absolute p-4 bg-bg-light dark:bg-bg-dark top-full left-[50%] -translate-x-[50%]`}
+            onClick={() => setIsPopoverOpen(!isPopoverOpen)}
         >
-            {children}
+            <div>{isPopoverOpen && <div>{content}</div>}</div>
         </div>
     )
 }

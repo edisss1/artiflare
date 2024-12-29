@@ -15,9 +15,10 @@ import { useNavigate } from "react-router-dom"
 
 interface SettingsLinksProps {
     uid: string | undefined
+    isPanelVisible: boolean
 }
 
-const SettingsPanel = ({ uid }: SettingsLinksProps) => {
+const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
     const dispatch: AppDispatch = useDispatch()
     const teams = useSelector((state: RootState) => state.teamManagement.teams)
     const user = useSelector((state: RootState) => state.auth.user)
@@ -49,42 +50,48 @@ const SettingsPanel = ({ uid }: SettingsLinksProps) => {
     }
 
     return (
-        <aside className="flex flex-col bg-primary dark:bg-primary-dark text-typography-light dark:text-typography-dark w-full max-w-[300px] p-4 rounded-md h-full min-h-[500px]  ">
-            <div className="flex items-center  mb-4 dark:p-2 dark:bg-primary dark:rounded-md transition-all">
-                <div
-                    role="change to image later"
-                    className="w-12 h-12 bg-gray-500 aspect-square rounded-md"
-                />
-                <SettingsSelect
-                    onChange={handleCurrentTeamChange}
-                    options={teamOptions}
-                />
-            </div>
-            <SettingsLink
-                icon={<ProfileSettingsIcon />}
-                to={"Profile settings"}
-                path={`/app/settings/profile/${uid}`}
-            />
-            <div className={"flex flex-col gap-6"}>
-                <div>
-                    <h2 className={"font-medium mb-2"}>Account</h2>
-                    <div>
-                        <SettingsLink
-                            path={`/app/settings/team/${user?.currentSelectedTeam}`}
-                            to="Team profile"
-                            icon={<TeamProfileIcon />}
-                        />
-                    </div>
+        <aside
+            className={`${
+                isPanelVisible ? "left-0" : "-left-[1000px]"
+            } flex  flex-col bg-primary max-lg:absolute transition-[left] duration-500 max-lg:min-w-screen max-lg:z-40 dark:bg-primary-dark text-typography-light dark:text-typography-dark w-full max-lg:items-center max-lg:max-w-screen lg:max-w-[300px] p-4 rounded-md h-full lg:min-h-[500px]  overflow-hidden  `}
+        >
+            <div>
+                <div className="flex items-center   mb-4 dark:p-2 dark:bg-primary dark:rounded-md transition-all">
+                    <div
+                        role="change to image later"
+                        className="w-12 h-12 bg-gray-500 aspect-square rounded-md"
+                    />
+                    <SettingsSelect
+                        onChange={handleCurrentTeamChange}
+                        options={teamOptions}
+                    />
                 </div>
-
-                <div>
-                    <h2 className={"font-medium mb-2"}>User management</h2>
+                <SettingsLink
+                    icon={<ProfileSettingsIcon />}
+                    to={"Profile settings"}
+                    path={`/app/settings/profile/${uid}`}
+                />
+                <div className={"flex flex-col gap-6"}>
                     <div>
-                        <SettingsLink
-                            path={`/app/settings/team/${user?.currentSelectedTeam}/members`}
-                            to="Team members"
-                            icon={<TeamMembersIcon />}
-                        />
+                        <h2 className={"font-medium mb-2"}>Account</h2>
+                        <div>
+                            <SettingsLink
+                                path={`/app/settings/team/${user?.currentSelectedTeam}`}
+                                to="Team profile"
+                                icon={<TeamProfileIcon />}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <h2 className={"font-medium mb-2"}>User management</h2>
+                        <div>
+                            <SettingsLink
+                                path={`/app/settings/team/${user?.currentSelectedTeam}/members`}
+                                to="Team members"
+                                icon={<TeamMembersIcon />}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

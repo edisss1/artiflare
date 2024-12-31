@@ -4,24 +4,28 @@ import Search from "../atoms/Search"
 import User from "../atoms/User.tsx"
 import BurgerMenuIcon from "../icons/BurgerMenuIcon.tsx"
 import Button from "../atoms/Button.tsx"
+import { AppDispatch, RootState } from "../../redux/store.ts"
+import { useDispatch, useSelector } from "react-redux"
+import { setIsMobileSidebarOpened } from "../../redux/slices/miscStatesSlice.ts"
 
-interface DashboardSidebarProps {
-    isMobileSidebarOpened: boolean
-    setIsMobileSidebarOpened: React.Dispatch<React.SetStateAction<boolean>>
-}
+// interface DashboardSidebarProps {
+//     isMobileSidebarOpened: boolean
+//     setIsMobileSidebarOpened: React.Dispatch<React.SetStateAction<boolean>>
+// }
 
-const DashboardSidebar = ({
-    isMobileSidebarOpened,
-    setIsMobileSidebarOpened
-}: DashboardSidebarProps) => {
+const DashboardSidebar = () => {
     const [query, setQuery] = useState("")
+    const dispatch: AppDispatch = useDispatch()
+    const { isMobileSidebarOpened } = useSelector(
+        (state: RootState) => state.miscStates
+    )
 
     const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value)
     }
 
     const handleMobileSideBarClose = () => {
-        setIsMobileSidebarOpened(false)
+        dispatch(setIsMobileSidebarOpened(false))
     }
 
     const windowWidth = window.innerWidth

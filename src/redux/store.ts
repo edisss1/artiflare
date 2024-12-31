@@ -4,6 +4,7 @@ import authReducer from "./slices/authSlice"
 import boardReducer from "./slices/boardSlice"
 import userManagementReducer from "./slices/userManagementSlice.ts"
 import teamManagementReducer from "./slices/teamManagementSlice"
+import miscStatesReducer from "./slices/miscStatesSlice"
 
 export const store = configureStore({
     reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
         auth: authReducer,
         boards: boardReducer,
         userManagement: userManagementReducer,
-        teamManagement: teamManagementReducer
+        teamManagement: teamManagementReducer,
+        miscStates: miscStatesReducer
     }
 })
 

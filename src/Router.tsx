@@ -5,6 +5,7 @@ import SettingsDashboard from "./pages/SettingsDashboard"
 import UserSettingsPanel from "./components/organisms/UserSettingsPanel.tsx"
 import TeamSettingsPanel from "./components/organisms/TeamSettingsPanel.tsx"
 import TeamMembersSettingsPanel from "./components/organisms/TeamMembersSettingsPanel.tsx"
+import FavoriteBoards from "./pages/FavoriteBoards.tsx"
 const Home = lazy(() => import("./pages/Home"))
 const Auth = lazy(() => import("./pages/Auth"))
 const Login = lazy(() => import("./components/molecules/Login"))
@@ -16,14 +17,7 @@ function Router() {
     return (
         <Suspense fallback={<Loading />}>
             <Routes>
-                <Route
-                    path="/"
-                    element={
-                        // <ProtectedRoute>
-                        <Home />
-                        // </ProtectedRoute>
-                    }
-                />
+                <Route path="/" element={<Home />} />
                 <Route path="/auth" element={<Auth />}>
                     <Route path="login" element={<Login />} />
                     <Route path="signup" element={<SignUp />} />
@@ -31,7 +25,7 @@ function Router() {
                 <Route path="/app">
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="recent" />
-                    <Route path="favorites" />
+                    <Route path="favorites" element={<FavoriteBoards />} />
                     <Route path="board/:boardID" element={<DrawingBoard />} />
                     <Route path="settings/" element={<SettingsDashboard />}>
                         <Route

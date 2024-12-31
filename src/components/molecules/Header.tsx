@@ -5,13 +5,17 @@ import { useState } from "react"
 import NotificationsContainer from "../organisms/NotificationsContainer.tsx"
 import Button from "../atoms/Button.tsx"
 import BurgerMenuIcon from "../icons/BurgerMenuIcon.tsx"
+import { AppDispatch } from "../../redux/store.ts"
+import { useDispatch } from "react-redux"
+import { setIsMobileSidebarOpened } from "../../redux/slices/miscStatesSlice.ts"
 
 type HeaderProps = {
     plan: string
-    setIsMobileSidebarOpened: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Header = ({ plan, setIsMobileSidebarOpened }: HeaderProps) => {
+const Header = ({ plan }: HeaderProps) => {
+    const dispatch: AppDispatch = useDispatch()
+
     const [isContainerOpened, setIsContainerOpened] = useState(false)
 
     const handleNotificationsOpen = () => {
@@ -23,7 +27,7 @@ const Header = ({ plan, setIsMobileSidebarOpened }: HeaderProps) => {
     }
 
     const handleMobileSideBarOpen = () => {
-        setIsMobileSidebarOpened(true)
+        dispatch(setIsMobileSidebarOpened(true))
     }
 
     return (
@@ -38,13 +42,13 @@ const Header = ({ plan, setIsMobileSidebarOpened }: HeaderProps) => {
                 <Link className="text-xl" to={"/app/dashboard"}>
                     Artiflare
                 </Link>
-                <p className="uppercase bg-primary dark:bg-primary-dark rounded-md dark:text-typography-dark text-typography-light px-4 py-1">
+                <p className="uppercase rounded-lg bg-primary dark:bg-primary-dark  dark:text-typography-dark text-typography-light px-4 py-1">
                     {plan}
                 </p>
             </div>
             <div className="flex items-center gap-6 ">
                 {plan === "free" && (
-                    <Button className="capitalize px-2 py-1  text-typography-light bg-secondary rounded-md  ">
+                    <Button className="capitalize px-2 py-1  text-typography-light bg-secondary rounded-lg  ">
                         upgrade
                     </Button>
                 )}

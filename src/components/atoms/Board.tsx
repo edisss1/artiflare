@@ -19,6 +19,7 @@ interface BoardProps {
 const Board = ({ id, title, createdBy, modifiedBy, updatedAt }: BoardProps) => {
     const popoverRef = useRef<HTMLDivElement | null>(null)
     const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+    const winowWidth = window.innerWidth
 
     return (
         <div className="flex  flex-col relative border-2 gap-2 px-4 py-2 group hover:bg-primary dark:hover:bg-primary-dark/70 dark:hover:text-typography-dark    transition-colors duration-150 border-typography-light dark:border-typography-dark/40 rounded-md">
@@ -40,8 +41,10 @@ const Board = ({ id, title, createdBy, modifiedBy, updatedAt }: BoardProps) => {
                 </div>
             </div>
             <div
-                className={`absolute top-[50%] right-4 -translate-y-[50%] flex items-center gap-4 opacity-0 ${
-                    isPopoverOpen && "opacity-100"
+                className={`absolute top-[50%] right-4 -translate-y-[50%] flex items-center gap-4  ${
+                    isPopoverOpen || winowWidth < 1024
+                        ? "opacity-100 pointer-events-auto"
+                        : "opacity-0 "
                 } max-xl:opacity-100 group-hover:opacity-100 transition-opacity duration-150`}
             >
                 <Button

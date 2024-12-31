@@ -34,7 +34,7 @@ const Popover = ({
         <div
             className={`${
                 isPopoverOpen ? "block" : "hidden"
-            } absolute top-full left-[50%]  -translate-x-[50%] bg-primary p-4 w-[170px] shadow-lg rounded-md`}
+            } absolute top-full left-[50%]  -translate-x-[50%] bg-primary dark:bg-primary-dark p-4 w-[170px] shadow-lg rounded-md`}
             ref={popoverRef}
             onClick={() => setIsPopoverOpen(!isPopoverOpen)}
         >

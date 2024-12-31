@@ -1,6 +1,7 @@
 const TrashCanIcon = () => {
     return (
         <svg
+            className="[&>*]:stroke-bg-dark [&>*]:dark:stroke-bg-light"
             width="20"
             height="20"
             viewBox="-0.5 0 25 25"

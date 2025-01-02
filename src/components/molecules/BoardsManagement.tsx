@@ -75,6 +75,7 @@ const BoardsManagement = () => {
                     <h2 className="text-xl">Your boards</h2>
                     <div className="flex gap-4 max-md:flex-col text-typography-light">
                         <Button
+                            // disabled={user?.teams && user?.teams.length >= 1}
                             onClick={toggleJoinTeamModal}
                             className="flex gap-2 items-center px-2 py-3 w-max bg-primary rounded-md hover:shadow-lg transition-all duration-200 hover:shadow-primary/80"
                         >

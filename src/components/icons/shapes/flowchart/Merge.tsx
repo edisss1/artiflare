@@ -1,6 +1,7 @@
 const Merge = () => {
     return (
         <svg
+            className="w-6"
             width="45"
             height="24"
             viewBox="0 0 404 204"
@@ -12,9 +13,9 @@ const Merge = () => {
                 clip-rule="evenodd"
                 d="M2 2L202 202L402 2H2Z"
                 stroke="#333333"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="16"
+                strokeLinecap="round"
+                strokeLinejoin="round"
             />
         </svg>
     )

@@ -28,6 +28,26 @@ import PencilIcon from "../components/icons/shapes/PencilIcon.tsx"
 import { updateSelectedShape } from "../utils/updateSelectedShape.ts"
 import ChatContainer from "../components/molecules/ChatContainer.tsx"
 import FlowchartIcon from "../components/icons/shapes/FlowchartIcon.tsx"
+import Process from "../components/icons/shapes/flowchart/Process.tsx"
+import Decision from "../components/icons/shapes/flowchart/Decision.tsx"
+import Terminator from "../components/icons/shapes/flowchart/Terminator.tsx"
+import PredefinedProcess from "../components/icons/shapes/flowchart/PredefinedProcess.tsx"
+import Document from "../components/icons/shapes/flowchart/Document.tsx"
+import MultipleDocuments from "../components/icons/shapes/flowchart/MultipleDocuments.tsx"
+import InputOutput from "../components/icons/shapes/flowchart/InputOutput.tsx"
+import Preparation from "../components/icons/shapes/flowchart/Preparation.tsx"
+import Database from "../components/icons/shapes/flowchart/Database.tsx"
+import DirectData from "../components/icons/shapes/flowchart/DirectData.tsx"
+import InternalStorage from "../components/icons/shapes/flowchart/InternalStorage.tsx"
+import ManualLoop from "../components/icons/shapes/flowchart/ManualLoop.tsx"
+import Delay from "../components/icons/shapes/flowchart/Delay.tsx"
+import StoredData from "../components/icons/shapes/flowchart/StoredData.tsx"
+import Merge from "../components/icons/shapes/flowchart/Merge.tsx"
+import Connector from "../components/icons/shapes/flowchart/Connector.tsx"
+import Or from "../components/icons/shapes/flowchart/Or.tsx"
+import SummingJunction from "../components/icons/shapes/flowchart/SummingJunction.tsx"
+import Display from "../components/icons/shapes/flowchart/Display.tsx"
+import OffPageConnector from "../components/icons/shapes/flowchart/OffPageConnector.tsx"
 
 const DrawingBoard = () => {
     const [canvas, setCanvas] = useState<Canvas | null>(null)
@@ -333,13 +353,160 @@ const DrawingBoard = () => {
             icon: <FlowchartIcon />,
             fn: [
                 {
-                    label: <FlowchartIcon />,
+                    label: <Process />,
                     fn: () =>
                         updateSelectedShape(
-                            "flowchart",
+                            "process",
                             dispatch,
                             selectedShapeRef
                         )
+                },
+                {
+                    label: <Decision />,
+                    fn: () =>
+                        updateSelectedShape(
+                            "decision",
+                            dispatch,
+                            selectedShapeRef
+                        )
+                },
+                {
+                    label: <Terminator />,
+                    fn: () =>
+                        updateSelectedShape(
+                            "terminator",
+                            dispatch,
+                            selectedShapeRef
+                        )
+                },
+                {
+                    label: <PredefinedProcess />,
+                    fn: () =>
+                        updateSelectedShape(
+                            "predefined",
+                            dispatch,
+                            selectedShapeRef
+                        )
+                },
+                {
+                    label: <Document />,
+                    fn: () =>
+                        updateSelectedShape(
+                            "process",
+                            dispatch,
+                            selectedShapeRef
+                        )
+                },
+                {
+                    label: <MultipleDocuments />,
+                    fn: () =>
+                        updateSelectedShape(
+                            "multiple",
+                            dispatch,
+                            selectedShapeRef
+                        )
+                },
+                {
+                    label: <InputOutput />,
+                    fn: () =>
+                        updateSelectedShape("input", dispatch, selectedShapeRef)
+                },
+                {
+                    label: <Preparation />,
+                    fn: () =>
+                        updateSelectedShape(
+                            "preparation",
+                            dispatch,
+                            selectedShapeRef
+                        )
+                },
+                {
+                    label: <Database />,
+                    fn: () =>
+                        updateSelectedShape(
+                            "database",
+                            dispatch,
+                            selectedShapeRef
+                        )
+                },
+                {
+                    label: <DirectData />,
+                    fn: () =>
+                        updateSelectedShape(
+                            "direct",
+                            dispatch,
+                            selectedShapeRef
+                        )
+                },
+                {
+                    label: <InternalStorage />,
+                    fn: () =>
+                        updateSelectedShape(
+                            "internal",
+                            dispatch,
+                            selectedShapeRef
+                        )
+                },
+                {
+                    label: <ManualLoop />,
+                    fn: () =>
+                        updateSelectedShape(
+                            "manual",
+                            dispatch,
+                            selectedShapeRef
+                        )
+                },
+                {
+                    label: <Delay />,
+                    fn: () =>
+                        updateSelectedShape("delay", dispatch, selectedShapeRef)
+                },
+                {
+                    label: <StoredData />,
+                    fn: () =>
+                        updateSelectedShape(
+                            "stored",
+                            dispatch,
+                            selectedShapeRef
+                        )
+                },
+                {
+                    label: <Merge />,
+                    fn: () =>
+                        updateSelectedShape("merge", dispatch, selectedShapeRef)
+                },
+                {
+                    label: <Connector />,
+                    fn: () =>
+                        updateSelectedShape(
+                            "connector",
+                            dispatch,
+                            selectedShapeRef
+                        )
+                },
+                {
+                    label: <Or />,
+                    fn: () =>
+                        updateSelectedShape("or", dispatch, selectedShapeRef)
+                },
+                {
+                    label: <SummingJunction />,
+                    fn: () =>
+                        updateSelectedShape("sum", dispatch, selectedShapeRef)
+                },
+                {
+                    label: <Display />,
+                    fn: () =>
+                        updateSelectedShape(
+                            "display",
+                            dispatch,
+                            selectedShapeRef
+                        )
+                },
+                {
+                    label: <OffPageConnector />,
+                    fn: () =>
+                        updateSelectedShape("off", dispatch, selectedShapeRef)
                 }
             ]
         }

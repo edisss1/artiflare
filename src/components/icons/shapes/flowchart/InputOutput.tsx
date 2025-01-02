@@ -1,6 +1,7 @@
 const InputOutput = () => {
     return (
         <svg
+            className="w-6"
             width="45"
             height="24"
             viewBox="0 0 404 204"
@@ -12,7 +13,7 @@ const InputOutput = () => {
                 clip-rule="evenodd"
                 d="M2 202L55.3333 2H402L348.667 202H2Z"
                 stroke="#333333"
-                stroke-width="4"
+                stroke-width="16"
                 stroke-linecap="round"
                 stroke-linejoin="round"
             />

@@ -1,38 +1,40 @@
 const PredefinedProcess = () => {
     return (
         <svg
+            className="w-6"
             width="45"
             height="24"
-            viewBox="0 0 404 204"
+            viewBox="0 0 45 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
         >
-            <g clip-path="url(#clip0_418_68)">
+            <g clipPath="url(#clip0)">
                 <path
-                    d="M385.77 2H18.23C9.26642 2 2 9.26642 2 18.23V185.77C2 194.734 9.26642 202 18.23 202H385.77C394.734 202 402 194.734 402 185.77V18.23C402 9.26642 394.734 2 385.77 2Z"
+                    d="M2 2H43C44.1046 2 45 2.89543 45 4V20C45 21.1046 44.1046 22 43 22H2C0.89543 22 0 21.1046 0 20V4C0 2.89543 0.89543 2 2 2Z"
                     stroke="#333333"
-                    stroke-width="4"
-                    stroke-miterlimit="10"
+                    strokeWidth="2"
+                    strokeMiterlimit="10"
                 />
                 <path
-                    d="M18.23 2V202"
+                    d="M2 2V22"
                     stroke="#333333"
-                    stroke-width="4"
-                    stroke-miterlimit="10"
+                    strokeWidth="2"
+                    strokeMiterlimit="10"
                 />
                 <path
-                    d="M385.77 2V202"
+                    d="M43 2V22"
                     stroke="#333333"
-                    stroke-width="4"
-                    stroke-miterlimit="10"
+                    strokeWidth="2"
+                    strokeMiterlimit="10"
                 />
             </g>
             <defs>
-                <clipPath id="clip0_418_68">
-                    <rect width="404" height="204" fill="white" />
+                <clipPath id="clip0">
+                    <rect width="45" height="24" fill="white" />
                 </clipPath>
             </defs>
         </svg>
     )
 }
+
 export default PredefinedProcess

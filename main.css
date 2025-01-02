@@ -27,7 +27,7 @@ body {
 }
 
 .grid-pattern {
-    background-image: url("/src/assets/ooorganize.svg");
+    background-image: url("/src/assets/grid-pattern.svg");
     background-repeat: repeat;
 }
 

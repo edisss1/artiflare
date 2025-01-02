@@ -27,6 +27,7 @@ import TextIcon from "../components/icons/shapes/TextIcon.tsx"
 import PencilIcon from "../components/icons/shapes/PencilIcon.tsx"
 import { updateSelectedShape } from "../utils/updateSelectedShape.ts"
 import ChatContainer from "../components/molecules/ChatContainer.tsx"
+import FlowchartIcon from "../components/icons/shapes/FlowchartIcon.tsx"
 
 const DrawingBoard = () => {
     const [canvas, setCanvas] = useState<Canvas | null>(null)
@@ -325,6 +326,20 @@ const DrawingBoard = () => {
                     label: <TextIcon />,
                     fn: () =>
                         updateSelectedShape("text", dispatch, selectedShapeRef)
+                }
+            ]
+        },
+        {
+            icon: <FlowchartIcon />,
+            fn: [
+                {
+                    label: <FlowchartIcon />,
+                    fn: () =>
+                        updateSelectedShape(
+                            "flowchart",
+                            dispatch,
+                            selectedShapeRef
+                        )
                 }
             ]
         }

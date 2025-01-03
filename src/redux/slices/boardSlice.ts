@@ -50,35 +50,41 @@ export const createBoard = createAsyncThunk(
 
             if (!user) return
 
-            const boardData: Board = {
-                boardTitle,
-                userUID: user.uid,
-                teamID: currentTeam!,
-                createdAt: new Date().toDateString(),
-                updatedAt: new Date().toDateString(),
-                createdBy: user.displayName || user.email,
-                modifiedBy: user.displayName || user.email,
-                data: {},
-                members: [
-                    {
-                        uid: user.uid,
-                        role: "owner",
-                        displayName: user.displayName || user.email,
-                        img: user.img,
-                        email: user.email,
-                        lastAccessAt: user.lastAccessAt!
-                    }
-                ],
-                isFavorite: false
+            if (boardTitle.length >= 4) {
+                const boardData: Board = {
+                    boardTitle,
+                    userUID: user.uid,
+                    teamID: currentTeam!,
+                    createdAt: new Date().toDateString(),
+                    updatedAt: new Date().toDateString(),
+                    createdBy: user.displayName || user.email,
+                    modifiedBy: user.displayName || user.email,
+                    data: {},
+                    members: [
+                        {
+                            uid: user.uid,
+                            role: "owner",
+                            displayName: user.displayName || user.email,
+                            img: user.img,
+                            email: user.email,
+                            lastAccessAt: user.lastAccessAt!
+                        }
+                    ],
+                    isFavorite: false
+                }
+
+                const docRef = await addDoc(boardsRef, boardData)
+
+                await updateDoc(doc(db, "users", user.uid), {
+                    boards: arrayUnion(docRef.id)
+                })
+
+                return { id: docRef.id, ...boardData }
+            } else {
+                throw new Error(
+                    "Board title must be at least 4 characters long"
+                )
             }
-
-            const docRef = await addDoc(boardsRef, boardData)
-
-            await updateDoc(doc(db, "users", user.uid), {
-                boards: arrayUnion(docRef.id)
-            })
-
-            return { id: docRef.id, ...boardData }
         } catch (err) {
             console.error(err)
             throw err

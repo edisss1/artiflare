@@ -8,8 +8,7 @@ import {
     Line,
     FabricText,
     Group,
-    Path,
-    Ellipse
+    Path
 } from "fabric"
 
 export function useShapes(canvas: Canvas | null) {
@@ -23,7 +22,8 @@ export function useShapes(canvas: Canvas | null) {
             ry: 10,
             fill: null,
             stroke: stroke,
-            strokeWidth: 4
+            strokeWidth: 4,
+            selectable: true
         })
 
         canvas?.add(process)
@@ -39,7 +39,8 @@ export function useShapes(canvas: Canvas | null) {
                     width: 200,
                     height: 100,
                     left: x,
-                    top: y
+                    top: y,
+                    selectable: true
                 }
             )
 
@@ -61,7 +62,8 @@ export function useShapes(canvas: Canvas | null) {
                 ry: 50,
                 fill: null,
                 stroke: stroke,
-                strokeWidth: 4
+                strokeWidth: 4,
+                selectable: true
             })
 
             canvas.add(terminator)

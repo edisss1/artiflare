@@ -156,6 +156,7 @@ export const updateBoard = createAsyncThunk(
 
             return { boardID, user, newBoardData }
         } catch (err) {
+            console.error((err as Error).message)
             throw err
         }
     }
@@ -252,6 +253,10 @@ const boardSlice = createSlice({
                     state.currentBoard.data = action.payload.newBoardData
                     state.currentBoard.updatedAt = new Date().toDateString()
                 }
+            })
+            .addCase(updateBoard.rejected, (state, action) => {
+                state.error = action.error.message
+                state.status = "failed"
             })
             .addCase(addBoardToFavorites.fulfilled, (state) => {
                 state.status = "succeeded"

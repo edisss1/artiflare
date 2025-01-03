@@ -11,7 +11,6 @@ import { BoardData } from "../types/BoardData"
 import User from "../components/atoms/User.tsx"
 import {
     setDrawingMode,
-    setFreeDrawingMode,
     setSelectedShape
 } from "../redux/slices/shapeManagementSlice"
 
@@ -79,17 +78,19 @@ const DrawingBoard = () => {
 
     const saveBoard = useCallback(async () => {
         if (canvas && boardID && user) {
-            const newBoardData = canvas.toJSON()
+            try {
+                const newBoardData = JSON.stringify(canvas.toJSON())
 
-            console.log("Saving board data: ", newBoardData)
-
-            dispatch(
-                updateBoard({
-                    boardID,
-                    newBoardData,
-                    user
-                })
-            )
+                dispatch(
+                    updateBoard({
+                        boardID,
+                        newBoardData,
+                        user
+                    })
+                )
+            } catch (err) {
+                console.error(err)
+            }
         }
         console.log("Board saved")
     }, [canvas, boardID, user, dispatch])
@@ -102,6 +103,7 @@ const DrawingBoard = () => {
 
             const { payload } = boardData
             const { data } = payload
+
             await canvas?.loadFromJSON(data)
             canvas?.requestRenderAll()
             console.log("board data on load: ", canvas?.toJSON())

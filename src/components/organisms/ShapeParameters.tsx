@@ -36,7 +36,10 @@ const ShapeParameters = ({
     stroke,
     angle
 }: SettingProps) => {
-    const [selectedObject, setSelectedObject] = useState<any>(null)
+    const [selectedObject, setSelectedObject] = useState<{
+        obj: any
+        name: string | null
+    }>({ obj: null, name: null })
     const [settingsPosition, setSettingsPosition] = useState({
         top: 0,
         left: 0
@@ -48,12 +51,14 @@ const ShapeParameters = ({
         dispatch(setWidth(widthValue))
 
         if (
-            (!selectedObject && selectedObject?.type !== "rect") ||
-            (selectedObject.type === "group" && !widthValue)
+            (!selectedObject.obj && selectedObject?.obj.type !== "rect") ||
+            (selectedObject.obj.type === "group" && !widthValue)
         )
             return
-        selectedObject.set({
-            width: isNaN(widthValue) ? 0 : widthValue / selectedObject.scaleX
+        selectedObject.obj.set({
+            width: isNaN(widthValue)
+                ? 0
+                : widthValue / selectedObject.obj.scaleX
         })
         canvas?.renderAll()
     }
@@ -63,13 +68,15 @@ const ShapeParameters = ({
         dispatch(setHeight(heightValue))
 
         if (
-            (!selectedObject && selectedObject?.type !== "rect") ||
-            (selectedObject.type && heightValue === 0)
+            (!selectedObject.obj && selectedObject.obj.type !== "rect") ||
+            (selectedObject.obj.type && heightValue === 0)
         )
             return
 
-        selectedObject.set({
-            height: isNaN(heightValue) ? 0 : heightValue / selectedObject.scaleY
+        selectedObject.obj.set({
+            height: isNaN(heightValue)
+                ? 0
+                : heightValue / selectedObject.obj.scaleY
         })
         canvas?.renderAll()
     }
@@ -80,14 +87,14 @@ const ShapeParameters = ({
         dispatch(setDiameter(diameterValue))
 
         if (
-            !selectedObject &&
-            selectedObject.type !== "circle" &&
+            !selectedObject.obj &&
+            selectedObject.obj.type !== "circle" &&
             !diameterValue
         )
             return
 
-        selectedObject.set({
-            radius: diameterValue / 2 / selectedObject.scaleX
+        selectedObject.obj.set({
+            radius: diameterValue / 2 / selectedObject.obj.scaleX
         })
         canvas?.renderAll()
     }
@@ -96,8 +103,8 @@ const ShapeParameters = ({
         const colorValue = e.target.value
         dispatch(setColor(colorValue))
 
-        if (!selectedObject) return
-        selectedObject.set({ fill: colorValue })
+        if (!selectedObject.obj) return
+        selectedObject.obj.set({ fill: colorValue })
         canvas?.renderAll()
     }
 
@@ -105,8 +112,8 @@ const ShapeParameters = ({
         const strokeValue = e.target.value
         dispatch(setStroke(strokeValue))
 
-        if (!selectedObject) return
-        selectedObject.set({ stroke: strokeValue })
+        if (!selectedObject.obj) return
+        selectedObject.obj.set({ stroke: strokeValue })
         canvas?.renderAll()
     }
 
@@ -115,7 +122,7 @@ const ShapeParameters = ({
         dispatch(setAngle(Number(angleValue)))
 
         if (!selectedObject) return
-        selectedObject.set({ angle: angleValue })
+        selectedObject.obj.set({ angle: angleValue })
         canvas?.renderAll()
     }
 
@@ -141,7 +148,7 @@ const ShapeParameters = ({
             )
         })
         canvas.on("selection:cleared", () => {
-            setSelectedObject(null)
+            setSelectedObject({ obj: null, name: null })
             clearSettings(dispatch)
         })
 
@@ -158,7 +165,7 @@ const ShapeParameters = ({
 
     const deleteSelectedObject = () => {
         if (canvas && selectedObject) {
-            canvas.remove(selectedObject)
+            canvas.remove(selectedObject.obj)
             canvas.renderAll()
         }
     }
@@ -187,12 +194,12 @@ const ShapeParameters = ({
                 left: settingsPosition.left
             }}
             className={`${
-                !selectedObject
+                !selectedObject.obj
                     ? "hidden"
                     : "flex items-center bg-primary z-40 border-2 border-black p-4 -translate-y-[200%] -translate-x-[50%] text-typography-light"
             }`}
         >
-            {selectedObject && selectedObject.type === "rect" && (
+            {selectedObject.obj && selectedObject.obj.type === "rect" && (
                 <RectParameters
                     rectWidthValue={width}
                     onChangeWidth={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -213,7 +220,7 @@ const ShapeParameters = ({
                     onClick={deleteSelectedObject}
                 />
             )}
-            {selectedObject && selectedObject.type === "circle" && (
+            {selectedObject.obj && selectedObject.obj.type === "circle" && (
                 <CircleParameters
                     circleDiameterValue={diameter}
                     circleFillValue={fill}
@@ -230,7 +237,7 @@ const ShapeParameters = ({
                     }
                 />
             )}
-            {selectedObject && selectedObject.type === "line" && (
+            {selectedObject.obj && selectedObject.obj.type === "line" && (
                 <LineParameters
                     lineStrokeValue={stroke}
                     onChangeStroke={(e: React.ChangeEvent<HTMLInputElement>) =>

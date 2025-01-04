@@ -8,8 +8,22 @@ import {
     Line,
     FabricText,
     Group,
-    Path
+    Path,
+    FabricObject,
+    GroupProps
 } from "fabric"
+
+class NamedGroup extends Group {
+    name: string
+    constructor(
+        objects: FabricObject[],
+        options: Partial<GroupProps>,
+        name: string
+    ) {
+        super(objects, options)
+        this.name = name
+    }
+}
 
 export function useShapes(canvas: Canvas | null) {
     const addProcess = (x: number, y: number, stroke: string) => {
@@ -23,7 +37,8 @@ export function useShapes(canvas: Canvas | null) {
             fill: null,
             stroke: stroke,
             strokeWidth: 4,
-            selectable: true
+            selectable: true,
+            name: "process"
         })
 
         canvas?.add(process)
@@ -40,7 +55,8 @@ export function useShapes(canvas: Canvas | null) {
                     height: 100,
                     left: x,
                     top: y,
-                    selectable: true
+                    selectable: true,
+                    name: "decision"
                 }
             )
 
@@ -63,7 +79,8 @@ export function useShapes(canvas: Canvas | null) {
                 fill: null,
                 stroke: stroke,
                 strokeWidth: 4,
-                selectable: true
+                selectable: true,
+                name: "terminator"
             })
 
             canvas.add(terminator)
@@ -92,20 +109,22 @@ export function useShapes(canvas: Canvas | null) {
             fill: "transparent"
         })
 
-        const predefinedProcess = new Group(
+        const predefinedProcess = new NamedGroup(
             [firstPath, secondPath, thirdPath],
             {
                 left: x,
                 top: y,
                 width: 200,
-                height: 100
-            }
+                height: 100,
+                selectable: true
+            },
+            "predefinedProcess"
         )
 
         predefinedProcess.scaleX = 7
         predefinedProcess.scaleY = 5
 
-        canvas?.add(predefinedProcess)
+        return canvas?.add(predefinedProcess)
     }
 
     const addDocument = (x: number, y: number, stroke: string) => {
@@ -510,7 +529,8 @@ export function useShapes(canvas: Canvas | null) {
             strokeWidth: strokeWidth,
             top: y,
             left: x,
-            opacity: 100
+            opacity: 100,
+            name: "triangle"
         })
 
         canvas.add(triangle)

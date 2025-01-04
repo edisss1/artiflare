@@ -13,7 +13,12 @@ export const handleObjectSelection = (
         value: React.SetStateAction<{ top: number; left: number }>
     ) => void,
     canvas: Canvas | null,
-    setSelectedObject: (value: any) => void,
+    setSelectedObject: React.Dispatch<
+        React.SetStateAction<{
+            obj: any
+            name: string | null
+        }>
+    >,
     dispatch: AppDispatch
 ) => {
     if (!object || !canvas) return
@@ -27,11 +32,14 @@ export const handleObjectSelection = (
         left: (boundingRect.left + transform[4]) / zoom
     })
 
-    setSelectedObject(object)
-    console.log(object)
+    setSelectedObject({ obj: object, name: object.name })
+    console.log("Object type: ", object.type)
+    console.log("Object name: ", object.name)
 
     switch (object.type) {
-        case "rect" || "triangle" || "polygon":
+        case "rect":
+        case "triangle":
+        case "polygon":
             dispatch(setWidth(Math.round(object.width * object.scaleX)))
             dispatch(setHeight(Math.round(object.height * object.scaleY)))
             dispatch(setColor(object.fill))

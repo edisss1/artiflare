@@ -199,44 +199,64 @@ const ShapeParameters = ({
                     : "flex items-center bg-primary z-40 border-2 border-black p-4 -translate-y-[200%] -translate-x-[50%] text-typography-light"
             }`}
         >
-            {selectedObject.obj && selectedObject.obj.type === "rect" && (
-                <RectParameters
-                    rectWidthValue={width}
-                    onChangeWidth={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleWidthChange(e)
-                    }
-                    rectHeightValue={height}
-                    onChangeHeight={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleHeightChange(e)
-                    }
-                    rectFillValue={fill}
-                    onChangeFill={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleColorChange(e)
-                    }
-                    rectStrokeValue={stroke}
-                    onChangeStroke={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleStrokeChange(e)
-                    }
-                    onClick={deleteSelectedObject}
-                />
-            )}
-            {selectedObject.obj && selectedObject.obj.type === "circle" && (
-                <CircleParameters
-                    circleDiameterValue={diameter}
-                    circleFillValue={fill}
-                    circleStrokeValue={stroke}
-                    onClick={deleteSelectedObject}
-                    onChangeDiameter={(
-                        e: React.ChangeEvent<HTMLInputElement>
-                    ) => handleDiameterChange(e)}
-                    onChangeFill={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleColorChange(e)
-                    }
-                    onChangeStroke={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleStrokeChange(e)
-                    }
-                />
-            )}
+            {selectedObject.obj &&
+                !["circle", "connector", "summing-junction", "or"].includes(
+                    selectedObject.obj.name ||
+                        ![
+                            "circle",
+                            "connector",
+                            "summing-junction",
+                            "or"
+                        ].includes(selectedObject.obj.type)
+                ) && (
+                    <RectParameters
+                        type={selectedObject.obj.type}
+                        name={selectedObject.obj.name}
+                        rectWidthValue={width}
+                        onChangeWidth={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => handleWidthChange(e)}
+                        rectHeightValue={height}
+                        onChangeHeight={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => handleHeightChange(e)}
+                        rectFillValue={fill}
+                        onChangeFill={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => handleColorChange(e)}
+                        rectStrokeValue={stroke}
+                        onChangeStroke={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => handleStrokeChange(e)}
+                        onClick={deleteSelectedObject}
+                    />
+                )}
+            {selectedObject.obj &&
+                ["circle", "connector", "summing-junction", "or"].includes(
+                    selectedObject.obj.name ||
+                        [
+                            "circle",
+                            "connector",
+                            "summing-junction",
+                            "or"
+                        ].includes(selectedObject.obj.type)
+                ) && (
+                    <CircleParameters
+                        circleDiameterValue={diameter}
+                        circleFillValue={fill}
+                        circleStrokeValue={stroke}
+                        onClick={deleteSelectedObject}
+                        onChangeDiameter={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => handleDiameterChange(e)}
+                        onChangeFill={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => handleColorChange(e)}
+                        onChangeStroke={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => handleStrokeChange(e)}
+                    />
+                )}
             {selectedObject.obj && selectedObject.obj.type === "line" && (
                 <LineParameters
                     lineStrokeValue={stroke}

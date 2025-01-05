@@ -32,9 +32,7 @@ export const handleObjectSelection = (
         left: (boundingRect.left + transform[4]) / zoom
     })
 
-    setSelectedObject({ obj: object, name: object.name })
-    console.log("Object type: ", object.type)
-    console.log("Object name: ", object.name)
+    setSelectedObject(object)
 
     switch (object.type) {
         case "rect":

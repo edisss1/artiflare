@@ -6,7 +6,9 @@ import {
     setColor,
     setDiameter,
     setStroke,
-    setAngle
+    setAngle,
+    setScaleX,
+    setScaleY
 } from "../../redux/slices/shapeManagementSlice"
 import { handleObjectSelection } from "../../utils/handleObjectSelection.ts"
 import { AppDispatch } from "../../redux/store.ts"
@@ -24,6 +26,8 @@ interface SettingProps {
     fill: string
     stroke: string
     angle: number
+    scaleX: number
+    scaleY: number
 }
 
 const ShapeParameters = ({
@@ -34,12 +38,11 @@ const ShapeParameters = ({
     fill,
     diameter,
     stroke,
-    angle
+    angle,
+    scaleX,
+    scaleY
 }: SettingProps) => {
-    const [selectedObject, setSelectedObject] = useState<{
-        obj: any
-        name: string | null
-    }>({ obj: null, name: null })
+    const [selectedObject, setSelectedObject] = useState<any>(null)
     const [settingsPosition, setSettingsPosition] = useState({
         top: 0,
         left: 0
@@ -51,14 +54,12 @@ const ShapeParameters = ({
         dispatch(setWidth(widthValue))
 
         if (
-            (!selectedObject.obj && selectedObject?.obj.type !== "rect") ||
-            (selectedObject.obj.type === "group" && !widthValue)
+            (!selectedObject && selectedObject?.type !== "rect") ||
+            (selectedObject.type === "group" && !widthValue)
         )
             return
-        selectedObject.obj.set({
-            width: isNaN(widthValue)
-                ? 0
-                : widthValue / selectedObject.obj.scaleX
+        selectedObject.set({
+            width: isNaN(widthValue) ? 0 : widthValue / selectedObject.scaleX
         })
         canvas?.renderAll()
     }
@@ -68,15 +69,13 @@ const ShapeParameters = ({
         dispatch(setHeight(heightValue))
 
         if (
-            (!selectedObject.obj && selectedObject.obj.type !== "rect") ||
-            (selectedObject.obj.type && heightValue === 0)
+            (!selectedObject && selectedObject.type !== "rect") ||
+            (selectedObject.type && heightValue === 0)
         )
             return
 
-        selectedObject.obj.set({
-            height: isNaN(heightValue)
-                ? 0
-                : heightValue / selectedObject.obj.scaleY
+        selectedObject.set({
+            height: isNaN(heightValue) ? 0 : heightValue / selectedObject.scaleY
         })
         canvas?.renderAll()
     }
@@ -87,24 +86,61 @@ const ShapeParameters = ({
         dispatch(setDiameter(diameterValue))
 
         if (
-            !selectedObject.obj &&
-            selectedObject.obj.type !== "circle" &&
+            !selectedObject &&
+            selectedObject.type !== "circle" &&
             !diameterValue
         )
             return
 
-        selectedObject.obj.set({
-            radius: diameterValue / 2 / selectedObject.obj.scaleX
+        selectedObject.set({
+            radius: diameterValue / 2 / selectedObject.scaleX
         })
         canvas?.renderAll()
+    }
+
+    useEffect(() => {})
+
+    const handlePathScaleChangeAsWidth = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const scaleValue = parseInt(e.target.value.replace(/,/g, ""), 10)
+
+        if (!selectedObject || !scaleValue) return
+
+        // dispatch(setScaleX(scaleValue))
+        dispatch(setScaleX(scaleValue))
+        console.log("Scale value of path (input)", scaleValue)
+        console.log("Width", width)
+
+        console.log(scaleX)
+
+        selectedObject.set({
+            scaleX: isNaN(scaleValue) ? 1 : scaleValue / selectedObject.width
+        })
+
+        canvas?.renderAll()
+    }
+
+    const handlePathScaleChangeAsHeight = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const scaleValue = parseInt(e.target.value.replace(/,/g, ""), 10)
+
+        if (!selectedObject || !scaleValue) return
+
+        dispatch(setScaleY(scaleValue))
+
+        selectedObject.set({
+            scaleY: isNaN(scaleValue) ? 1 : scaleValue / selectedObject.height
+        })
     }
 
     const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const colorValue = e.target.value
         dispatch(setColor(colorValue))
 
-        if (!selectedObject.obj) return
-        selectedObject.obj.set({ fill: colorValue })
+        if (!selectedObject) return
+        selectedObject.set({ fill: colorValue })
         canvas?.renderAll()
     }
 
@@ -112,8 +148,8 @@ const ShapeParameters = ({
         const strokeValue = e.target.value
         dispatch(setStroke(strokeValue))
 
-        if (!selectedObject.obj) return
-        selectedObject.obj.set({ stroke: strokeValue })
+        if (!selectedObject) return
+        selectedObject.set({ stroke: strokeValue })
         canvas?.renderAll()
     }
 
@@ -122,7 +158,7 @@ const ShapeParameters = ({
         dispatch(setAngle(Number(angleValue)))
 
         if (!selectedObject) return
-        selectedObject.obj.set({ angle: angleValue })
+        selectedObject.set({ angle: angleValue })
         canvas?.renderAll()
     }
 
@@ -148,7 +184,7 @@ const ShapeParameters = ({
             )
         })
         canvas.on("selection:cleared", () => {
-            setSelectedObject({ obj: null, name: null })
+            setSelectedObject(null)
             clearSettings(dispatch)
         })
 
@@ -165,7 +201,7 @@ const ShapeParameters = ({
 
     const deleteSelectedObject = () => {
         if (canvas && selectedObject) {
-            canvas.remove(selectedObject.obj)
+            canvas.remove(selectedObject)
             canvas.renderAll()
         }
     }
@@ -194,24 +230,32 @@ const ShapeParameters = ({
                 left: settingsPosition.left
             }}
             className={`${
-                !selectedObject.obj
+                !selectedObject
                     ? "hidden"
                     : "flex items-center bg-primary z-40 border-2 border-black p-4 -translate-y-[200%] -translate-x-[50%] text-typography-light"
             }`}
         >
-            {selectedObject.obj &&
+            {selectedObject &&
                 !["circle", "connector", "summing-junction", "or"].includes(
-                    selectedObject.obj.name ||
+                    selectedObject.name ||
                         ![
                             "circle",
                             "connector",
                             "summing-junction",
                             "or"
-                        ].includes(selectedObject.obj.type)
+                        ].includes(selectedObject.type)
                 ) && (
                     <RectParameters
-                        type={selectedObject.obj.type}
-                        name={selectedObject.obj.name}
+                        onChangePathScaleX={(e) =>
+                            handlePathScaleChangeAsWidth(e)
+                        }
+                        pathScaleValueX={scaleX}
+                        onChangePathScaleY={(e) =>
+                            handlePathScaleChangeAsHeight(e)
+                        }
+                        pathScaleValueY={scaleY}
+                        type={selectedObject.type}
+                        name={selectedObject.name}
                         rectWidthValue={width}
                         onChangeWidth={(
                             e: React.ChangeEvent<HTMLInputElement>
@@ -231,15 +275,15 @@ const ShapeParameters = ({
                         onClick={deleteSelectedObject}
                     />
                 )}
-            {selectedObject.obj &&
+            {selectedObject &&
                 ["circle", "connector", "summing-junction", "or"].includes(
-                    selectedObject.obj.name ||
+                    selectedObject.name ||
                         [
                             "circle",
                             "connector",
                             "summing-junction",
                             "or"
-                        ].includes(selectedObject.obj.type)
+                        ].includes(selectedObject.type)
                 ) && (
                     <CircleParameters
                         circleDiameterValue={diameter}
@@ -257,7 +301,7 @@ const ShapeParameters = ({
                         ) => handleStrokeChange(e)}
                     />
                 )}
-            {selectedObject.obj && selectedObject.obj.type === "line" && (
+            {selectedObject && selectedObject.type === "line" && (
                 <LineParameters
                     lineStrokeValue={stroke}
                     onChangeStroke={(e: React.ChangeEvent<HTMLInputElement>) =>

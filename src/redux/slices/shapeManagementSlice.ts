@@ -14,6 +14,8 @@ interface ShapeManagementState {
     brushWidth: number
     angle: number
     freeDrawingMode: boolean
+    scaleX: number
+    scaleY: number
 }
 
 const initialState: ShapeManagementState = {
@@ -29,7 +31,9 @@ const initialState: ShapeManagementState = {
     brushColor: "#000000",
     brushWidth: 5,
     angle: 0,
-    freeDrawingMode: false
+    freeDrawingMode: false,
+    scaleX: 100,
+    scaleY: 100
 }
 
 const shapeManagementSlice = createSlice({
@@ -74,6 +78,12 @@ const shapeManagementSlice = createSlice({
         },
         setFreeDrawingMode(state, action: PayloadAction<boolean>) {
             state.freeDrawingMode = action.payload
+        },
+        setScaleX(state, action: PayloadAction<number>) {
+            state.scaleX = action.payload
+        },
+        setScaleY(state, action: PayloadAction<number>) {
+            state.scaleY = action.payload
         }
     }
 })
@@ -90,7 +100,9 @@ export const {
     setDrawingMode,
     setBrushWidth,
     setAngle,
-    setFreeDrawingMode
+    setFreeDrawingMode,
+    setScaleX,
+    setScaleY
 } = shapeManagementSlice.actions
 
 export default shapeManagementSlice.reducer

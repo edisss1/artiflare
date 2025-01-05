@@ -88,7 +88,7 @@ export function useShapes(canvas: Canvas | null) {
 
     const addPredefinedProcess = (x: number, y: number, stroke: string) => {
         const firstPath = new Path(
-            "M2 2H43C44.1046 2 45 2.89543 45 4V20C45 21.1046 44.1046 22 43 22H2C0.89543 22 0 21.1046 0 20V4C0 2.89543 0.89543 2 2 2Z",
+            `M 2 2 H43C44.1046 2 45 2.89543 45 4V20C45 21.1046 44.1046 22 43 22H2C0.89543 22 0 21.1046 0 20V4C0 2.89543 0.89543 2 2 2Z`,
             {
                 stroke: stroke,
                 strokeWidth: 1,
@@ -99,12 +99,14 @@ export function useShapes(canvas: Canvas | null) {
         const secondPath = new Path("M2 2V22", {
             stroke: stroke,
             strokeWidth: 1,
+
             fill: "transparent"
         })
 
         const thirdPath = new Path("M43 2V22", {
             stroke: stroke,
             strokeWidth: 1,
+
             fill: "transparent"
         })
 
@@ -113,17 +115,14 @@ export function useShapes(canvas: Canvas | null) {
             {
                 left: x,
                 top: y,
-                width: 200,
-                height: 100,
                 selectable: true
             },
-            "predefinedProcess"
+            "predefined-process"
         )
 
-        predefinedProcess.scaleX = 7
-        predefinedProcess.scaleY = 5
+        console.log(predefinedProcess.getScaledWidth())
 
-        return canvas?.add(predefinedProcess)
+        canvas?.add(predefinedProcess)
     }
 
     const addDocument = (x: number, y: number, stroke: string) => {
@@ -138,8 +137,6 @@ export function useShapes(canvas: Canvas | null) {
                 name: "document"
             }
         )
-
-        document.scale(0.5)
 
         canvas?.add(document)
     }
@@ -171,12 +168,16 @@ export function useShapes(canvas: Canvas | null) {
             }
         )
 
-        const documents = new Group([firstDoc, seconDoc, thirdDoc], {
-            top: y,
-            left: x,
-            fill: "transparent",
-            stroke: stroke
-        })
+        const documents = new NamedGroup(
+            [firstDoc, seconDoc, thirdDoc],
+            {
+                top: y,
+                left: x,
+                fill: "transparent",
+                stroke: stroke
+            },
+            "documents"
+        )
 
         documents.scale(0.5)
 

@@ -8,6 +8,7 @@ import {
     deleteDoc,
     doc,
     getDoc,
+    getDocs,
     onSnapshot,
     query,
     updateDoc,
@@ -18,6 +19,8 @@ import { AppDispatch } from "../store"
 
 interface BoardState {
     boards: Board[]
+    recentBoards: Board[]
+    favoriteBoards: Board[]
     currentBoard: Board | undefined
     status: "idle" | "loading" | "succeeded" | "failed"
     error: string | undefined
@@ -27,6 +30,8 @@ interface BoardState {
 
 const initialState: BoardState = {
     boards: [],
+    recentBoards: [],
+    favoriteBoards: [],
     currentBoard: undefined,
     status: "idle",
     error: undefined,
@@ -162,13 +167,43 @@ export const updateBoard = createAsyncThunk(
     }
 )
 
-const addBoardToFavorites = createAsyncThunk(
+export const addBoardToFavorites = createAsyncThunk(
     "board/addBoardToFavorites",
     async (boardID: string) => {
         try {
             const boardRef = doc(db, "boards", boardID)
             await updateDoc(boardRef, { isFavorite: true })
         } catch (err) {
+            throw new Error(err as string)
+        }
+    }
+)
+
+export const getRecentBoards = createAsyncThunk(
+    "board/getRecentBoards",
+    async (userID: string) => {
+        try {
+            const timeFrame = new Date()
+            timeFrame.setDate(timeFrame.getDate() - 1)
+
+            const boardsRef = collection(db, "boards")
+            const q = query(
+                boardsRef,
+                where("updatedAt", ">", timeFrame),
+                where("userUID", "==", userID)
+            )
+
+            const querySnapshot = await getDocs(q)
+
+            const recentBoards = [] as Board[]
+
+            querySnapshot.forEach((doc) => {
+                recentBoards.push(doc.data() as Board)
+
+                return { id: doc.id, recentBoards }
+            })
+        } catch (err) {
+            console.error(err)
             throw new Error(err as string)
         }
     }

@@ -4,10 +4,14 @@ import Board from "../atoms/Board"
 import { useEffect, useMemo, useState } from "react"
 import { fetchAllUserBoards, updateBoards } from "../../redux/slices/boardSlice"
 import Pagination from "../atoms/Pagination"
+import { Board as BoardType } from "../../types/Board"
 
-const BoardsContainer = () => {
+interface BoardsContainerProps {
+    boards: BoardType[]
+}
+
+const BoardsContainer = ({ boards }: BoardsContainerProps) => {
     const dispatch: AppDispatch = useDispatch()
-    const { boards } = useSelector((state: RootState) => state.boards)
     const user = useSelector((state: RootState) => state.auth.user)
     const [currentPage, setCurrentPage] = useState(1)
     const boardsPerPage = useSelector(

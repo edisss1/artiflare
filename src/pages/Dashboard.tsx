@@ -1,17 +1,11 @@
-import BoardsContainer from "../components/molecules/BoardsContainer"
-import Header from "../components/molecules/Header.tsx"
 import DashboardSidebar from "../components/organisms/DashboardSidebar"
-import BoardsManagement from "../components/molecules/BoardsManagement"
+import DashboardHome from "../components/organisms/DashboardHome.tsx"
 
 const Dashboard = () => {
     return (
         <main className="dashboard">
             <DashboardSidebar />
-            <div className="w-full py-4 px-8">
-                <Header plan="pro" />
-                <BoardsManagement />
-                <BoardsContainer />
-            </div>
+            <DashboardHome />
         </main>
     )
 }

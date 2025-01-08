@@ -10,7 +10,11 @@ import CreateBoardModalContent from "../atoms/CreateBoardModalContent"
 import TeamManagementModal from "./TeamManagementModal"
 import { sortByOptions } from "../../constants/sortByOptions"
 
-const BoardsManagement = () => {
+interface BoardsManagementProps {
+    title: string
+}
+
+const BoardsManagement = ({ title }: BoardsManagementProps) => {
     const dispatch: AppDispatch = useDispatch()
     const user = useSelector((state: RootState) => state.auth.user)
     const createBoardModalRef = useRef<HTMLDialogElement | null>(null)
@@ -18,13 +22,9 @@ const BoardsManagement = () => {
     const [boardTitle, setBoardTitle] = useState("")
     const [isCreateModal, setIsCreateModal] = useState(false)
 
-    const teams = useSelector((state: RootState) => state.teamManagement.teams)
     const { sortedBy } = useSelector(
         (setBoardTitle: RootState) => setBoardTitle.boards
     )
-
-    console.log("Current selected team: ", user?.currentSelectedTeam)
-    console.log("All teams: ", teams)
 
     const toggleCreateBoardModal = () => {
         createBoardModalRef.current?.showModal()
@@ -72,7 +72,7 @@ const BoardsManagement = () => {
             </Modal>
             <div className="grid grid-rows-2 max-md:place-items-center mt-[clamp(1.5rem,40vh,5rem)] mb-9">
                 <div className="flex items-center w-full justify-between">
-                    <h2 className="text-xl">Your boards</h2>
+                    <h2 className="text-xl">{title}</h2>
                     <div className="flex gap-4 max-md:flex-col text-typography-light">
                         <Button
                             // disabled={user?.teams && user?.teams.length >= 1}

@@ -12,8 +12,6 @@ const Modal = ({ modalRef, children }: ModalProps) => {
         if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
             closeModal(modalRef)
         }
-
-        console.log(e.target)
     }
 
     useEffect(() => {

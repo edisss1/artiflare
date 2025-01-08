@@ -16,17 +16,8 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        console.log("AuthChecker: Location changed to", location)
-    }, [location])
-
-    useEffect(() => {
-        console.log("AuthChecker: Initializing auth state check.")
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
-                console.log(
-                    "AuthChecker: User detected. (firebaseUser)",
-                    firebaseUser
-                )
                 const userDocRef = doc(db, "users", firebaseUser.uid)
                 const userDoc = await getDoc(userDocRef)
                 const userData = userDoc.data()
@@ -49,7 +40,6 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                 dispatch(setUser(loggedUser))
                 console.log(loggedUser)
             } else {
-                console.log("AuthChecker: No user detected.")
                 dispatch(setUser(null))
             }
         })
@@ -72,9 +62,6 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
             }
         }
     }, [status, user, location.pathname, navigate])
-
-    console.log("AuthChecker: Loading state is", status)
-    console.log("AuthChecker: User state is", user)
 
     if (status === "loading") {
         return <Loading />

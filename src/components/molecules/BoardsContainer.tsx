@@ -12,7 +12,7 @@ interface BoardsContainerProps {
 
 const BoardsContainer = ({ boards }: BoardsContainerProps) => {
     const dispatch: AppDispatch = useDispatch()
-    const user = useSelector((state: RootState) => state.auth.user)
+    const { user } = useSelector((state: RootState) => state.auth)
     const [currentPage, setCurrentPage] = useState(1)
     const boardsPerPage = useSelector(
         (state: RootState) => state.boards.boardsPerPage

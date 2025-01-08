@@ -8,7 +8,6 @@ import {
     deleteDoc,
     doc,
     getDoc,
-    getDocs,
     onSnapshot,
     query,
     updateDoc,
@@ -60,8 +59,8 @@ export const createBoard = createAsyncThunk(
                     boardTitle,
                     userUID: user.uid,
                     teamID: currentTeam!,
-                    createdAt: new Date().toDateString(),
-                    updatedAt: new Date().toDateString(),
+                    createdAt: new Date().toString(),
+                    updatedAt: new Date().toString(),
                     createdBy: user.displayName || user.email,
                     modifiedBy: user.displayName || user.email,
                     data: {},
@@ -159,9 +158,7 @@ export const updateBoard = createAsyncThunk(
             const boardRef = doc(db, "boards", boardID)
             await updateDoc(boardRef, {
                 data: newBoardData,
-                updatedAt: `${new Date().toDateString()}, ${new Date()
-                    .toTimeString()
-                    .padStart(2, "0")}`,
+                updatedAt: new Date(),
                 modifiedBy: user.displayName || user.email
             })
 
@@ -185,35 +182,41 @@ export const addBoardToFavorites = createAsyncThunk(
     }
 )
 
-export const getRecentBoards = createAsyncThunk(
-    "board/getRecentBoards",
-    async (userID: string) => {
-        try {
-            const timeFrame = new Date()
-            timeFrame.setDate(timeFrame.getDate() - 1)
+export const getRecentBoards = (userID: string) => (dispatch: AppDispatch) => {
+    try {
+        const currentTime = new Date()
 
-            const boardsRef = collection(db, "boards")
-            const q = query(
-                boardsRef,
-                where("updatedAt", ">", timeFrame),
-                where("userUID", "==", userID)
+        const timeFrameStart = new Date(
+            currentTime.getTime() - 24 * 60 * 60 * 1000
+        ).toISOString()
+
+        console.log(`Time frame start: ${timeFrameStart}`)
+
+        const boardsRef = collection(db, "boards")
+        const q = query(
+            boardsRef,
+            where("updatedAt", ">", timeFrameStart),
+            where("userUID", "==", userID)
+        )
+
+        return onSnapshot(q, (snapshot) => {
+            const recentBoards: Board[] = snapshot.docs.map(
+                (doc) =>
+                    ({
+                        id: doc.id,
+                        ...doc.data()
+                    } as Board)
             )
+            console.dir(snapshot.docs)
+            console.log("Acquired boards: ", recentBoards)
 
-            const querySnapshot = await getDocs(q)
-
-            const recentBoards = [] as Board[]
-
-            querySnapshot.forEach((doc) => {
-                recentBoards.push(doc.data() as Board)
-
-                return { id: doc.id, recentBoards }
-            })
-        } catch (err) {
-            console.error(err)
-            throw new Error(err as string)
-        }
+            dispatch(updateRecentBoards(recentBoards))
+        })
+    } catch (err) {
+        console.error("Error fetching recent boards:", err)
+        throw new Error(err as string)
     }
-)
+}
 
 export const deleteBoard = createAsyncThunk(
     "board/deleteBoard",
@@ -242,6 +245,9 @@ const boardSlice = createSlice({
         },
         updateBoards: (state, action: PayloadAction<Board[]>) => {
             state.boards = action.payload
+        },
+        updateRecentBoards: (state, action: PayloadAction<Board[]>) => {
+            state.recentBoards = action.payload
         },
         setBoardsPerPage: (state, action: PayloadAction<number>) => {
             state.boardsPerPage = action.payload
@@ -292,7 +298,7 @@ const boardSlice = createSlice({
                 state.status = "succeeded"
                 if (state.currentBoard) {
                     state.currentBoard.data = action.payload.newBoardData
-                    state.currentBoard.updatedAt = new Date().toDateString()
+                    state.currentBoard.updatedAt = new Date().toString()
                 }
             })
             .addCase(updateBoard.rejected, (state, action) => {
@@ -318,7 +324,12 @@ const boardSlice = createSlice({
     }
 })
 
-export const { setBoard, updateBoards, setBoardsPerPage, updateSortedBy } =
-    boardSlice.actions
+export const {
+    setBoard,
+    updateBoards,
+    setBoardsPerPage,
+    updateSortedBy,
+    updateRecentBoards
+} = boardSlice.actions
 
 export default boardSlice.reducer

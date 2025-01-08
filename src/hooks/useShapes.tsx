@@ -115,12 +115,16 @@ export function useShapes(canvas: Canvas | null) {
             {
                 left: x,
                 top: y,
-                selectable: true
+                selectable: true,
+                scaleX: 4.7,
+                scaleY: 5.3
             },
             "predefined-process"
         )
 
-        console.log(predefinedProcess.getScaledWidth())
+        console.log(
+            `Width: ${predefinedProcess.width} Height: ${predefinedProcess.height}`
+        )
 
         canvas?.add(predefinedProcess)
     }
@@ -174,7 +178,9 @@ export function useShapes(canvas: Canvas | null) {
                 top: y,
                 left: x,
                 fill: "transparent",
-                stroke: stroke
+                stroke: stroke,
+                scaleX: 4.7,
+                scaleY: 5.3
             },
             "documents"
         )

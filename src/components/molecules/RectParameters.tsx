@@ -79,7 +79,8 @@ const RectParameters = ({
                 "predefined-process",
                 "documents",
                 "database",
-                "direct-data"
+                "direct-data",
+                "document"
             ].includes(name) && (
                 <>
                     <SettingsInput

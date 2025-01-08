@@ -8,8 +8,22 @@ import {
     Line,
     FabricText,
     Group,
-    Path
+    Path,
+    FabricObject,
+    GroupProps
 } from "fabric"
+
+class NamedGroup extends Group {
+    name: string
+    constructor(
+        objects: FabricObject[],
+        options: Partial<GroupProps>,
+        name: string
+    ) {
+        super(objects, options)
+        this.name = name
+    }
+}
 
 export function useShapes(canvas: Canvas | null) {
     const addProcess = (x: number, y: number, stroke: string) => {
@@ -18,12 +32,12 @@ export function useShapes(canvas: Canvas | null) {
             top: y,
             width: 200,
             height: 100,
-            rx: 10,
-            ry: 10,
+            rx: 4,
             fill: null,
             stroke: stroke,
             strokeWidth: 4,
-            selectable: true
+            selectable: true,
+            name: "process"
         })
 
         canvas?.add(process)
@@ -40,12 +54,13 @@ export function useShapes(canvas: Canvas | null) {
                     height: 100,
                     left: x,
                     top: y,
-                    selectable: true
+                    selectable: true,
+                    name: "decision"
                 }
             )
 
             decision.scaleX = 7
-            decision.scaleY = 3.5
+            decision.scaleY = 4
 
             canvas?.add(decision)
         }
@@ -63,7 +78,8 @@ export function useShapes(canvas: Canvas | null) {
                 fill: null,
                 stroke: stroke,
                 strokeWidth: 4,
-                selectable: true
+                selectable: true,
+                name: "terminator"
             })
 
             canvas.add(terminator)
@@ -72,7 +88,7 @@ export function useShapes(canvas: Canvas | null) {
 
     const addPredefinedProcess = (x: number, y: number, stroke: string) => {
         const firstPath = new Path(
-            "M2 2H43C44.1046 2 45 2.89543 45 4V20C45 21.1046 44.1046 22 43 22H2C0.89543 22 0 21.1046 0 20V4C0 2.89543 0.89543 2 2 2Z",
+            `M 2 2 H43C44.1046 2 45 2.89543 45 4V20C45 21.1046 44.1046 22 43 22H2C0.89543 22 0 21.1046 0 20V4C0 2.89543 0.89543 2 2 2Z`,
             {
                 stroke: stroke,
                 strokeWidth: 1,
@@ -83,27 +99,32 @@ export function useShapes(canvas: Canvas | null) {
         const secondPath = new Path("M2 2V22", {
             stroke: stroke,
             strokeWidth: 1,
+
             fill: "transparent"
         })
 
         const thirdPath = new Path("M43 2V22", {
             stroke: stroke,
             strokeWidth: 1,
+
             fill: "transparent"
         })
 
-        const predefinedProcess = new Group(
+        const predefinedProcess = new NamedGroup(
             [firstPath, secondPath, thirdPath],
             {
                 left: x,
                 top: y,
-                width: 200,
-                height: 100
-            }
+                selectable: true,
+                scaleX: 4.7,
+                scaleY: 5.3
+            },
+            "predefined-process"
         )
 
-        predefinedProcess.scaleX = 7
-        predefinedProcess.scaleY = 5
+        console.log(
+            `Width: ${predefinedProcess.width} Height: ${predefinedProcess.height}`
+        )
 
         canvas?.add(predefinedProcess)
     }
@@ -116,7 +137,8 @@ export function useShapes(canvas: Canvas | null) {
                 top: y,
                 fill: "transparent",
                 stroke: stroke,
-                strokeWidth: 4
+                strokeWidth: 8,
+                name: "document"
             }
         )
 
@@ -128,7 +150,7 @@ export function useShapes(canvas: Canvas | null) {
             "M30 2H430V185.599C230 110.566 230 262.759 30 172.295V2Z",
             {
                 stroke: stroke,
-                strokeWidth: 4,
+                strokeWidth: 8,
                 fill: ""
             }
         )
@@ -136,7 +158,7 @@ export function useShapes(canvas: Canvas | null) {
             "M18.5 22.5H418.5V206.099C218.5 131.066 218.5 283.259 18.5 192.795V22.5Z",
             {
                 stroke: stroke,
-                strokeWidth: 4,
+                strokeWidth: 8,
                 fill: ""
             }
         )
@@ -145,18 +167,25 @@ export function useShapes(canvas: Canvas | null) {
             "M2 43H402V226.599C202 151.566 202 303.759 2 213.295V43Z",
             {
                 stroke: stroke,
-                strokeWidth: 4,
+                strokeWidth: 8,
                 fill: ""
             }
         )
 
-        const documents = new Group([firstDoc, seconDoc, thirdDoc], {
-            top: y,
-            left: x,
-            fill: "transparent",
-            stroke: stroke,
-            strokeWidth: 4
-        })
+        const documents = new NamedGroup(
+            [firstDoc, seconDoc, thirdDoc],
+            {
+                top: y,
+                left: x,
+                fill: "transparent",
+                stroke: stroke,
+                scaleX: 4.7,
+                scaleY: 5.3
+            },
+            "documents"
+        )
+
+        documents.scale(0.5)
 
         canvas?.add(documents)
     }
@@ -185,12 +214,15 @@ export function useShapes(canvas: Canvas | null) {
             "M55.3333 202L2 102L55.3333 2H348.667L402 102L348.667 202H55.3333Z",
             {
                 stroke,
-                strokeWidth: 4,
+                strokeWidth: 8,
                 top: y,
                 left: x,
                 fill: "transparent"
             }
         )
+
+        preparation.scale(0.5)
+
         canvas?.add(preparation)
     }
 
@@ -199,7 +231,7 @@ export function useShapes(canvas: Canvas | null) {
             "M2 27C2 39.5 84.5 52 189.5 52C294.5 52 377 39.5 377 27V177C377 189.5 294.5 202 189.5 202C84.5 202 2 189.5 2 177V27Z",
             {
                 stroke,
-                strokeWidth: 4,
+                strokeWidth: 8,
                 fill: "transparent"
             }
         )
@@ -207,7 +239,7 @@ export function useShapes(canvas: Canvas | null) {
             "M377 26.5C377 38.75 294.5 51 189.5 51C84.5 51 2 38.75 2 26.5C2 14.25 84.5 2 189.5 2C294.5 2 377 14.25 377 26.5Z",
             {
                 stroke,
-                strokeWidth: 4,
+                strokeWidth: 8,
                 fill: "transparent"
             }
         )
@@ -216,7 +248,7 @@ export function useShapes(canvas: Canvas | null) {
             "M2 39C2 52 84.5 65 189.5 65C294.5 65 377 52 377 39",
             {
                 stroke,
-                strokeWidth: 4,
+                strokeWidth: 8,
                 fill: "transparent"
             }
         )
@@ -224,18 +256,21 @@ export function useShapes(canvas: Canvas | null) {
             "M2 51C2 64.5 84.5 78 189.5 78C294.5 78 377 64.5 377 51",
             {
                 stroke,
-                strokeWidth: 4,
+                strokeWidth: 8,
                 fill: "transparent"
             }
         )
 
-        const database = new Group(
+        const database = new NamedGroup(
             [firstPath, secondPath, thirdPath, fourthPath],
             {
                 left: x,
                 top: y
-            }
+            },
+            "database"
         )
+
+        database.scale(0.5)
 
         canvas?.add(database)
     }
@@ -245,7 +280,7 @@ export function useShapes(canvas: Canvas | null) {
             "M34.087 202C18.7141 202 2 159.14 2 102C2 44.86 18.7141 2 34.087 2H371C354.957 2 338.913 44.86 338.913 102C338.913 159.14 354.957 202 371 202H34.087Z",
             {
                 stroke,
-                strokeWidth: 4,
+                strokeWidth: 8,
                 fill: ""
             }
         )
@@ -254,41 +289,54 @@ export function useShapes(canvas: Canvas | null) {
             "M370 202C354 202 338 159.14 338 102C338 44.86 354 2 370 2C386 2 402 44.86 402 102C402 159.14 386 202 370 202Z",
             {
                 stroke,
-                strokeWidth: 4,
+                strokeWidth: 8,
                 fill: ""
             }
         )
 
-        const directData = new Group([firstPath, secondPath], {
-            left: x,
-            top: y
-        })
+        const directData = new NamedGroup(
+            [firstPath, secondPath],
+            {
+                left: x,
+                top: y
+            },
+            "direct-data"
+        )
+
+        directData.scale(0.5)
+
         canvas?.add(directData)
     }
 
     const addInternalStorage = (x: number, y: number, stroke: string) => {
         const firstPath = new Path("M2 2H402V202H2V2Z", {
             stroke,
-            strokeWidth: 4,
+            strokeWidth: 8,
             fill: "transparent"
         })
 
         const secondPath = new Path("M55.3333 2V202", {
             stroke,
-            strokeWidth: 4,
+            strokeWidth: 8,
             fill: "transparent"
         })
 
         const thirdPath = new Path("M2 55.3333H402", {
             stroke,
-            strokeWidth: 4,
+            strokeWidth: 8,
             fill: "transparent"
         })
 
-        const internalStorage = new Group([firstPath, secondPath, thirdPath], {
-            top: y,
-            left: x
-        })
+        const internalStorage = new NamedGroup(
+            [firstPath, secondPath, thirdPath],
+            {
+                top: y,
+                left: x
+            },
+            "internal-storage"
+        )
+
+        internalStorage.scale(0.5)
 
         canvas?.add(internalStorage)
     }
@@ -296,16 +344,20 @@ export function useShapes(canvas: Canvas | null) {
     const addManualLoop = (x: number, y: number, stroke: string) => {
         const manualLoop = new Path("M2 2L55.3333 202H348.667L402 2H2Z", {
             stroke,
-            strokeWidth: 4,
+            strokeWidth: 8,
             fill: "",
             top: y,
-            left: x
+            left: x,
+            name: "manual-loop"
         })
+
+        manualLoop.scale(0.5)
+
         canvas?.add(manualLoop)
     }
 
     const addDelay = (x: number, y: number, stroke: string) => {
-        const path = new Path(
+        const delay = new Path(
             `M 0,0 L ${200},0 A ${100 / 2},${
                 100 / 2
             } 0 0,1 ${200},${100} L 0,${100} Z`,
@@ -314,10 +366,14 @@ export function useShapes(canvas: Canvas | null) {
                 top: y,
                 fill: "transparent",
                 stroke,
-                strokeWidth: 4
+                strokeWidth: 6,
+                name: "delay"
             }
         )
-        canvas?.add(path)
+
+        delay.scale(0.8)
+
+        canvas?.add(delay)
     }
 
     const addStoredData = (x: number, y: number, stroke: string) => {
@@ -328,11 +384,13 @@ export function useShapes(canvas: Canvas | null) {
                 top: y,
                 fill: "transparent",
                 stroke: stroke,
-                strokeWidth: 4,
+                strokeWidth: 8,
                 width: 200,
                 height: 100
             }
         )
+
+        storedData.scale(0.5)
 
         canvas?.add(storedData)
     }
@@ -356,15 +414,19 @@ export function useShapes(canvas: Canvas | null) {
     }
 
     const addConnector = (x: number, y: number, stroke: string) => {
-        const circle = new Circle({
+        const connector = new Circle({
             left: x,
             top: y,
             radius: 75,
             fill: "transparent",
             stroke,
-            strokeWidth: 4
+            strokeWidth: 6,
+            name: "connector"
         })
-        canvas?.add(circle)
+
+        connector.scale(0.8)
+
+        canvas?.add(connector)
     }
 
     const addOr = (x: number, y: number, stroke: string) => {
@@ -372,26 +434,33 @@ export function useShapes(canvas: Canvas | null) {
             "M102 202C157.228 202 202 157.228 202 102C202 46.7715 157.228 2 102 2C46.7715 2 2 46.7715 2 102C2 157.228 46.7715 202 102 202Z",
             {
                 stroke,
-                strokeWidth: 4,
+                strokeWidth: 8,
                 fill: "transparent"
             }
         )
 
         const secondPath = new Path("M102 2V202", {
             stroke,
-            strokeWidth: 4,
+            strokeWidth: 8,
             fill: "transparent"
         })
         const thirdPath = new Path("M202 102H2", {
             stroke,
-            strokeWidth: 4,
+            strokeWidth: 8,
             fill: "transparent"
         })
 
-        const or = new Group([firstPath, secondPath, thirdPath], {
-            top: y,
-            left: x
-        })
+        const or = new NamedGroup(
+            [firstPath, secondPath, thirdPath],
+            {
+                top: y,
+                left: x
+            },
+            "or"
+        )
+
+        or.scale(0.5)
+
         canvas?.add(or)
     }
 
@@ -400,27 +469,33 @@ export function useShapes(canvas: Canvas | null) {
             "M102 202C157.228 202 202 157.228 202 102C202 46.7715 157.228 2 102 2C46.7715 2 2 46.7715 2 102C2 157.228 46.7715 202 102 202Z",
             {
                 stroke,
-                strokeWidth: 4,
+                strokeWidth: 8,
                 fill: "transparent"
             }
         )
 
         const secondPath = new Path("M31.5 31.5L171.5 171.5", {
             stroke,
-            strokeWidth: 4,
+            strokeWidth: 8,
             fill: "transparent"
         })
 
         const thirdPath = new Path("M175.5 35.5L35.5 175.5", {
             stroke,
-            strokeWidth: 4,
+            strokeWidth: 8,
             fill: "transparent"
         })
 
-        const summingJunction = new Group([firstPath, secondPath, thirdPath], {
-            left: x,
-            top: y
-        })
+        const summingJunction = new NamedGroup(
+            [firstPath, secondPath, thirdPath],
+            {
+                left: x,
+                top: y
+            },
+            "summing-junction"
+        )
+
+        summingJunction.scale(0.5)
 
         canvas?.add(summingJunction)
     }
@@ -433,9 +508,13 @@ export function useShapes(canvas: Canvas | null) {
                 top: y,
                 fill: "transparent",
                 stroke,
-                strokeWidth: 4
+                strokeWidth: 8,
+                name: "display"
             }
         )
+
+        display.scale(0.5)
+
         canvas?.add(display)
     }
 
@@ -444,12 +523,15 @@ export function useShapes(canvas: Canvas | null) {
             "M1.99999 2.00001L2 102L102 202L202 102L202 2L1.99999 2.00001Z",
             {
                 stroke: stroke,
-                strokeWidth: 4,
+                strokeWidth: 8,
                 fill: "transparent",
                 left: x,
-                top: y
+                top: y,
+                name: "off-page-connector"
             }
         )
+
+        offPageConnector.scale(0.5)
 
         canvas?.add(offPageConnector)
     }
@@ -510,7 +592,8 @@ export function useShapes(canvas: Canvas | null) {
             strokeWidth: strokeWidth,
             top: y,
             left: x,
-            opacity: 100
+            opacity: 100,
+            name: "triangle"
         })
 
         canvas.add(triangle)

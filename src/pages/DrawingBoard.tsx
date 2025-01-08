@@ -36,7 +36,9 @@ const DrawingBoard = () => {
         isDrawingMode,
         angle,
         freeDrawingMode,
-        text
+        text,
+        scaleX,
+        scaleY
     } = useSelector((state: RootState) => state.shape)
 
     const user = useSelector((state: RootState) => state.auth.user)
@@ -197,6 +199,8 @@ const DrawingBoard = () => {
             <div className="min-h-screen">
                 <ToolBar shapesList={shapesList} />
                 <ShapeParameters
+                    scaleY={scaleY}
+                    scaleX={scaleX}
                     width={width}
                     height={height}
                     diameter={diameter}

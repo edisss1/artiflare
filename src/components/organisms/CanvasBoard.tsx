@@ -1,6 +1,15 @@
 import { useEffect, useRef } from "react"
 
 import { Canvas } from "fabric"
+import { FabricObject } from "fabric"
+;(FabricObject.prototype.toObject as any) = (function (toObject: any) {
+    return function (this: any) {
+        return {
+            ...toObject.call(this),
+            name: this.name || undefined
+        }
+    }
+})(FabricObject.prototype.toObject)
 
 interface CanvasBoardProps {
     setCanvas: React.Dispatch<React.SetStateAction<Canvas | null>>

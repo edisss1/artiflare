@@ -24,10 +24,16 @@ const CreateBoardModalContent = ({
                     onChange={setTitle}
                     required
                 />
+                {title.length < 4 && (
+                    <p className="text-danger">
+                        Board title should be at least 4 characters long
+                    </p>
+                )}
             </div>
             <Button
+                disabled={title.length < 4}
                 onClick={createBoard}
-                className="absolute bottom-6 mt-8 px-6 py-2 rounded-sm border-2 border-typography-light dark:border-typography-dark hover:bg-secondary transition-colors duration-100 w-fit self-center"
+                className="absolute bottom-6 disabled:opacity-70 disabled:hover:bg-transparent disabled:select-none mt-8 px-6 py-2 border-2 border-typography-light dark:border-typography-dark hover:bg-secondary  w-fit self-center transition-colors duration-150 rounded-lg"
             >
                 Create
             </Button>

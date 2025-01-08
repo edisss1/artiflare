@@ -15,9 +15,6 @@ export const formatRelativeDate = (
     const diffTime = nowLocalDate.getTime() - lastAccessLocalDate.getTime()
     const diffDays = diffTime / (1000 * 60 * 60 * 24)
 
-    console.log("diffDays: ", diffDays)
-    console.log("diffTime: ", diffTime)
-
     if (diffDays === 0) {
         return "Today"
     } else if (diffDays === 1) {

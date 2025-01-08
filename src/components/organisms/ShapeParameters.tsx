@@ -6,7 +6,9 @@ import {
     setColor,
     setDiameter,
     setStroke,
-    setAngle
+    setAngle,
+    setScaleX,
+    setScaleY
 } from "../../redux/slices/shapeManagementSlice"
 import { handleObjectSelection } from "../../utils/handleObjectSelection.ts"
 import { AppDispatch } from "../../redux/store.ts"
@@ -24,6 +26,8 @@ interface SettingProps {
     fill: string
     stroke: string
     angle: number
+    scaleX: number
+    scaleY: number
 }
 
 const ShapeParameters = ({
@@ -34,7 +38,9 @@ const ShapeParameters = ({
     fill,
     diameter,
     stroke,
-    angle
+    angle,
+    scaleX,
+    scaleY
 }: SettingProps) => {
     const [selectedObject, setSelectedObject] = useState<any>(null)
     const [settingsPosition, setSettingsPosition] = useState({
@@ -63,7 +69,7 @@ const ShapeParameters = ({
         dispatch(setHeight(heightValue))
 
         if (
-            (!selectedObject && selectedObject?.type !== "rect") ||
+            (!selectedObject && selectedObject.type !== "rect") ||
             (selectedObject.type && heightValue === 0)
         )
             return
@@ -90,6 +96,43 @@ const ShapeParameters = ({
             radius: diameterValue / 2 / selectedObject.scaleX
         })
         canvas?.renderAll()
+    }
+
+    useEffect(() => {})
+
+    const handlePathScaleChangeAsWidth = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const scaleValue = parseInt(e.target.value.replace(/,/g, ""), 10)
+
+        if (!selectedObject || !scaleValue) return
+
+        // dispatch(setScaleX(scaleValue))
+        dispatch(setScaleX(scaleValue))
+        console.log("Scale value of path (input)", scaleValue)
+        console.log("Width", width)
+
+        console.log(scaleX)
+
+        selectedObject.set({
+            scaleX: isNaN(scaleValue) ? 1 : scaleValue / selectedObject.width
+        })
+
+        canvas?.renderAll()
+    }
+
+    const handlePathScaleChangeAsHeight = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const scaleValue = parseInt(e.target.value.replace(/,/g, ""), 10)
+
+        if (!selectedObject || !scaleValue) return
+
+        dispatch(setScaleY(scaleValue))
+
+        selectedObject.set({
+            scaleY: isNaN(scaleValue) ? 1 : scaleValue / selectedObject.height
+        })
     }
 
     const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -192,44 +235,72 @@ const ShapeParameters = ({
                     : "flex items-center bg-primary z-40 border-2 border-black p-4 -translate-y-[200%] -translate-x-[50%] text-typography-light"
             }`}
         >
-            {selectedObject && selectedObject.type === "rect" && (
-                <RectParameters
-                    rectWidthValue={width}
-                    onChangeWidth={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleWidthChange(e)
-                    }
-                    rectHeightValue={height}
-                    onChangeHeight={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleHeightChange(e)
-                    }
-                    rectFillValue={fill}
-                    onChangeFill={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleColorChange(e)
-                    }
-                    rectStrokeValue={stroke}
-                    onChangeStroke={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleStrokeChange(e)
-                    }
-                    onClick={deleteSelectedObject}
-                />
-            )}
-            {selectedObject && selectedObject.type === "circle" && (
-                <CircleParameters
-                    circleDiameterValue={diameter}
-                    circleFillValue={fill}
-                    circleStrokeValue={stroke}
-                    onClick={deleteSelectedObject}
-                    onChangeDiameter={(
-                        e: React.ChangeEvent<HTMLInputElement>
-                    ) => handleDiameterChange(e)}
-                    onChangeFill={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleColorChange(e)
-                    }
-                    onChangeStroke={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleStrokeChange(e)
-                    }
-                />
-            )}
+            {selectedObject &&
+                !["circle", "connector", "summing-junction", "or"].includes(
+                    selectedObject.name ||
+                        ![
+                            "circle",
+                            "connector",
+                            "summing-junction",
+                            "or"
+                        ].includes(selectedObject.type)
+                ) && (
+                    <RectParameters
+                        onChangePathScaleX={(e) =>
+                            handlePathScaleChangeAsWidth(e)
+                        }
+                        pathScaleValueX={scaleX}
+                        onChangePathScaleY={(e) =>
+                            handlePathScaleChangeAsHeight(e)
+                        }
+                        pathScaleValueY={scaleY}
+                        type={selectedObject.type}
+                        name={selectedObject.name}
+                        rectWidthValue={width}
+                        onChangeWidth={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => handleWidthChange(e)}
+                        rectHeightValue={height}
+                        onChangeHeight={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => handleHeightChange(e)}
+                        rectFillValue={fill}
+                        onChangeFill={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => handleColorChange(e)}
+                        rectStrokeValue={stroke}
+                        onChangeStroke={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => handleStrokeChange(e)}
+                        onClick={deleteSelectedObject}
+                    />
+                )}
+            {selectedObject &&
+                ["circle", "connector", "summing-junction", "or"].includes(
+                    selectedObject.name ||
+                        [
+                            "circle",
+                            "connector",
+                            "summing-junction",
+                            "or"
+                        ].includes(selectedObject.type)
+                ) && (
+                    <CircleParameters
+                        circleDiameterValue={diameter}
+                        circleFillValue={fill}
+                        circleStrokeValue={stroke}
+                        onClick={deleteSelectedObject}
+                        onChangeDiameter={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => handleDiameterChange(e)}
+                        onChangeFill={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => handleColorChange(e)}
+                        onChangeStroke={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => handleStrokeChange(e)}
+                    />
+                )}
             {selectedObject && selectedObject.type === "line" && (
                 <LineParameters
                     lineStrokeValue={stroke}

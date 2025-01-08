@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { closeModal } from "../../utils/closeModal.ts"
 import CloseIcon from "../icons/CloseIcon.tsx"
 
@@ -7,17 +8,26 @@ interface ModalProps {
 }
 
 const Modal = ({ modalRef, children }: ModalProps) => {
-    const handleClickOutside = (e: React.MouseEvent<HTMLDialogElement>) => {
-        if (modalRef.current && e.target === modalRef.current) {
+    const handleClickOutside = (e: MouseEvent) => {
+        if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
             closeModal(modalRef)
         }
+
+        console.log(e.target)
     }
+
+    useEffect(() => {
+        window.addEventListener("mousedown", handleClickOutside)
+
+        return () => {
+            window.removeEventListener("mousedown", handleClickOutside)
+        }
+    }, [])
 
     return (
         <dialog
-            className="modal w-full max-w-[500px] lg:min-h-[600px] max-lg:min-h-[300px] p-9 text-typography-light dark:text-typography-dark dark:bg-bg-dark rounded-sm relative bg-bg-light dark:backdrop:bg-bg-light/25 backdrop:bg-bg-dark/30"
+            className="modal w-full max-w-[500px] lg:min-h-[600px] max-lg:min-h-[300px] p-9 text-typography-light dark:text-typography-dark dark:bg-bg-dark rounded-lg relative bg-bg-light dark:backdrop:bg-bg-light/25 backdrop:bg-bg-dark/30 backdrop:pointer-events-none"
             ref={modalRef}
-            onClick={handleClickOutside}
         >
             <button
                 onClick={() => closeModal(modalRef)}

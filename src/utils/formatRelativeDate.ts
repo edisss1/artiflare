@@ -8,7 +8,7 @@ export const formatRelativeDate = (
     if (!lastAccessDate) return "Never"
 
     // Get local date representations without time
-    const lastAccessLocalDate = new Date(lastAccessDate.toLocaleDateString())
+    const lastAccessLocalDate = new Date(lastAccessDate)
     const nowLocalDate = new Date(now.toLocaleDateString())
 
     // Calculate difference in days

@@ -8,6 +8,7 @@ import { RootState } from "../../redux/store"
 import { doc, getDoc, updateDoc } from "firebase/firestore"
 import Loading from "./Loading"
 import { useLocation, useNavigate } from "react-router-dom"
+import { Team } from "../../types/Team"
 
 const AuthChecker = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useDispatch()
@@ -18,27 +19,54 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
-                const userDocRef = doc(db, "users", firebaseUser.uid)
-                const userDoc = await getDoc(userDocRef)
-                const userData = userDoc.data()
+                try {
+                    const userDocRef = doc(db, "users", firebaseUser.uid)
+                    const userDoc = await getDoc(userDocRef)
+                    const userData = userDoc.data()
 
-                const loggedUser: LoggedUser = {
-                    uid: firebaseUser.uid,
-                    email: firebaseUser.email,
-                    img: firebaseUser.photoURL,
-                    displayName: firebaseUser.displayName,
-                    teams: userData?.teams || [],
-                    boards: userData?.boards || [],
-                    currentSelectedTeam: userData?.currentSelectedTeam,
-                    lastAccessAt: userData?.lastAccessAt
+                    const currentTeamDocRef = doc(
+                        db,
+                        "teams",
+                        userData?.currentSelectedTeam
+                    )
+
+                    const loggedUser: LoggedUser = {
+                        uid: firebaseUser.uid,
+                        email: firebaseUser.email,
+                        img: firebaseUser.photoURL,
+                        displayName: firebaseUser.displayName,
+                        teams: userData?.teams || [],
+                        boards: userData?.boards || [],
+                        currentSelectedTeam: userData?.currentSelectedTeam,
+                        lastAccessAt: userData?.lastAccessAt
+                    }
+
+                    const currentTeamSnap = await getDoc(currentTeamDocRef)
+                    if (currentTeamSnap.exists()) {
+                        const currentTeamData = currentTeamSnap.data() as Team
+                        const updatedTeamMembers = currentTeamData.members.map(
+                            (member) =>
+                                member.uid === loggedUser.uid
+                                    ? {
+                                          ...member,
+                                          lastAccessAt: new Date().toISOString()
+                                      }
+                                    : member
+                        )
+
+                        await updateDoc(currentTeamDocRef, {
+                            members: updatedTeamMembers
+                        })
+                    }
+
+                    await updateDoc(userDocRef, {
+                        lastAccessAt: new Date().toISOString()
+                    })
+
+                    dispatch(setUser(loggedUser))
+                } catch (error) {
+                    console.error("Error during authentication check:", error)
                 }
-
-                await updateDoc(userDocRef, {
-                    lastAccessAt: new Date().toDateString()
-                })
-
-                dispatch(setUser(loggedUser))
-                console.log(loggedUser)
             } else {
                 dispatch(setUser(null))
             }

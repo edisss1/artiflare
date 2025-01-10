@@ -12,7 +12,6 @@ const ScrollTo = ({ x, y, children }: ScrollToProps) => {
 
     useEffect(() => {
         const handleScroll = () => {
-            console.log(window.scrollY)
             setIsScrolled(window.scrollY > 0)
         }
 

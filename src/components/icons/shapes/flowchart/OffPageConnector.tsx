@@ -9,13 +9,13 @@ const OffPageConnector = () => {
             xmlns="http://www.w3.org/2000/svg"
         >
             <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M1.99999 2.00001L2 102L102 202L202 102L202 2L1.99999 2.00001Z"
                 stroke="#333333"
-                stroke-width="8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
             />
         </svg>
     )

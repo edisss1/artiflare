@@ -9,27 +9,27 @@ const InternalStorage = () => {
             xmlns="http://www.w3.org/2000/svg"
         >
             <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M2 2H402V202H2V2Z"
                 stroke="#333333"
-                stroke-width="16"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="16"
+                strokeLinecap="round"
+                strokeLinejoin="round"
             />
             <path
                 d="M55.3333 2V202"
                 stroke="#333333"
-                stroke-width="16"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="16"
+                strokeLinecap="round"
+                strokeLinejoin="round"
             />
             <path
                 d="M2 55.3335H402"
                 stroke="#333333"
-                stroke-width="16"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="16"
+                strokeLinecap="round"
+                strokeLinejoin="round"
             />
         </svg>
     )

@@ -5,6 +5,7 @@ interface FormInputProps {
     type: string
     bg?: string
     maxWidth?: string
+    autoComplete?: string
 }
 
 const FormInput = ({
@@ -13,7 +14,8 @@ const FormInput = ({
     placeholder,
     type,
     bg,
-    maxWidth
+    maxWidth,
+    autoComplete
 }: FormInputProps) => {
     return (
         <input
@@ -23,6 +25,7 @@ const FormInput = ({
             placeholder={placeholder}
             type={type}
             required
+            autoComplete={autoComplete}
         />
     )
 }

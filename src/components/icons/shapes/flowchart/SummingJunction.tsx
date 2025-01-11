@@ -10,23 +10,23 @@ const SummingJunction = () => {
             <path
                 d="M102 202C157.228 202 202 157.228 202 102C202 46.7715 157.228 2 102 2C46.7715 2 2 46.7715 2 102C2 157.228 46.7715 202 102 202Z"
                 stroke="#333333"
-                stroke-width="12"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="12"
+                strokeLinecap="round"
+                strokeLinejoin="round"
             />
             <path
                 d="M31.5 31.5L171.5 171.5"
                 stroke="#333333"
-                stroke-width="12"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="12"
+                strokeLinecap="round"
+                strokeLinejoin="round"
             />
             <path
                 d="M175.5 35.5L35.5 175.5"
                 stroke="#333333"
-                stroke-width="12"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="12"
+                strokeLinecap="round"
+                strokeLinejoin="round"
             />
         </svg>
     )

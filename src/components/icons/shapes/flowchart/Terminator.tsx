@@ -15,7 +15,7 @@ const Terminator = () => {
                 height="24"
                 rx="16"
                 stroke="#333333"
-                stroke-width="2"
+                strokeWidth="2"
             />
         </svg>
     )

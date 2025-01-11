@@ -200,6 +200,9 @@ export const createUserWithCredentials = createAsyncThunk(
                 currentSelectedTeam: "",
                 lastAccessAt: new Date().toDateString()
             }
+            console.log(user)
+
+            await setDoc(doc(db, "users", user.uid), user)
 
             if (!user.teams.length && user) {
                 const defaultTeamID = await createDefaultTeam(user)
@@ -207,8 +210,6 @@ export const createUserWithCredentials = createAsyncThunk(
                     user.currentSelectedTeam = defaultTeamID
                 }, 1000)
             }
-
-            await setDoc(doc(db, "users", user.uid), user)
 
             return user
         } catch (err) {

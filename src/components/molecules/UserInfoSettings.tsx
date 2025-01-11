@@ -5,6 +5,7 @@ import SettingsInput from "../atoms/SettingsInput"
 import { AppDispatch } from "../../redux/store"
 import { setNewDisplayName } from "../../redux/slices/userManagementSlice"
 import { useState } from "react"
+import FallbackAvatar from "../atoms/FallbackAvatar"
 
 interface UserInfoSettingsProps {
     user: User | null
@@ -62,13 +63,28 @@ const UserInfoSettings = ({
             </div>
             <div className={"flex flex-col gap-2 items-center"}>
                 <h3>Your photo</h3>
-                <img
-                    className={
-                        "aspect-square rounded-md w-[clamp(2rem,40vw,10rem)]"
-                    }
-                    src={user?.img ? user.img : userIcon}
-                    alt={""}
-                />
+                {user?.img ? (
+                    <img
+                        className={
+                            "aspect-square rounded-md w-[clamp(2rem,40vw,10rem)]"
+                        }
+                        src={user?.img ? user.img : userIcon}
+                        alt={""}
+                    />
+                ) : (
+                    <FallbackAvatar
+                        width="w-[clamp(2rem,40vw,10rem)]"
+                        height="w-[clamp(2rem,40vw,10rem)]"
+                        rounded="rounded-md"
+                        username={
+                            user?.displayName
+                                ? user.displayName
+                                : user?.email
+                                ? user.email
+                                : "?"
+                        }
+                    />
+                )}
                 <div className={"flex gap-2 justify-center items-center"}>
                     <Button
                         className={

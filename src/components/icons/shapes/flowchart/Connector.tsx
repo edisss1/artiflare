@@ -10,9 +10,9 @@ const Connector = () => {
             <path
                 d="M102 202C157.228 202 202 157.228 202 102C202 46.7715 157.228 2 102 2C46.7715 2 2 46.7715 2 102C2 157.228 46.7715 202 102 202Z"
                 stroke="#333333"
-                stroke-width="12"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="12"
+                strokeLinecap="round"
+                strokeLinejoin="round"
             />
         </svg>
     )

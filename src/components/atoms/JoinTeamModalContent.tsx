@@ -25,9 +25,12 @@ const JoinTeamModalContent = ({
                     type="text"
                     maxWidth="max-w-[300px]"
                 />
-                <div className="flex flex-col mt-6 gap-6">
+                <div className="flex flex-col mt-6 gap-6 items-center">
                     <p>Don't have a team to join?</p>
-                    <Button onClick={handleCreateTeamModal} className="">
+                    <Button
+                        onClick={handleCreateTeamModal}
+                        className="relative  dark:border-typography-dark after:content-[''] after:w-full after:h-px after:bg-typography-light dark:after:bg-typography-dark after:scale-x-0 hover:after:scale-x-100 after:transform after:origin-center after:transition-all duration-300 after:absolute after:top-full after:left-0"
+                    >
                         Create one
                     </Button>
                 </div>

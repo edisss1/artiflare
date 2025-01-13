@@ -7,9 +7,13 @@ import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch } from "react-redux"
-import { createTeam } from "../../redux/slices/teamManagementSlice"
+import {
+    createTeam,
+    inviteUserToTeam
+} from "../../redux/slices/teamManagementSlice"
 import SuggestionList from "./SuggestionList"
 import { fetchSuggestionsForInvites } from "../../utils/fetchSuggestionsForInvites"
+import { TeamMember } from "../../types/Team"
 
 interface CreateTeamModalContentProps {
     setIsCreateModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -51,6 +55,14 @@ const CreateTeamModalContent = ({
         console.log("team created")
     }
 
+    console.log(
+        `User's team data: ${JSON.stringify(
+            user?.teams.filter(
+                (team) => team.teamID === user?.currentSelectedTeam
+            )
+        )}`
+    )
+
     return (
         <div className="flex flex-col items-center">
             <h3 className="font-medium text-xl text-center mb-6">
@@ -70,21 +82,37 @@ const CreateTeamModalContent = ({
                         onChange={handleTeamTypeChange}
                     />
                     <div className="flex flex-col">
-                        <FormInput
+                        {/* <FormInput
                             value={userSearchQuery}
-                            onChange={(e) => handleQueryChange(e)}
+                            onChange={}
                             placeholder="Invite users to your team"
                             type="text"
-                        />
+                        /> */}
                         <SuggestionList
                             suggestions={suggestions}
                             searchQuery={userSearchQuery}
                         />
+                        <Button
+                            className=""
+                            children="Invite test"
+                            onClick={() =>
+                                dispatch(() =>
+                                    inviteUserToTeam(
+                                        user,
+                                        user?.currentSelectedTeam,
+                                        ["iwHDxa0BfWgsJxAIs60KRGsr37t2"]
+                                    )
+                                )
+                            }
+                        />
                     </div>
                 </div>
-                <div className="flex flex-col mt-6 gap-6">
+                <div className="flex flex-col items-center mt-6 gap-6">
                     <p>Already have a team to join?</p>
-                    <Button onClick={handleJoinTeamModal} className="">
+                    <Button
+                        onClick={handleJoinTeamModal}
+                        className="relative rounded-lg t dark:border-typography-dark after:content-[''] after:w-full after:h-px after:bg-typography-light dark:after:bg-typography-dark after:scale-x-0 hover:after:scale-x-100 after:transform after:origin-center after:transition-all duration-300 after:absolute after:top-full after:left-0"
+                    >
                         Find it!
                     </Button>
                 </div>

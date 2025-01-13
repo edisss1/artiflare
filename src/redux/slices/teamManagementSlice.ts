@@ -147,58 +147,65 @@ export const joinTeam = createAsyncThunk(
 )
 
 export const inviteUserToTeam = async (
-    user: TeamMember,
-    teamId: string,
-    inviteeId: string
+    user: User | null,
+    teamId: string | undefined,
+    inviteeId: string[]
 ) => {
+    if (!user || !teamId || !inviteeId) return
+
     const teamDocRef = doc(db, "teams", teamId)
     const teamDoc = await getDoc(teamDocRef)
+
+    const isOwner = user.teams.some((team) => team.role === "owner")
+
+    if (!isOwner) return
 
     if (teamDoc.exists()) {
         const teamData = teamDoc.data() as Team
 
-        const userDocRef = doc(db, "users", user.uid)
-        const userDoc = await getDoc(userDocRef)
-        const teamDocRef = doc(db, "teams", teamId)
+        const members: TeamMember[] = teamData.members || []
 
-        if (userDoc.exists()) {
-            const userData = userDoc.data() as User
+        const inviteeDocsRef = inviteeId.map((inviteeId) =>
+            doc(db, "users", inviteeId)
+        )
 
-            if (userData.teams.some((team) => team.role === "owner")) {
-                console.error("User is already an owner of the team")
-                return
-            }
+        const inviteeDocs = await Promise.all(
+            inviteeDocsRef.map((docRef) => getDoc(docRef))
+        )
 
-            if (userData.teams.some((team) => team.teamID === teamId)) {
-                console.error("User is already a member of the team")
-                return
-            }
+        if (inviteeDocs.filter((doc) => doc.exists())) {
+            const inviteesData = inviteeDocs.map((doc) => doc.data() as User)
 
-            userData.teams = userData.teams || []
-            userData.teams.push({ teamID: teamId, role: "member" })
+            inviteesData.forEach((inviteeData) => {
+                if (
+                    inviteeData.teams.some(
+                        (team) => team.teamID === user.currentSelectedTeam
+                    )
+                ) {
+                    return
+                }
 
-            await updateDoc(userDocRef, { teams: userData.teams })
-            await updateDoc(teamDocRef, { members: teamData.members })
-        } else {
-            console.error(`User with ID ${user.uid} does not exist`)
-            return
-        }
+                inviteeData.teams.push({ teamID: teamId, role: "member" })
 
-        const inviteeDocRef = doc(db, "users", inviteeId)
-        const inviteeDoc = await getDoc(inviteeDocRef)
+                updateDoc(doc(db, "users", inviteeData.uid), {
+                    teams: inviteeData.teams
+                })
 
-        if (inviteeDoc.exists()) {
-            const inviteeData = inviteeDoc.data() as User
+                const newMember: TeamMember = {
+                    uid: inviteeData.uid,
+                    role: "member",
+                    displayName: inviteeData.displayName || inviteeData.email,
+                    img: inviteeData.img,
+                    email: inviteeData.email,
+                    lastAccessAt: inviteeData.lastAccessAt
+                }
 
-            if (inviteeData.teams.some((team) => team.teamID === teamId)) {
-                console.error("Invitee is already a member of the team")
-                return
-            }
+                members.push(newMember)
 
-            inviteeData.teams = inviteeData.teams || []
-            inviteeData.teams.push({ teamID: teamId, role: "member" })
-
-            await updateDoc(inviteeDocRef, { teams: inviteeData.teams })
+                updateDoc(teamDocRef, {
+                    members: members
+                })
+            })
         } else {
             console.error(`Invitee with ID ${inviteeId} does not exist`)
             return

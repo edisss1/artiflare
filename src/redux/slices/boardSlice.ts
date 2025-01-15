@@ -158,7 +158,7 @@ export const updateBoard = createAsyncThunk(
             const boardRef = doc(db, "boards", boardID)
             await updateDoc(boardRef, {
                 data: newBoardData,
-                updatedAt: new Date(),
+                updatedAt: new Date().toISOString(),
                 modifiedBy: user.displayName || user.email
             })
 

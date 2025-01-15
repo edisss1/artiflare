@@ -1,15 +1,30 @@
-import {NotificationType} from "../../types/NotificationType.ts"
+import { NotificationType } from "../../types/NotificationType.ts"
+import TeamInvitation from "./TeamInvitation.tsx"
 
 interface Notification {
-	notification: NotificationType
+    teamID: string | undefined
+    userUID: string
+    type: NotificationType["type"]
+    notificationText: string
 }
 
-const Notification = ({notification}: Notification) => {
-	return (
-		<div className={"grid grid-rows-2"}>
-			<h5>{notification.senderName}</h5>
-			<p>{notification.notificationText}</p>
-		</div>
-	)
+const Notification = ({
+    notificationText,
+    userUID,
+    teamID,
+    type
+}: Notification) => {
+    return (
+        <div className={"flex flex-col"}>
+            {type === "invitation" && (
+                <TeamInvitation
+                    notificationText={notificationText}
+                    teamID={teamID}
+                    userUID={userUID}
+                    type={type}
+                />
+            )}
+        </div>
+    )
 }
 export default Notification

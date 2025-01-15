@@ -7,13 +7,10 @@ import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch } from "react-redux"
-import {
-    createTeam,
-    inviteUserToTeam
-} from "../../redux/slices/teamManagementSlice"
-import SuggestionList from "./SuggestionList"
-import { fetchSuggestionsForInvites } from "../../utils/fetchSuggestionsForInvites"
-import { TeamMember } from "../../types/Team"
+import { createTeam } from "../../redux/slices/teamManagementSlice"
+import { sendInvite } from "../../redux/slices/notificationManagementSlice"
+// import SuggestionList from "./SuggestionList"
+// import { fetchSuggestionsForInvites } from "../../utils/fetchSuggestionsForInvites"
 
 interface CreateTeamModalContentProps {
     setIsCreateModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -24,17 +21,17 @@ const CreateTeamModalContent = ({
 }: CreateTeamModalContentProps) => {
     const [teamType, setTeamType] = useState<TeamType["teamType"]>("private")
     const [teamTitle, setTeamTitle] = useState<string>("")
-    const [userSearchQuery, setUserSearchQuery] = useState<string>("")
-    const [suggestions, setSuggestions] = useState<string[]>([])
+    // const [userSearchQuery, setUserSearchQuery] = useState<string>("")
+    // const [suggestions, setSuggestions] = useState<string[]>([])
     const dispatch: AppDispatch = useDispatch()
 
     const user = useSelector((state: RootState) => state.auth.user)
 
-    const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value
-        setUserSearchQuery(value)
-        fetchSuggestionsForInvites(value, setSuggestions)
-    }
+    // const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const value = e.target.value
+    //     setUserSearchQuery(value)
+    //     fetchSuggestionsForInvites(value, setSuggestions)
+    // }
 
     const handleJoinTeamModal = () => {
         setIsCreateModal(false)
@@ -52,16 +49,9 @@ const CreateTeamModalContent = ({
         if (user) {
             dispatch(createTeam({ teamTitle, teamType, user, dispatch }))
         }
-        console.log("team created")
     }
 
-    console.log(
-        `User's team data: ${JSON.stringify(
-            user?.teams.filter(
-                (team) => team.teamID === user?.currentSelectedTeam
-            )
-        )}`
-    )
+    const invitees = ["8n0o9lzrPWZF3t9JHP1KBd0zH0i1"]
 
     return (
         <div className="flex flex-col items-center">
@@ -88,20 +78,19 @@ const CreateTeamModalContent = ({
                             placeholder="Invite users to your team"
                             type="text"
                         /> */}
-                        <SuggestionList
+                        {/* <SuggestionList
                             suggestions={suggestions}
                             searchQuery={userSearchQuery}
-                        />
+                        /> */}
                         <Button
                             className=""
                             children="Invite test"
                             onClick={() =>
-                                dispatch(() =>
-                                    inviteUserToTeam(
+                                dispatch(
+                                    sendInvite({
                                         user,
-                                        user?.currentSelectedTeam,
-                                        ["iwHDxa0BfWgsJxAIs60KRGsr37t2"]
-                                    )
+                                        invitees
+                                    })
                                 )
                             }
                         />

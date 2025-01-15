@@ -146,7 +146,7 @@ export const joinTeam = createAsyncThunk(
     }
 )
 
-export const inviteUserToTeam = async (
+export const addNewUsersToTeam = async (
     user: User | null,
     teamId: string | undefined,
     inviteeId: string[]
@@ -186,6 +186,11 @@ export const inviteUserToTeam = async (
                 }
 
                 inviteeData.teams.push({ teamID: teamId, role: "member" })
+                const inviteeDoc = doc(db, "users", inviteeData.uid)
+
+                updateDoc(inviteeDoc, {
+                    currentSelectedTeam: teamId
+                })
 
                 updateDoc(doc(db, "users", inviteeData.uid), {
                     teams: inviteeData.teams

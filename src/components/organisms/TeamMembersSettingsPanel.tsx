@@ -1,16 +1,24 @@
 import SettingsHeader from "../atoms/SettingsHeader"
-import { RootState } from "../../redux/store"
+import { AppDispatch, RootState } from "../../redux/store"
 import { useSelector } from "react-redux"
 import SearchMembers from "../atoms/SearchMembers"
 import MembersDisplay from "../molecules/MembersDisplay"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { getCurrentSelectedTeam } from "../../redux/slices/teamManagementSlice"
 
 const TeamMembersSettingsPanel = () => {
+    const dispatch: AppDispatch = useDispatch()
     const user = useSelector((state: RootState) => state.auth.user)
-    const teams = useSelector((state: RootState) => state.teamManagement.teams)
 
-    const currentTeam = teams.find(
-        (team) => team.id === user?.currentSelectedTeam
+    const currentTeam = useSelector(
+        (state: RootState) => state.teamManagement.currentTeam
     )
+
+    useEffect(() => {
+        dispatch(getCurrentSelectedTeam(user))
+        console.log("dispatched")
+    }, [])
 
     return (
         <div className="">

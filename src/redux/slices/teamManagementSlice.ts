@@ -5,7 +5,6 @@ import {
     addDoc,
     arrayUnion,
     collection,
-    deleteDoc,
     doc,
     getDoc,
     getDocs,
@@ -19,7 +18,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 
 interface TeamState {
     teams: Team[]
-    currentTeamID: string | undefined
+    currentTeam: Team | undefined
     newTeam: Team
     status: "idle" | "loading" | "succeeded" | "failed"
     error: string | undefined
@@ -36,7 +35,7 @@ const initialState: TeamState = {
         teamType: "",
         logo: ""
     },
-    currentTeamID: undefined,
+    currentTeam: undefined,
     status: "idle",
     error: undefined,
     newTeamName: ""
@@ -126,27 +125,6 @@ export const getTeams = createAsyncThunk(
     }
 )
 
-// export const joinTeam = createAsyncThunk(
-//     "teamManagement/joinTeam",
-//     async ({
-//         user,
-//         teamID
-//     }: {
-//         user: User
-//         teamID?: string
-//         teamTitle?: string
-//     }) => {
-//         try {
-//             await updateDoc(doc(db, "users", user.uid), {
-//                 teams: arrayUnion(teamID),
-//                 role: "member"
-//             })
-//         } catch (err) {
-//             console.error(err)
-//         }
-//     }
-// )
-
 export const addNewUserToTeam = async (
     teamId: string | undefined,
     inviteeId: string | undefined
@@ -219,19 +197,6 @@ export const addNewUserToTeam = async (
     }
 }
 
-export const deleteNotification = createAsyncThunk(
-    "notificationManagement/deleteNotification",
-    async ({ notificationID }: { notificationID: string }) => {
-        if (!notificationID) return
-
-        try {
-            await deleteDoc(doc(db, "notifications", notificationID))
-        } catch (err) {
-            console.error(err)
-        }
-    }
-)
-
 export const searchUsers = async (queryString: string) => {
     const usersCollectionRef = collection(db, "users")
     const q = query(
@@ -300,7 +265,16 @@ export const getCurrentSelectedTeam = createAsyncThunk(
         const userDoc = await getDoc(userDocRef)
         if (userDoc.exists()) {
             const userData = userDoc.data() as User
-            return userData.currentSelectedTeam
+            const currentTeamDoc = await getDoc(
+                doc(db, "teams", userData.currentSelectedTeam)
+            )
+            const currentTeamData = {
+                id: currentTeamDoc.id,
+                ...currentTeamDoc.data()
+            } as Team
+            console.log(`current team data id: ${currentTeamData.id}`)
+
+            return currentTeamData
         }
     }
 )
@@ -379,7 +353,7 @@ const teamManagementSlice = createSlice({
                 state.status = "failed"
             })
             .addCase(getCurrentSelectedTeam.fulfilled, (state, action) => {
-                state.currentTeamID = action.payload
+                state.currentTeam = action.payload
             })
             .addCase(updateTeamName.fulfilled, (state) => {
                 state.status = "succeeded"
@@ -387,18 +361,6 @@ const teamManagementSlice = createSlice({
             .addCase(uploadTeamLogo.fulfilled, (state) => {
                 state.error = undefined
                 state.status = "succeeded"
-            })
-            .addCase(deleteNotification.fulfilled, (state) => {
-                state.status = "succeeded"
-                state.error = undefined
-            })
-            .addCase(deleteNotification.pending, (state) => {
-                state.status = "loading"
-                state.error = undefined
-            })
-            .addCase(deleteNotification.rejected, (state, action) => {
-                state.status = "failed"
-                state.error = action.error.message
             })
     }
 })

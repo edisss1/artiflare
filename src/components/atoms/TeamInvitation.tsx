@@ -1,10 +1,8 @@
 import { useDispatch } from "react-redux"
-import {
-    addNewUserToTeam,
-    deleteNotification
-} from "../../redux/slices/teamManagementSlice"
+import { addNewUserToTeam } from "../../redux/slices/teamManagementSlice"
 import { AppDispatch } from "../../redux/store"
 import Button from "./Button"
+import { deleteNotification } from "../../redux/slices/notificationManagementSlice"
 
 interface TeamInvitationProps {
     teamID: string | undefined

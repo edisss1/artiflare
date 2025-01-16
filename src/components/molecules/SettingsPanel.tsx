@@ -38,7 +38,7 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
         }
     })
 
-    console.log(user?.currentSelectedTeam)
+    // console.log(user?.currentSelectedTeam)
 
     const handleCurrentTeamChange = (
         e: React.ChangeEvent<HTMLSelectElement>

@@ -5,6 +5,7 @@ import { Team } from "../../types/Team.ts"
 import {
     addDoc,
     collection,
+    deleteDoc,
     doc,
     getDoc,
     onSnapshot,
@@ -105,6 +106,19 @@ export const getNotificationsForUser =
         }
     }
 
+export const deleteNotification = createAsyncThunk(
+    "notificationManagement/deleteNotification",
+    async ({ notificationID }: { notificationID: string }) => {
+        if (!notificationID) return
+
+        try {
+            await deleteDoc(doc(db, "notifications", notificationID))
+        } catch (err) {
+            console.error(err)
+        }
+    }
+)
+
 const notificationManagementSlice = createSlice({
     name: "notificationManagement",
     initialState,
@@ -127,6 +141,18 @@ const notificationManagementSlice = createSlice({
                 state.error = undefined
             })
             .addCase(sendInvite.rejected, (state, action) => {
+                state.status = "failed"
+                state.error = action.error.message
+            })
+            .addCase(deleteNotification.fulfilled, (state) => {
+                state.status = "succeeded"
+                state.error = undefined
+            })
+            .addCase(deleteNotification.pending, (state) => {
+                state.status = "loading"
+                state.error = undefined
+            })
+            .addCase(deleteNotification.rejected, (state, action) => {
                 state.status = "failed"
                 state.error = action.error.message
             })

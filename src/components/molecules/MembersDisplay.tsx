@@ -14,7 +14,7 @@ const MembersDisplay = ({ currentTeam }: MembersDisplayProps) => {
                 <h3>Last access</h3>
             </div>
             {currentTeam?.members.map((member) => (
-                <div className="grid grid-cols-3 items-center">
+                <div key={member.uid} className="grid grid-cols-3 items-center">
                     <div className="flex items-center gap-2">
                         <img
                             className="w-8 h-8 rounded-full"

@@ -61,7 +61,8 @@ export const sendInvite = createAsyncThunk(
                 team: teamData.data() as Team,
                 notificationText: `${
                     user.displayName || user.email
-                } invited you to join ${teamData.data()?.name}`
+                } invited you to join ${teamData.data()?.name}`,
+                teamID: teamData.id
             }
 
             console.log(`Adding new invite - ${newInvitation} - to database`)

@@ -3,21 +3,24 @@ import TeamInvitation from "./TeamInvitation.tsx"
 
 interface Notification {
     teamID: string | undefined
-    userUID: string
+    userUID: string | undefined
     type: NotificationType["type"]
     notificationText: string
+    notificationID: string
 }
 
 const Notification = ({
     notificationText,
     userUID,
     teamID,
-    type
+    type,
+    notificationID
 }: Notification) => {
     return (
         <div className={"flex flex-col"}>
             {type === "invitation" && (
                 <TeamInvitation
+                    notificationID={notificationID}
                     notificationText={notificationText}
                     teamID={teamID}
                     userUID={userUID}

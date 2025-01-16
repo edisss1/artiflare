@@ -16,7 +16,7 @@ const NotificationsContainer = ({
     isContainerOpened,
     closeContainer
 }: NotificationsProps) => {
-    const { notifications, error } = useSelector(
+    const { notifications } = useSelector(
         (state: RootState) => state.notificationManagement
     )
     const dispatch: AppDispatch = useDispatch()
@@ -39,14 +39,22 @@ const NotificationsContainer = ({
             <div className="p-4">
                 <NotificationsContainerHeader onClick={closeContainer} />
 
-                {notifications.map((notification) => (
-                    <Notification
-                        type={notification.type}
-                        notificationText={notification.notificationText}
-                        teamID={notification.team.id}
-                        userUID={notification.senderID}
-                    />
-                ))}
+                {notifications.map((notification) => {
+                    const inviteeID = notification.receiversID.find(
+                        (id) => id === user?.uid
+                    )
+
+                    return (
+                        <Notification
+                            key={notification.id}
+                            type={notification.type}
+                            notificationText={notification.notificationText}
+                            notificationID={notification.id}
+                            teamID={notification.teamID}
+                            userUID={inviteeID}
+                        />
+                    )
+                })}
             </div>
 
             <div className=" p-4 border-t-2 border-typography-light/30 dark:border-typography-dark/30">

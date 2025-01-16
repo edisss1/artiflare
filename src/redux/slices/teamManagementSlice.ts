@@ -5,6 +5,7 @@ import {
     addDoc,
     arrayUnion,
     collection,
+    deleteDoc,
     doc,
     getDoc,
     getDocs,
@@ -125,96 +126,88 @@ export const getTeams = createAsyncThunk(
     }
 )
 
-export const joinTeam = createAsyncThunk(
-    "teamManagement/joinTeam",
-    async ({
-        user,
-        teamID
-    }: {
-        user: User
-        teamID?: string
-        teamTitle?: string
-    }) => {
-        try {
-            await updateDoc(doc(db, "users", user.uid), {
-                teams: arrayUnion(teamID),
-                role: "member"
-            })
-        } catch (err) {
-            console.error(err)
-        }
-    }
-)
+// export const joinTeam = createAsyncThunk(
+//     "teamManagement/joinTeam",
+//     async ({
+//         user,
+//         teamID
+//     }: {
+//         user: User
+//         teamID?: string
+//         teamTitle?: string
+//     }) => {
+//         try {
+//             await updateDoc(doc(db, "users", user.uid), {
+//                 teams: arrayUnion(teamID),
+//                 role: "member"
+//             })
+//         } catch (err) {
+//             console.error(err)
+//         }
+//     }
+// )
 
-export const addNewUsersToTeam = async (
-    user: User | null,
+export const addNewUserToTeam = async (
     teamId: string | undefined,
-    inviteeId: string[]
+    inviteeId: string | undefined
 ) => {
-    if (!user || !teamId || !inviteeId) return
+    if (!teamId || !inviteeId) return
 
     const teamDocRef = doc(db, "teams", teamId)
     const teamDoc = await getDoc(teamDocRef)
-
-    const isOwner = user.teams.some((team) => team.role === "owner")
-
-    if (!isOwner) return
 
     if (teamDoc.exists()) {
         const teamData = teamDoc.data() as Team
 
         const members: TeamMember[] = teamData.members || []
 
-        const inviteeDocsRef = inviteeId.map((inviteeId) =>
-            doc(db, "users", inviteeId)
-        )
+        const inviteeDocRef = doc(db, "users", inviteeId)
 
-        const inviteeDocs = await Promise.all(
-            inviteeDocsRef.map((docRef) => getDoc(docRef))
-        )
+        const inviteeDoc = await getDoc(inviteeDocRef)
 
-        if (inviteeDocs.filter((doc) => doc.exists())) {
-            const inviteesData = inviteeDocs.map((doc) => doc.data() as User)
+        if (inviteeDoc.exists()) {
+            const inviteeData = inviteeDoc.data() as User
+            if (
+                inviteeData.teams.some((team) => team.teamID === teamId) ||
+                teamData.members.some((member) => member.uid === inviteeId)
+            )
+                return
 
-            inviteesData.forEach((inviteeData) => {
-                if (
-                    inviteeData.teams.some(
-                        (team) => team.teamID === user.currentSelectedTeam
-                    )
-                ) {
-                    return
-                }
+            updateDoc(inviteeDocRef, {
+                currentSelectedTeam: teamId
+            })
 
-                inviteeData.teams.push({ teamID: teamId, role: "member" })
-                const inviteeDoc = doc(db, "users", inviteeData.uid)
+            updateDoc(doc(db, "users", inviteeData.uid), {
+                teams: inviteeData.teams
+            })
 
-                updateDoc(inviteeDoc, {
-                    currentSelectedTeam: teamId
-                })
+            const newMember: TeamMember = {
+                uid: inviteeData.uid,
+                role: "member",
+                displayName: inviteeData.displayName || inviteeData.email,
+                img: inviteeData.img,
+                email: inviteeData.email,
+                lastAccessAt: inviteeData.lastAccessAt
+            }
 
-                updateDoc(doc(db, "users", inviteeData.uid), {
-                    teams: inviteeData.teams
-                })
+            members.push(newMember)
 
-                const newMember: TeamMember = {
-                    uid: inviteeData.uid,
-                    role: "member",
-                    displayName: inviteeData.displayName || inviteeData.email,
-                    img: inviteeData.img,
-                    email: inviteeData.email,
-                    lastAccessAt: inviteeData.lastAccessAt
-                }
+            updateDoc(teamDocRef, {
+                members: members
+            })
 
-                members.push(newMember)
-
-                updateDoc(teamDocRef, {
-                    members: members
+            updateDoc(inviteeDocRef, {
+                teams: arrayUnion({
+                    teamID: teamId,
+                    role: "member"
                 })
             })
         } else {
             console.error(`Invitee with ID ${inviteeId} does not exist`)
             return
         }
+
+        console.log(`Added user ${inviteeDoc.id} to team ${teamDoc.id}`)
 
         teamData.members = teamData.members || []
         teamData.members.push()
@@ -225,6 +218,19 @@ export const addNewUsersToTeam = async (
         return
     }
 }
+
+export const deleteNotification = createAsyncThunk(
+    "notificationManagement/deleteNotification",
+    async ({ notificationID }: { notificationID: string }) => {
+        if (!notificationID) return
+
+        try {
+            await deleteDoc(doc(db, "notifications", notificationID))
+        } catch (err) {
+            console.error(err)
+        }
+    }
+)
 
 export const searchUsers = async (queryString: string) => {
     const usersCollectionRef = collection(db, "users")
@@ -350,17 +356,17 @@ const teamManagementSlice = createSlice({
                 state.status = "loading"
                 state.error = undefined
             })
-            .addCase(joinTeam.fulfilled, (state) => {
-                state.status = "succeeded"
-            })
-            .addCase(joinTeam.rejected, (state) => {
-                state.error = "Failed to join team"
-                state.status = "failed"
-            })
-            .addCase(joinTeam.pending, (state) => {
-                state.status = "loading"
-                state.error = undefined
-            })
+            // .addCase(joinTeam.fulfilled, (state) => {
+            //     state.status = "succeeded"
+            // })
+            // .addCase(joinTeam.rejected, (state) => {
+            //     state.error = "Failed to join team"
+            //     state.status = "failed"
+            // })
+            // .addCase(joinTeam.pending, (state) => {
+            //     state.status = "loading"
+            //     state.error = undefined
+            // })
             .addCase(updateCurrentSelectedTeam.fulfilled, (state) => {
                 state.status = "succeeded"
                 state.error = undefined
@@ -381,6 +387,18 @@ const teamManagementSlice = createSlice({
             .addCase(uploadTeamLogo.fulfilled, (state) => {
                 state.error = undefined
                 state.status = "succeeded"
+            })
+            .addCase(deleteNotification.fulfilled, (state) => {
+                state.status = "succeeded"
+                state.error = undefined
+            })
+            .addCase(deleteNotification.pending, (state) => {
+                state.status = "loading"
+                state.error = undefined
+            })
+            .addCase(deleteNotification.rejected, (state, action) => {
+                state.status = "failed"
+                state.error = action.error.message
             })
     }
 })

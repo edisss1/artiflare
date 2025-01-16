@@ -12,4 +12,5 @@ export interface NotificationType {
     timestamp: string
     type: "invitation" | "message"
     team: Team
+    teamID: string
 }

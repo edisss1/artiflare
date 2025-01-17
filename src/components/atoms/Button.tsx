@@ -3,11 +3,23 @@ interface ButtonProps {
     onClick?: () => void
     className: string
     disabled?: boolean
+    ariaLabel?: string
 }
 
-const Button = ({ children, onClick, className, disabled }: ButtonProps) => {
+const Button = ({
+    children,
+    ariaLabel,
+    onClick,
+    className,
+    disabled
+}: ButtonProps) => {
     return (
-        <button disabled={disabled} className={className} onClick={onClick}>
+        <button
+            aria-label={ariaLabel}
+            disabled={disabled}
+            className={className}
+            onClick={onClick}
+        >
             {children}
         </button>
     )

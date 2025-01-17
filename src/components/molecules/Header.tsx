@@ -54,14 +54,17 @@ const Header = ({ plan }: HeaderProps) => {
                 )}
 
                 <div className="flex gap-4 items-center justify-center">
-                    <Button onClick={handleNotificationsOpen} className={"w-8"}>
+                    <Button
+                        ariaLabel="Open notifications"
+                        onClick={handleNotificationsOpen}
+                        className={"w-8"}
+                    >
                         <Bell />
                     </Button>
                     <ThemeSwitch />
                 </div>
             </div>
             <NotificationsContainer
-                notifications={[]}
                 closeContainer={handleNotificationsClose}
                 isContainerOpened={isContainerOpened}
             />

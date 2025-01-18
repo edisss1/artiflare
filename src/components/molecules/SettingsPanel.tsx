@@ -20,7 +20,9 @@ interface SettingsLinksProps {
 
 const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
     const dispatch: AppDispatch = useDispatch()
-    const teams = useSelector((state: RootState) => state.teamManagement.teams)
+    const { teams, currentTeam } = useSelector(
+        (state: RootState) => state.teamManagement
+    )
     const user = useSelector((state: RootState) => state.auth.user)
 
     const navigate = useNavigate()
@@ -76,7 +78,7 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
                         <h2 className={"font-medium mb-2"}>Account</h2>
                         <div>
                             <SettingsLink
-                                path={`/app/settings/team/${user?.currentSelectedTeam}`}
+                                path={`/app/settings/team/${currentTeam?.id}`}
                                 to="Team profile"
                                 icon={<TeamProfileIcon />}
                             />
@@ -87,7 +89,7 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
                         <h2 className={"font-medium mb-2"}>User management</h2>
                         <div>
                             <SettingsLink
-                                path={`/app/settings/team/${user?.currentSelectedTeam}/members`}
+                                path={`/app/settings/team/${currentTeam?.id}/members`}
                                 to="Team members"
                                 icon={<TeamMembersIcon />}
                             />

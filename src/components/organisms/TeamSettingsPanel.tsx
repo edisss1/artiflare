@@ -54,8 +54,7 @@ const TeamSettingsPanel = () => {
             <div className={`flex justify-between w-full max-w-[90%]`}>
                 <div className={"grid gap-2 place-items-start"}>
                     <SettingsInput
-                        defaultValue={newTeamName}
-                        value={newTeamName}
+                        value={currentTeam?.name}
                         onChange={(e) => handleNewTeamName(e)}
                         id="teamName"
                         type="text"
@@ -97,10 +96,12 @@ const TeamSettingsPanel = () => {
                 className={"mt-[clamp(3rem,30vh,9rem)] flex flex-col relative"}
             >
                 <div className={"grid gap-2"}>
-                    <h3 className={"font-medium"}>Delete Profile</h3>
+                    <h3 className={"font-medium"}>
+                        Delete {currentTeam?.name}
+                    </h3>
                     <p>
-                        Deleting the profile will irreversibly remove all your
-                        boards{" "}
+                        Deleting the team will irreversibly remove all its
+                        boards and disband users.
                     </p>
                 </div>
                 <Button

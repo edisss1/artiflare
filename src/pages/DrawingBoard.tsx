@@ -19,6 +19,7 @@ import { updateSelectedShape } from "../utils/updateSelectedShape.ts"
 import ChatContainer from "../components/molecules/ChatContainer.tsx"
 import { handleSelectedShape } from "../utils/shapeHandlers.ts"
 import { shapesListFunc } from "../constants/shapesList.tsx"
+import { shapeKeyboardShortcuts } from "../utils/shapeKeyboardShortcuts.ts"
 
 const DrawingBoard = () => {
     const [canvas, setCanvas] = useState<Canvas | null>(null)
@@ -129,6 +130,14 @@ const DrawingBoard = () => {
         opt.e.preventDefault()
         opt.e.stopPropagation()
     }
+
+    // shortcuts
+
+    useEffect(() => {
+        const cleanup = shapeKeyboardShortcuts(dispatch, selectedShapeRef)
+
+        return cleanup
+    }, [dispatch])
 
     // canvas effects
 

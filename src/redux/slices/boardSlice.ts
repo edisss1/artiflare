@@ -123,10 +123,10 @@ export const getBoardByID = createAsyncThunk(
     async (boardID: string) => {
         try {
             const boardRef = doc(db, "boards", boardID)
-            const docSnap = await getDoc(boardRef)
+            const boardDoc = await getDoc(boardRef)
 
-            if (docSnap.exists()) {
-                const boardData = docSnap.data()
+            if (boardDoc.exists()) {
+                const boardData = boardDoc.data()
 
                 console.log("board doc data", boardData)
 

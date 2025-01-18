@@ -272,7 +272,7 @@ export const getCurrentSelectedTeam = createAsyncThunk(
                 id: currentTeamDoc.id,
                 ...currentTeamDoc.data()
             } as Team
-            console.log(`current team data id: ${currentTeamData.id}`)
+            console.log(`current team  id: ${currentTeamData.id}`)
 
             return currentTeamData
         }

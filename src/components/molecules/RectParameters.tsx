@@ -37,7 +37,7 @@ const RectParameters = ({
     pathScaleValueY
 }: RectParametersProps) => {
     return (
-        <div className="flex gap-2 items-center">
+        <div className="flex flex-col gap-2 items-center">
             {type === "rect" && (
                 <>
                     <SettingsInput

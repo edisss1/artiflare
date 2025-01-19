@@ -27,6 +27,7 @@ const SignUp = () => {
                     <p className="text-xl font-medium">Sign up</p>
                 </div>
                 <Form
+                    isSignUp
                     children={"Sign up"}
                     onSubmit={(e) => handleUserSignUp(e)}
                 />

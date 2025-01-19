@@ -224,15 +224,10 @@ const ShapeParameters = ({
 
     return (
         <aside
-            style={{
-                position: "absolute",
-                top: settingsPosition.top,
-                left: settingsPosition.left
-            }}
             className={`${
                 !selectedObject
                     ? "hidden"
-                    : "flex items-center bg-primary z-40 border-2 border-black p-4 -translate-y-[200%] -translate-x-[50%] text-typography-light"
+                    : "flex flex-col items-center bg-primary z-40 border-2 absolute  top-full left-[90%] border-black p-4 -translate-y-[200%] -translate-x-[50%] text-typography-light"
             }`}
         >
             {selectedObject &&

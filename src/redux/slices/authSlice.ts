@@ -51,16 +51,20 @@ const loadUserFromLocalStorage = (): User | null => {
 
 interface AuthState {
     user: User | null
-    status: "idle" | "authenticated" | "unauthenticated" | "loading"
+    status: "idle" | "authenticated" | "unauthenticated" | "loading" | "failed"
     email: string
     password: string
+    confirmedPassword: string
+    errorCode: string | undefined
 }
 
 const initialState: AuthState = {
     user: loadUserFromLocalStorage(),
     status: "loading",
     password: "",
-    email: ""
+    email: "",
+    confirmedPassword: "",
+    errorCode: undefined
 }
 
 const createDefaultTeam = async (user: User) => {
@@ -132,11 +136,6 @@ export const signInWithGoogle = createAsyncThunk(
 
             return user
         } catch (error) {
-            console.error(
-                (error as Error).message,
-                (error as Error).name,
-                (error as Error).stack
-            )
             throw error
         }
     }
@@ -295,6 +294,9 @@ const authSlice = createSlice({
         },
         setEmail: (state, action: PayloadAction<string>) => {
             state.email = action.payload
+        },
+        setConfirmedPassword: (state, action: PayloadAction<string>) => {
+            state.confirmedPassword = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -304,40 +306,60 @@ const authSlice = createSlice({
                 (state, action: PayloadAction<User>) => {
                     state.user = action.payload
                     state.status = "authenticated"
+                    state.errorCode = undefined
                 }
             )
             .addCase(signInWithGoogle.pending, (state) => {
                 state.status = "loading"
+                state.errorCode = undefined
             })
-            .addCase(signInWithGoogle.rejected, (state) => {
+            .addCase(signInWithGoogle.rejected, (state, action) => {
                 state.user = null
                 state.status = "unauthenticated"
+                state.errorCode = action.error.code
             })
             .addCase(signOutUser.fulfilled, (state) => {
                 state.user = null
                 state.status = "unauthenticated"
+                state.errorCode = undefined
             })
             .addCase(
                 signInWithCredentials.fulfilled,
                 (state, action: PayloadAction<User>) => {
                     state.user = action.payload
                     state.status = "authenticated"
+                    state.errorCode = undefined
                 }
             )
+            .addCase(signInWithCredentials.rejected, (state, action) => {
+                state.status = "failed"
+                state.errorCode = action.error.code
+            })
             .addCase(
                 createUserWithCredentials.fulfilled,
                 (state, action: PayloadAction<User>) => {
                     state.user = action.payload
                     state.status = "authenticated"
+                    state.errorCode = undefined
                 }
             )
+            .addCase(createUserWithCredentials.rejected, (state, action) => {
+                state.errorCode = action.error.code
+            })
             .addCase(deleteUserFromDatabase.fulfilled, (state) => {
                 state.user = null
                 state.status = "unauthenticated"
+                state.errorCode = undefined
             })
     }
 })
 
-export const { setUser, clearUser, setEmail, setPassword } = authSlice.actions
+export const {
+    setUser,
+    clearUser,
+    setEmail,
+    setPassword,
+    setConfirmedPassword
+} = authSlice.actions
 
 export default authSlice.reducer

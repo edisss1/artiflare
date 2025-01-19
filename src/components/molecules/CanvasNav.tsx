@@ -15,7 +15,7 @@ const CanvasNav = () => {
                     Artiflare
                 </Link>
                 <span>{">"}</span>
-                <p className="max-w-[150px] w-full truncate">
+                <p className="max-w-[150px] text-lg w-full truncate">
                     {currentBoard?.boardTitle}
                 </p>
             </div>

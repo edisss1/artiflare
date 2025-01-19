@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
 import Loading from "./components/atoms/Loading"
+import TermsOfService from "./pages/TermsOfService.tsx"
 const SettingsDashboard = lazy(() => import("./pages/SettingsDashboard"))
 const UserSettingsPanel = lazy(
     () => import("./components/organisms/UserSettingsPanel.tsx")
@@ -55,6 +56,7 @@ function Router() {
                         />
                     </Route>
                 </Route>
+                <Route path="/terms" element={<TermsOfService />} />
             </Routes>
         </Suspense>
     )

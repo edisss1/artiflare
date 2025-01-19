@@ -17,6 +17,10 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
     const navigate = useNavigate()
 
     useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [location])
+
+    useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
                 try {

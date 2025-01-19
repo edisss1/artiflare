@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import Anchor from "../atoms/Anchor"
 import ScrollTo from "../atoms/ScrollTo"
 import ThemeSwitch from "../atoms/ThemeSwitch"
@@ -6,7 +7,9 @@ import ChevronIcon from "../icons/ChevronIcon"
 const NavBar = () => {
     return (
         <nav className="w-full max-w-[50%] max-lg:max-w-[100%] text-typography-light dark:text-typography-dark items-center flex justify-between mx-auto bg-primary dark:bg-primary-dark mt-9 px-6 py-4 rounded-md">
-            <h1 className="text-xl ">Artiflare</h1>
+            <Link to={"/"} className="text-xl ">
+                Artiflare
+            </Link>
             <div className="flex gap-4 items-center">
                 <div className={"flex gap-2 items-center justify-center "}>
                     <Anchor

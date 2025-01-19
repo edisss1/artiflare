@@ -4,14 +4,20 @@ import AuthWithProviders from "../atoms/AuthWithProviders"
 import Form from "./Form"
 import { Link } from "react-router-dom"
 import { createUserWithCredentials } from "../../redux/slices/authSlice"
+import { useState } from "react"
 
 const SignUp = () => {
     const dispatch: AppDispatch = useDispatch()
-    const { email, password } = useSelector((state: RootState) => state.auth)
+    const { email, password, confirmedPassword, errorCode } = useSelector(
+        (state: RootState) => state.auth
+    )
+    const [isAgreed, setIsAgreed] = useState(false)
 
     const handleUserSignUp = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
-        dispatch(createUserWithCredentials({ email, password }))
+        if (isAgreed && confirmedPassword && email && password) {
+            dispatch(createUserWithCredentials({ email, password }))
+        }
     }
 
     return (
@@ -27,6 +33,12 @@ const SignUp = () => {
                     <p className="text-xl font-medium">Sign up</p>
                 </div>
                 <Form
+                    isAgreed={isAgreed}
+                    email={email}
+                    password={password}
+                    confirmedPassword={confirmedPassword}
+                    errorCode={errorCode}
+                    setIsAgreed={setIsAgreed}
                     isSignUp
                     children={"Sign up"}
                     onSubmit={(e) => handleUserSignUp(e)}

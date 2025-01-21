@@ -5,6 +5,7 @@ import Form from "./Form"
 import { Link } from "react-router-dom"
 import { createUserWithCredentials } from "../../redux/slices/authSlice"
 import { useState } from "react"
+import H2 from "../atoms/H2"
 
 const SignUp = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -27,9 +28,7 @@ const SignUp = () => {
         >
             <div className="flex flex-col items-center w-full max-w-[400px]">
                 <div className="flex flex-col gap-2 max-w-[200px] items-center">
-                    <h2 className="text-typography-light dark:text-typography-dark text-3xl font-bold">
-                        Artiflare
-                    </h2>
+                    <H2>Artiflare</H2>
                     <p className="text-xl font-medium">Sign up</p>
                 </div>
                 <Form

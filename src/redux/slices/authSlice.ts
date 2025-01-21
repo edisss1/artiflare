@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import {
     deleteUser,
     reauthenticateWithPopup,
+    sendPasswordResetEmail,
     signInWithEmailAndPassword,
     signInWithPopup,
     signOut
@@ -277,6 +278,18 @@ export const deleteUserFromDatabase = createAsyncThunk(
     }
 )
 
+export const resetPassword = createAsyncThunk(
+    "auth/resetPassword",
+    async (email: string) => {
+        sendPasswordResetEmail(auth, email)
+            .then(() => alert("Password reset email sent."))
+            .catch((err) => {
+                console.error(err)
+                alert("Error sending password reset email.")
+            })
+    }
+)
+
 const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -350,6 +363,16 @@ const authSlice = createSlice({
                 state.user = null
                 state.status = "unauthenticated"
                 state.errorCode = undefined
+            })
+            .addCase(resetPassword.fulfilled, (state) => {
+                state.errorCode = undefined
+            })
+            .addCase(resetPassword.pending, (state) => {
+                state.errorCode = undefined
+            })
+            .addCase(resetPassword.rejected, (state, action) => {
+                state.errorCode = action.error.code
+                state.status = "failed"
             })
     }
 })

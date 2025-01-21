@@ -46,8 +46,6 @@ const Form = ({
 
     useEffect(() => {
         setErrorMessage(handleAuthError(errorCode))
-
-        console.log("infinite")
     }, [errorCode])
 
     const passwordMatch = password === confirmedPassword && isSignUp
@@ -109,6 +107,14 @@ const Form = ({
                             </Link>
                         </div>
                     </div>
+                )}
+                {!isSignUp && (
+                    <Link
+                        className="self-end text-typography-light opacity-60 hover:opacity-100 dark:text-typography-dark transition-opacity duration-150"
+                        to={"/auth/reset-password"}
+                    >
+                        Forgot password?
+                    </Link>
                 )}
                 {!passwordMatch && confirmedPassword && (
                     <p className="text-danger text-sm block ">

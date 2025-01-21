@@ -34,7 +34,7 @@ const Footer = () => {
                         <h4 className={"font-medium text-xl mb-2"}>Legal</h4>
                         <div className={"grid gap-2"}>
                             <Link to={"/terms"}>Terms of Service</Link>
-                            <p>Privacy policy</p>
+                            <Link to={"/privacy"}>Privacy policy</Link>
                         </div>
                     </div>
                 </div>

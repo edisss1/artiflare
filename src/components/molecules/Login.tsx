@@ -5,10 +5,13 @@ import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import { signInWithCredentials } from "../../redux/slices/authSlice"
+import H2 from "../atoms/H2"
 
 const Login = () => {
     const dispatch: AppDispatch = useDispatch()
-    const { email, password } = useSelector((state: RootState) => state.auth)
+    const { email, password, errorCode } = useSelector(
+        (state: RootState) => state.auth
+    )
 
     const handleUserSignIn = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -22,16 +25,18 @@ const Login = () => {
         >
             <div className="flex flex-col items-center w-full max-w-[400px]">
                 <div className="flex flex-col gap-2 max-w-[200px] items-center">
-                    <h2 className="text-typography-light dark:text-typography-dark text-3xl font-bold">
-                        Artiflare
-                    </h2>
+                    <H2>Artiflare</H2>
                     <p className="text-xl font-medium">Login</p>
                 </div>
                 <Form
+                    email={email}
+                    password={password}
+                    errorCode={errorCode}
                     isSignUp={false}
                     children={"Log in"}
                     onSubmit={(e) => handleUserSignIn(e)}
                 />
+
                 <AuthWithProviders />
                 <div className="flex gap-2 mt-6 mb-9">
                     <p>Don't have an account?</p>

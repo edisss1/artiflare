@@ -63,6 +63,7 @@ const BoardsContainer = ({ boards }: BoardsContainerProps) => {
             )}
             {paginatedBoards?.map((board) => (
                 <Board
+                    isFavorite={board.isFavorite}
                     createdBy={board.createdBy}
                     updatedAt={board.updatedAt}
                     id={board.id}

@@ -1,9 +1,13 @@
-const FavoritesIcon = () => {
+interface FavoritesIconProps {
+    fill?: string
+}
+
+const FavoritesIcon = ({ fill }: FavoritesIconProps) => {
     return (
         <svg
-            className="[&>*]:stroke-bg-dark dark:[&>*]:stroke-bg-light"
-            width="18"
-            height="18"
+            className={`[&>*]:stroke-bg-dark dark:[&>*]:stroke-bg-light ${fill}`}
+            width="20"
+            height="20"
             viewBox="0 0 18 18"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

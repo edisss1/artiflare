@@ -172,10 +172,24 @@ export const updateBoard = createAsyncThunk(
 
 export const addBoardToFavorites = createAsyncThunk(
     "board/addBoardToFavorites",
-    async (boardID: string) => {
+    async (boardID: string | undefined) => {
         try {
+            if (!boardID) return
             const boardRef = doc(db, "boards", boardID)
             await updateDoc(boardRef, { isFavorite: true })
+        } catch (err) {
+            throw new Error(err as string)
+        }
+    }
+)
+
+export const removeBoardsFromFavorites = createAsyncThunk(
+    "board/removeBoardsFromFavorites",
+    async (boardID: string | undefined) => {
+        try {
+            if (!boardID) return
+            const boardRef = doc(db, "boards", boardID)
+            await updateDoc(boardRef, { isFavorite: false })
         } catch (err) {
             throw new Error(err as string)
         }
@@ -189,8 +203,6 @@ export const getRecentBoards = (userID: string) => (dispatch: AppDispatch) => {
         const timeFrameStart = new Date(
             currentTime.getTime() - 24 * 60 * 60 * 1000
         ).toISOString()
-
-        console.log(`Time frame start: ${timeFrameStart}`)
 
         const boardsRef = collection(db, "boards")
         const q = query(
@@ -207,8 +219,6 @@ export const getRecentBoards = (userID: string) => (dispatch: AppDispatch) => {
                         ...doc.data()
                     } as Board)
             )
-            console.dir(snapshot.docs)
-            console.log("Acquired boards: ", recentBoards)
 
             dispatch(updateRecentBoards(recentBoards))
         })
@@ -217,6 +227,33 @@ export const getRecentBoards = (userID: string) => (dispatch: AppDispatch) => {
         throw new Error(err as string)
     }
 }
+
+export const getFavoriteBoards =
+    (userID: string) => (dispatch: AppDispatch) => {
+        try {
+            const boardsRef = collection(db, "boards")
+            const q = query(
+                boardsRef,
+                where("isFavorite", "==", true),
+                where("userUID", "==", userID)
+            )
+
+            return onSnapshot(q, (snapshot) => {
+                const favoriteBoards: Board[] = snapshot.docs.map(
+                    (doc) =>
+                        ({
+                            id: doc.id,
+                            ...doc.data()
+                        } as Board)
+                )
+
+                dispatch(updateFavoriteBoards(favoriteBoards))
+            })
+        } catch (err) {
+            console.error(err)
+            throw new Error(err as string)
+        }
+    }
 
 export const deleteBoard = createAsyncThunk(
     "board/deleteBoard",
@@ -254,6 +291,9 @@ const boardSlice = createSlice({
         },
         updateSortedBy: (state, action: PayloadAction<string>) => {
             state.sortedBy = action.payload
+        },
+        updateFavoriteBoards: (state, action: PayloadAction<Board[]>) => {
+            state.favoriteBoards = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -329,7 +369,8 @@ export const {
     updateBoards,
     setBoardsPerPage,
     updateSortedBy,
-    updateRecentBoards
+    updateRecentBoards,
+    updateFavoriteBoards
 } = boardSlice.actions
 
 export default boardSlice.reducer

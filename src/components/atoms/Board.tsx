@@ -1,12 +1,18 @@
 import { Link } from "react-router-dom"
 import Button from "./Button"
-import favorite from "../../assets/Favorite.svg"
-import more from "../../assets/More.svg"
+import FavoritesIcon from "../icons/FavoritesIcon"
 import { formatRelativeDate } from "../../utils/formatRelativeDate"
 import Popover from "./Popover"
 import PopoverBoardContent from "../molecules/PopoverBoardContent"
 import { useRef, useState } from "react"
 import { togglePopover } from "../../utils/togglePopover"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "../../redux/store"
+import {
+    addBoardToFavorites,
+    removeBoardsFromFavorites
+} from "../../redux/slices/boardSlice"
+import MoreIcon from "../icons/MoreIcon"
 
 interface BoardProps {
     id: string | undefined
@@ -14,9 +20,18 @@ interface BoardProps {
     createdBy: string | null
     modifiedBy: string | null
     updatedAt: string | null
+    isFavorite: boolean
 }
 
-const Board = ({ id, title, createdBy, modifiedBy, updatedAt }: BoardProps) => {
+const Board = ({
+    id,
+    title,
+    createdBy,
+    modifiedBy,
+    updatedAt,
+    isFavorite
+}: BoardProps) => {
+    const dispatch: AppDispatch = useDispatch()
     const popoverRef = useRef<HTMLDivElement | null>(null)
     const [isPopoverOpen, setIsPopoverOpen] = useState(false)
     const winowWidth = window.innerWidth
@@ -48,18 +63,28 @@ const Board = ({ id, title, createdBy, modifiedBy, updatedAt }: BoardProps) => {
                 } max-xl:opacity-100 group-hover:opacity-100 transition-opacity duration-150`}
             >
                 <Button
-                    onClick={() => alert("WIP")}
-                    className="hover:bg-slate-200 transition-colors duration-150 w-8 h-8 flex items-center justify-center rounded-sm"
+                    onClick={() =>
+                        !isFavorite
+                            ? dispatch(addBoardToFavorites(id))
+                            : dispatch(removeBoardsFromFavorites(id))
+                    }
+                    className={`hover:bg-typography-dark/10 transition-colors duration-150 w-8 h-8 flex items-center justify-center rounded-sm `}
                 >
-                    <img className="w-6" src={favorite} alt="" />
+                    <FavoritesIcon
+                        fill={`${
+                            isFavorite
+                                ? "fill-typography-light dark:fill-typography-dark "
+                                : ""
+                        }`}
+                    />
                 </Button>
                 <Button
                     onClick={() =>
                         togglePopover(isPopoverOpen, setIsPopoverOpen)
                     }
-                    className="relative hover:bg-slate-200 transition-colors duration-150 w-8 h-8 flex items-center justify-center rounded-sm"
+                    className="relative hover:bg-typography-dark/10 transition-colors duration-150 w-8 h-8 flex items-center justify-center rounded-sm"
                 >
-                    <img className="w-6" src={more} alt="" />
+                    <MoreIcon />
                 </Button>
                 <Popover
                     popoverRef={popoverRef}

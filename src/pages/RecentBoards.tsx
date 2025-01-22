@@ -1,25 +1,23 @@
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import DashboardContainer from "../components/atoms/DashboardContainer"
 import BoardsContainer from "../components/molecules/BoardsContainer"
 import BoardsManagement from "../components/molecules/BoardsManagement"
 import Header from "../components/molecules/Header"
 import DashboardSidebar from "../components/organisms/DashboardSidebar"
 import { AppDispatch, RootState } from "../redux/store"
-import { useSelector } from "react-redux"
+import { getRecentBoards } from "../redux/slices/boardSlice"
 import { useEffect } from "react"
-import { getFavoriteBoards } from "../redux/slices/boardSlice"
 
-const FavoriteBoards = () => {
+const RecentBoards = () => {
     const dispatch: AppDispatch = useDispatch()
     const { user } = useSelector((state: RootState) => state.auth)
-
-    const favoriteBoards = useSelector(
-        (state: RootState) => state.boards.favoriteBoards
+    const recentBoards = useSelector(
+        (state: RootState) => state.boards.recentBoards
     )
 
     useEffect(() => {
         if (user) {
-            const unsubscribe = dispatch(getFavoriteBoards(user.uid))
+            const unsubscribe = dispatch(getRecentBoards(user.uid))
 
             return () => unsubscribe()
         }
@@ -30,10 +28,10 @@ const FavoriteBoards = () => {
             <DashboardSidebar />
             <DashboardContainer>
                 <Header plan="pro" />
-                <BoardsManagement title="Favorite boards" />
-                <BoardsContainer boards={favoriteBoards} />
+                <BoardsManagement title="Recently modified boards" />
+                <BoardsContainer boards={recentBoards} />
             </DashboardContainer>
         </main>
     )
 }
-export default FavoriteBoards
+export default RecentBoards

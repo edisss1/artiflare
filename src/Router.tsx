@@ -17,9 +17,7 @@ const TeamMembersSettingsPanel = lazy(
     () => import("./components/organisms/TeamMembersSettingsPanel.tsx")
 )
 const FavoriteBoards = lazy(() => import("./pages/FavoriteBoards.tsx"))
-const DashboardRecent = lazy(
-    () => import("./components/organisms/DashboardRecent.tsx")
-)
+const RecentBoards = lazy(() => import("./pages/RecentBoards.tsx"))
 const Home = lazy(() => import("./pages/Home"))
 const Auth = lazy(() => import("./pages/Auth"))
 const Login = lazy(() => import("./components/molecules/Login"))
@@ -43,7 +41,7 @@ function Router() {
                 </Route>
                 <Route path="/app">
                     <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="recent" element={<DashboardRecent />} />
+                    <Route path="recent" element={<RecentBoards />} />
                     <Route path="favorites" element={<FavoriteBoards />} />
                     <Route
                         path="board/:boardID"

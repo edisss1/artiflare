@@ -1,5 +1,6 @@
 import React from "react"
 import ChevronIcon from "../icons/ChevronIcon"
+import { User } from "firebase/auth"
 
 interface SettingsSelectProps {
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
@@ -13,8 +14,8 @@ const SettingsSelect = ({ onChange, options }: SettingsSelectProps) => {
                 className="appearance-none w-full outline-none bg-transparent truncate w-calc(100%)  py-[0.9375rem] ps-3 rounded-md"
                 onChange={onChange}
             >
-                {options.map((option) => (
-                    <option key={option.label} value={option.value}>
+                {options.map((option, index) => (
+                    <option key={index} value={option.value}>
                         {option.label}
                     </option>
                 ))}

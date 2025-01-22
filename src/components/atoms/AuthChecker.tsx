@@ -2,12 +2,12 @@ import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { onAuthStateChanged } from "firebase/auth"
 import { auth, db } from "../../firestore/firebaseConfig"
-import { User as LoggedUser } from "../../types/User"
+import { User as LoggedUser, User } from "../../types/User"
 import { setUser } from "../../redux/slices/authSlice"
 import { RootState } from "../../redux/store"
 import { doc, getDoc, updateDoc } from "firebase/firestore"
 import Loading from "./Loading"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { Team } from "../../types/Team"
 
 const AuthChecker = ({ children }: { children: React.ReactNode }) => {
@@ -15,6 +15,7 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
     const { user, status } = useSelector((state: RootState) => state.auth)
     const location = useLocation()
     const navigate = useNavigate()
+    const { boardID } = useParams()
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -26,7 +27,20 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                 try {
                     const userDocRef = doc(db, "users", firebaseUser.uid)
                     const userDoc = await getDoc(userDocRef)
-                    const userData = userDoc.data()
+                    const userData = userDoc.data() as User
+                    // const isMemberOfBoard = userData?.boards.some(
+                    //     (board) => board.id === boardID
+                    // )
+
+                    const isEmailVerifiedInFirestore = userData?.emailVerified
+                    const isEmailVerifiedInAuth = firebaseUser.emailVerified
+
+                    if (isEmailVerifiedInAuth && !isEmailVerifiedInFirestore) {
+                        // Update emailVerified in Firestore if needed
+                        await updateDoc(userDocRef, {
+                            emailVerified: true
+                        })
+                    }
 
                     const currentTeamDocRef = doc(
                         db,
@@ -42,7 +56,8 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                         teams: userData?.teams || [],
                         boards: userData?.boards || [],
                         currentSelectedTeam: userData?.currentSelectedTeam,
-                        lastAccessAt: userData?.lastAccessAt
+                        lastAccessAt: userData?.lastAccessAt,
+                        emailVerified: firebaseUser.emailVerified
                     }
 
                     const currentTeamSnap = await getDoc(currentTeamDocRef)
@@ -82,6 +97,17 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         if (status === "authenticated" && user) {
             if (
+                !user.emailVerified &&
+                location.pathname.startsWith("/app") &&
+                location.pathname !== "/auth/email-verification"
+            ) {
+                navigate("/auth/email-verification", { replace: true })
+            } else if (
+                user.emailVerified &&
+                location.pathname === "/auth/email-verification"
+            ) {
+                navigate("/app/dashboard", { replace: true })
+            } else if (
                 location.pathname === "/auth/signup" ||
                 location.pathname === "/auth/login" ||
                 location.pathname === "/"
@@ -89,8 +115,11 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                 navigate("/app/dashboard", { replace: true })
             }
         } else if (status === "unauthenticated") {
-            if (!location.pathname.startsWith("/")) {
-                navigate("/", { replace: true })
+            if (
+                !location.pathname.startsWith("/") ||
+                location.pathname.startsWith("/app")
+            ) {
+                navigate("/auth/signup", { replace: true })
             }
         }
     }, [status, user, location.pathname, navigate])

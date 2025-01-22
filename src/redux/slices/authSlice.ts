@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import {
     deleteUser,
     reauthenticateWithPopup,
+    sendEmailVerification,
     sendPasswordResetEmail,
     signInWithEmailAndPassword,
     signInWithPopup,
@@ -123,7 +124,8 @@ export const signInWithGoogle = createAsyncThunk(
                 teams: userData?.teams || [],
                 boards: userData?.boards || [],
                 currentSelectedTeam: userData?.currentSelectedTeam || "",
-                lastAccessAt: new Date().toDateString()
+                lastAccessAt: new Date().toDateString(),
+                emailVerified: result.user.emailVerified
             }
 
             await setDoc(doc(db, "users", user.uid), user)
@@ -160,7 +162,8 @@ export const signInWithCredentials = createAsyncThunk(
                 teams: [],
                 boards: [],
                 currentSelectedTeam: "",
-                lastAccessAt: new Date().toDateString()
+                lastAccessAt: new Date().toDateString(),
+                emailVerified: result.user.emailVerified
             }
 
             await setDoc(doc(db, "users", user.uid), user)
@@ -198,9 +201,11 @@ export const createUserWithCredentials = createAsyncThunk(
                 teams: [],
                 boards: [],
                 currentSelectedTeam: "",
-                lastAccessAt: new Date().toDateString()
+                lastAccessAt: new Date().toDateString(),
+                emailVerified: result.user.emailVerified
             }
-            console.log(user)
+
+            sendEmailVerification(result.user)
 
             await setDoc(doc(db, "users", user.uid), user)
 

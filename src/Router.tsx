@@ -4,6 +4,8 @@ import Loading from "./components/atoms/Loading"
 import TermsOfService from "./pages/TermsOfService.tsx"
 import PrivacyPolicy from "./pages/PrivacyPolicy.tsx"
 import ResetPassword from "./components/molecules/ResetPassword.tsx"
+import AuthChecker from "./components/atoms/AuthChecker.tsx"
+import EmailVerification from "./pages/EmailVerification.tsx"
 const SettingsDashboard = lazy(() => import("./pages/SettingsDashboard"))
 const UserSettingsPanel = lazy(
     () => import("./components/organisms/UserSettingsPanel.tsx")
@@ -34,12 +36,23 @@ function Router() {
                     <Route path="login" element={<Login />} />
                     <Route path="signup" element={<SignUp />} />
                     <Route path="reset-password" element={<ResetPassword />} />
+                    <Route
+                        path="email-verification"
+                        element={<EmailVerification />}
+                    />
                 </Route>
                 <Route path="/app">
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="recent" element={<DashboardRecent />} />
                     <Route path="favorites" element={<FavoriteBoards />} />
-                    <Route path="board/:boardID" element={<DrawingBoard />} />
+                    <Route
+                        path="board/:boardID"
+                        element={
+                            <AuthChecker>
+                                <DrawingBoard />
+                            </AuthChecker>
+                        }
+                    />
                     <Route path="settings/" element={<SettingsDashboard />}>
                         <Route
                             path="profile/:userID"

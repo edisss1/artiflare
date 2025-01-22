@@ -7,4 +7,5 @@ export interface User {
     boards: string[]
     currentSelectedTeam: string
     lastAccessAt?: string
+    emailVerified: boolean
 }

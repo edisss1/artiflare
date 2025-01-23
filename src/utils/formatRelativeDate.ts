@@ -1,28 +1,20 @@
-export const formatRelativeDate = (
-    lastAccess: string | Date | undefined
-): string => {
-    const lastAccessDate =
-        typeof lastAccess === "string" ? new Date(lastAccess) : lastAccess
+export const formatRelativeDate = (lastAccess: string): string => {
+    const lastAccessDate = new Date(lastAccess)
+    if (isNaN(lastAccessDate.getTime())) return "Never"
+
     const now = new Date()
 
-    if (!lastAccessDate) return "Never"
-
-    // Get local date representations without time
-    const lastAccessLocalDate = new Date(lastAccessDate)
-    const nowLocalDate = new Date(now.toLocaleDateString())
-
-    // Calculate difference in days
-    const diffTime = nowLocalDate.getTime() - lastAccessLocalDate.getTime()
-    const diffDays = diffTime / (1000 * 60 * 60 * 24)
+    const diffTime = now.getTime() - lastAccessDate.getTime()
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
 
     if (diffDays === 0) {
         return "Today"
     } else if (diffDays === 1) {
         return "Yesterday"
     } else if (diffDays < 7) {
-        return `${Math.floor(diffDays)} days ago`
+        return `${diffDays} days ago`
     } else {
-        return new Intl.DateTimeFormat("en-UK", {
+        return new Intl.DateTimeFormat("en-GB", {
             weekday: "short",
             month: "short",
             day: "numeric",
@@ -30,7 +22,8 @@ export const formatRelativeDate = (
             hour: "numeric",
             minute: "numeric",
             second: "numeric",
-            hour12: true
+            hour12: true,
+            timeZone: "Europe/Amsterdam" // Specify the desired time zone
         }).format(lastAccessDate)
     }
 }

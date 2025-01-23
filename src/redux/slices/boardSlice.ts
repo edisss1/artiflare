@@ -59,8 +59,8 @@ export const createBoard = createAsyncThunk(
                     boardTitle,
                     userUID: user.uid,
                     teamID: currentTeam!,
-                    createdAt: new Date().toString(),
-                    updatedAt: new Date().toString(),
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
                     createdBy: user.displayName || user.email,
                     modifiedBy: user.displayName || user.email,
                     data: {},
@@ -338,7 +338,7 @@ const boardSlice = createSlice({
                 state.status = "succeeded"
                 if (state.currentBoard) {
                     state.currentBoard.data = action.payload.newBoardData
-                    state.currentBoard.updatedAt = new Date().toString()
+                    state.currentBoard.updatedAt = new Date().toISOString()
                 }
             })
             .addCase(updateBoard.rejected, (state, action) => {

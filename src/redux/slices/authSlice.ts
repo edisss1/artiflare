@@ -124,7 +124,7 @@ export const signInWithGoogle = createAsyncThunk(
                 teams: userData?.teams || [],
                 boards: userData?.boards || [],
                 currentSelectedTeam: userData?.currentSelectedTeam || "",
-                lastAccessAt: new Date().toDateString(),
+                lastAccessAt: new Date().toISOString(),
                 emailVerified: result.user.emailVerified
             }
 
@@ -162,7 +162,7 @@ export const signInWithCredentials = createAsyncThunk(
                 teams: [],
                 boards: [],
                 currentSelectedTeam: "",
-                lastAccessAt: new Date().toDateString(),
+                lastAccessAt: new Date().toISOString(),
                 emailVerified: result.user.emailVerified
             }
 
@@ -201,7 +201,7 @@ export const createUserWithCredentials = createAsyncThunk(
                 teams: [],
                 boards: [],
                 currentSelectedTeam: "",
-                lastAccessAt: new Date().toDateString(),
+                lastAccessAt: new Date().toISOString(),
                 emailVerified: result.user.emailVerified
             }
 

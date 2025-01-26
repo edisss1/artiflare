@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom"
 import Typewriter from "../atoms/Typewriter"
+import { useTranslation } from "react-i18next"
 
 const CallToAction = () => {
+    const { t } = useTranslation()
+
     const gradientStyles =
         "bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-transparent bg-clip-text"
     return (
@@ -12,7 +15,8 @@ const CallToAction = () => {
                 }
             >
                 <Typewriter
-                    text="Start collaborating creatively with your team in real time"
+                    // text="Start collaborating creatively with your team in real time"
+                    text={t("callToAction")}
                     delay={20}
                     styles={[{ range: [19, 29], className: gradientStyles }]}
                 />

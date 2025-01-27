@@ -4,12 +4,15 @@ import { resources } from "../localization/resources"
 
 i18n.use(initReactI18next).init({
     resources,
-
+    lng: localStorage.getItem("language") || "en",
     fallbackLng: "en",
     interpolation: {
         escapeValue: false
     },
-    lng: "en"
+    detection: {
+        order: ["localStorage", "navigator"],
+        caches: ["localStorage"]
+    }
 })
 
 export default i18n

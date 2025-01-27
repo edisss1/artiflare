@@ -6,6 +6,7 @@ import userManagementReducer from "./slices/userManagementSlice.ts"
 import teamManagementReducer from "./slices/teamManagementSlice"
 import miscStatesReducer from "./slices/miscStatesSlice"
 import notificationManagementReducer from "./slices/notificationManagementSlice"
+import languageReducer from "./slices/languageSlice"
 
 export const store = configureStore({
     reducer: {
@@ -15,7 +16,8 @@ export const store = configureStore({
         userManagement: userManagementReducer,
         teamManagement: teamManagementReducer,
         miscStates: miscStatesReducer,
-        notificationManagement: notificationManagementReducer
+        notificationManagement: notificationManagementReducer,
+        language: languageReducer
     }
 })
 

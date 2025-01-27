@@ -11,6 +11,7 @@ import Button from "../atoms/Button"
 import { Link, useLocation } from "react-router-dom"
 import { handleAuthError } from "../../utils/handleAuthError"
 import Checkbox from "../atoms/Checkbox"
+import { useTranslation } from "react-i18next"
 
 interface FormProps {
     onSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void
@@ -37,6 +38,7 @@ const Form = ({
     setIsAgreed
 }: FormProps) => {
     const dispatch: AppDispatch = useDispatch()
+    const { t } = useTranslation()
 
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
         undefined
@@ -72,7 +74,7 @@ const Form = ({
                     isIncorrect={!passwordMatch && isSignUp}
                     value={password}
                     onChange={(e) => dispatch(setPassword(e.target.value))}
-                    placeholder="password"
+                    placeholder={t("password").toLowerCase()}
                     type="password"
                     autoComplete="current-password"
                 />
@@ -83,7 +85,7 @@ const Form = ({
                         onChange={(e) =>
                             dispatch(setConfirmedPassword(e.target.value))
                         }
-                        placeholder="confirm your password"
+                        placeholder={t("confirmPassword").toLowerCase()}
                         type="password"
                     />
                 )}
@@ -97,13 +99,13 @@ const Form = ({
                             id="terms"
                         />
                         <div className="flex gap-1 items-center">
-                            <span>I agree to the</span>
+                            <span>{t("iAgreeToThe")}</span>
                             <Link
                                 className="relative after:content-[''] after:w-full after:h-px after:bg-typography-light after:absolute after:top-full after:left-0 after:dark:bg-typography-dark hover:after:scale-x-0 after:origin-center
                                 after:transition-all"
                                 to={"/terms"}
                             >
-                                Terms of service
+                                {t("termsOfService")}
                             </Link>
                         </div>
                     </div>
@@ -113,7 +115,7 @@ const Form = ({
                         className="self-end text-typography-light opacity-60 hover:opacity-100 dark:text-typography-dark transition-opacity duration-150"
                         to={"/auth/reset-password"}
                     >
-                        Forgot password?
+                        {t("forgotPassword")}
                     </Link>
                 )}
                 {!passwordMatch && confirmedPassword && (

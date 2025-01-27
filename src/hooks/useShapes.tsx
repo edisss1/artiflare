@@ -7,23 +7,9 @@ import {
     Polygon,
     Line,
     FabricText,
-    Group,
-    Path,
-    FabricObject,
-    GroupProps
+    Path
 } from "fabric"
-
-class NamedGroup extends Group {
-    name: string
-    constructor(
-        objects: FabricObject[],
-        options: Partial<GroupProps>,
-        name: string
-    ) {
-        super(objects, options)
-        this.name = name
-    }
-}
+import { NamedGroup } from "../fabric-extensions/NamedGroup"
 
 export function useShapes(canvas: Canvas | null) {
     const addProcess = (x: number, y: number, stroke: string) => {

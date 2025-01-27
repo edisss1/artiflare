@@ -1,3 +1,4 @@
+import { t } from "i18next"
 import { Team } from "../../types/Team"
 import { formatRelativeDate } from "../../utils/formatRelativeDate"
 
@@ -9,9 +10,9 @@ const MembersDisplay = ({ currentTeam }: MembersDisplayProps) => {
     return (
         <div className="flex flex-col gap-2 mx-8 mt-8">
             <div className="grid grid-cols-3">
-                <h3>Name</h3>
-                <h3>Role</h3>
-                <h3>Last access</h3>
+                <h3>{t("name")}</h3>
+                <h3>{t("role")}</h3>
+                <h3>{t("lastAccess")}</h3>
             </div>
             {currentTeam?.members.map((member) => (
                 <div key={member.uid} className="grid grid-cols-3 items-center">
@@ -30,7 +31,7 @@ const MembersDisplay = ({ currentTeam }: MembersDisplayProps) => {
                         <span className="capitalize">{member.role}</span>
                     </div>
                     <div className="col-start-3">
-                        <span>{formatRelativeDate(member.lastAccessAt)}</span>
+                        <span>{formatRelativeDate(member.lastAccessAt!)}</span>
                     </div>
                 </div>
             ))}

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom"
 import { createUserWithCredentials } from "../../redux/slices/authSlice"
 import { useState } from "react"
 import H2 from "../atoms/H2"
+import { useTranslation } from "react-i18next"
 
 const SignUp = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -13,6 +14,7 @@ const SignUp = () => {
         (state: RootState) => state.auth
     )
     const [isAgreed, setIsAgreed] = useState(false)
+    const { t } = useTranslation()
 
     const handleUserSignUp = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -29,7 +31,7 @@ const SignUp = () => {
             <div className="flex flex-col items-center w-full max-w-[400px]">
                 <div className="flex flex-col gap-2 max-w-[200px] items-center">
                     <H2>Artiflare</H2>
-                    <p className="text-xl font-medium">Sign up</p>
+                    <p className="text-xl font-medium">{t("signUp")}</p>
                 </div>
                 <Form
                     isAgreed={isAgreed}
@@ -39,24 +41,24 @@ const SignUp = () => {
                     errorCode={errorCode}
                     setIsAgreed={setIsAgreed}
                     isSignUp
-                    children={"Sign up"}
+                    children={t("signUp")}
                     onSubmit={(e) => handleUserSignUp(e)}
                 />
                 <AuthWithProviders />
                 <div className="flex gap-2 mt-6 mb-9">
-                    <p>Already have an account?</p>
+                    <p>{t("alreadyHaveAnAccount")}</p>
                     <Link
                         className="relative after:absolute after:w-full after:h-px after:bg-bg-dark dark:after:bg-bg-light after:top-full after:left-0 hover:after:scale-x-0 after:transition-all after:duration-200 after:origin-left "
                         to={"/auth/login"}
                     >
-                        Login
+                        {t("login")}
                     </Link>
                 </div>
                 <Link
                     className="relative after:absolute after:w-full after:h-px after:bg-bg-dark dark:after:bg-bg-light after:top-full after:left-0 hover:after:scale-x-0 after:transition-all after:duration-200 after:origin-left"
                     to={"/"}
                 >
-                    Go back
+                    {t("goBack")}
                 </Link>
             </div>
         </div>

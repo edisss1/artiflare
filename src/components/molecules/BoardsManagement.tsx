@@ -9,6 +9,7 @@ import { useRef, useState } from "react"
 import CreateBoardModalContent from "../atoms/CreateBoardModalContent"
 import TeamManagementModal from "./TeamManagementModal"
 import { sortByOptions } from "../../constants/sortByOptions"
+import { useTranslation } from "react-i18next"
 
 interface BoardsManagementProps {
     title: string
@@ -25,6 +26,7 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
     const { sortedBy } = useSelector(
         (setBoardTitle: RootState) => setBoardTitle.boards
     )
+    const { t } = useTranslation()
 
     const toggleCreateBoardModal = () => {
         createBoardModalRef.current?.showModal()
@@ -80,14 +82,14 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
                             className="flex gap-2 items-center px-2 py-3 w-max bg-primary rounded-md hover:shadow-lg transition-all duration-200 hover:shadow-primary/80"
                         >
                             <img src={team} alt="" />
-                            <p>Join a team</p>
+                            <p>{t("joinATeam")}</p>
                         </Button>
                         <Button
                             onClick={toggleCreateBoardModal}
                             className="flex gap-2 items-center px-2 py-3 max-w-max bg-secondary rounded-md hover:shadow-lg transition-all duration-200 hover:shadow-secondary/80 "
                         >
                             <img src={add} alt="" />
-                            <p>Create new</p>
+                            <p>{t("createNew")}</p>
                         </Button>
                     </div>
                 </div>
@@ -108,8 +110,6 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
                                 {option.label}
                             </option>
                         ))}
-                        {/* <option value="">Last opened</option>
-                        <option value="">Recently modified</option> */}
                     </select>
                 </div>
             </div>

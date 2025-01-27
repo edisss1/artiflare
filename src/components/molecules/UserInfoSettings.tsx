@@ -6,6 +6,8 @@ import { AppDispatch } from "../../redux/store"
 import { setNewDisplayName } from "../../redux/slices/userManagementSlice"
 import { useState } from "react"
 import FallbackAvatar from "../atoms/FallbackAvatar"
+import { t } from "i18next"
+import LanguageSwitch from "../atoms/LanguageSwitch"
 
 interface UserInfoSettingsProps {
     user: User | null
@@ -37,7 +39,7 @@ const UserInfoSettings = ({
                 <SettingsInput
                     defaultValue={user?.displayName!}
                     className={"rounded-md w-full max-w-[200px] "}
-                    label={"Name"}
+                    label={t("name")}
                     id={`name`}
                     value={newUserName!}
                     onChange={handleUserNameChange}
@@ -51,18 +53,19 @@ const UserInfoSettings = ({
                             "border-2 border-typography-light px-2 py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark transition-colors duration-150"
                         }
                     >
-                        Change
+                        {t("change")}
                     </Button>
                     <Button
                         onClick={() => handleSignOut(dispatch)}
                         className="border-2 border-typography-light px-2 py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark transition-colors duration-150"
                     >
-                        Log out
+                        {t("logOut")}
                     </Button>
                 </div>
+                <LanguageSwitch />
             </div>
             <div className={"flex flex-col gap-2 items-center"}>
-                <h3>Your photo</h3>
+                <h3>{t("yourPhoto")}</h3>
                 {user?.img ? (
                     <img
                         className={
@@ -91,14 +94,14 @@ const UserInfoSettings = ({
                             "border-2 border-typography-light p-2 rounded-md hover:bg-bg-dark hover:text-typography-dark transition-colors duration-150"
                         }
                     >
-                        Upload
+                        {t("upload")}
                     </Button>
                     <Button
                         className={
                             "border-2 border-typography-light p-2 rounded-md hover:bg-bg-dark hover:text-typography-dark transition-colors duration-150"
                         }
                     >
-                        Remove
+                        {t("remove")}
                     </Button>
                 </div>
             </div>

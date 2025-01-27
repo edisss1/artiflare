@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch } from "react-redux"
 import { createTeam } from "../../redux/slices/teamManagementSlice"
 import { sendInvite } from "../../redux/slices/notificationManagementSlice"
+import { t } from "i18next"
 // import SuggestionList from "./SuggestionList"
 // import { fetchSuggestionsForInvites } from "../../utils/fetchSuggestionsForInvites"
 
@@ -56,7 +57,7 @@ const CreateTeamModalContent = ({
     return (
         <div className="flex flex-col items-center">
             <h3 className="font-medium text-xl text-center mb-6">
-                Create a team
+                {t("createATeam")}
             </h3>
             <div className="flex flex-col items-center w-full max-w-[300px]">
                 <div className="flex flex-col gap-2 w-full max-w-[300px]">
@@ -97,12 +98,12 @@ const CreateTeamModalContent = ({
                     </div>
                 </div>
                 <div className="flex flex-col items-center mt-6 gap-6">
-                    <p>Already have a team to join?</p>
+                    <p>{t("alreadyHaveATeam")}</p>
                     <Button
                         onClick={handleJoinTeamModal}
                         className="relative rounded-lg t dark:border-typography-dark after:content-[''] after:w-full after:h-px after:bg-typography-light dark:after:bg-typography-dark after:scale-x-0 hover:after:scale-x-100 after:transform after:origin-center after:transition-all duration-300 after:absolute after:top-full after:left-0"
                     >
-                        Find it!
+                        {t("findIt")}!
                     </Button>
                 </div>
             </div>
@@ -110,7 +111,7 @@ const CreateTeamModalContent = ({
                 onClick={handleCreateNewTeam}
                 className="px-6 absolute bottom-6 border-2 border-typography-light dark:border-typography-dark py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:bg-bg-light dark:hover:text-typography-light transition-colors duration-150"
             >
-                Create
+                {t("create")}
             </Button>
         </div>
     )

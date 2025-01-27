@@ -12,6 +12,7 @@ import SettingsLink from "../atoms/SettingsLink"
 import TeamProfileIcon from "../icons/TeamProfileIcon"
 import TeamMembersIcon from "../icons/TeamMembersIcon"
 import { useNavigate } from "react-router-dom"
+import { t } from "i18next"
 
 interface SettingsLinksProps {
     uid: string | undefined
@@ -39,8 +40,6 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
             value: team.id!
         }
     })
-
-    // console.log(user?.currentSelectedTeam)
 
     const handleCurrentTeamChange = (
         e: React.ChangeEvent<HTMLSelectElement>
@@ -70,27 +69,29 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
                 </div>
                 <SettingsLink
                     icon={<ProfileSettingsIcon />}
-                    to={"Profile settings"}
+                    to={t("profileSettings")}
                     path={`/app/settings/profile/${uid}`}
                 />
                 <div className={"flex flex-col gap-6"}>
                     <div>
-                        <h2 className={"font-medium mb-2"}>Account</h2>
+                        <h2 className={"font-medium mb-2"}>{t("account")}</h2>
                         <div>
                             <SettingsLink
                                 path={`/app/settings/team/${currentTeam?.id}`}
-                                to="Team profile"
+                                to={t("teamSettings")}
                                 icon={<TeamProfileIcon />}
                             />
                         </div>
                     </div>
 
                     <div>
-                        <h2 className={"font-medium mb-2"}>User management</h2>
+                        <h2 className={"font-medium mb-2"}>
+                            {t("userManagement")}
+                        </h2>
                         <div>
                             <SettingsLink
                                 path={`/app/settings/team/${currentTeam?.id}/members`}
-                                to="Team members"
+                                to={t("teamMembers")}
                                 icon={<TeamMembersIcon />}
                             />
                         </div>

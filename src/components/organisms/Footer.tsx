@@ -1,6 +1,9 @@
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 const Footer = () => {
+    const { t } = useTranslation()
+
     return (
         <footer
             className={
@@ -25,16 +28,20 @@ const Footer = () => {
                     }
                 >
                     <div className={""}>
-                        <h4 className={"font-medium text-xl mb-2"}>Company</h4>
+                        <h4 className={"font-medium text-xl mb-2"}>
+                            {t("company")}
+                        </h4>
                         <div className={"grid gap-2"}>
-                            <p>Pricing</p>
+                            <p>{t("pricingHeader")}</p>
                         </div>
                     </div>
                     <div className={"col-start-2"}>
-                        <h4 className={"font-medium text-xl mb-2"}>Legal</h4>
+                        <h4 className={"font-medium text-xl mb-2"}>
+                            {t("legal")}
+                        </h4>
                         <div className={"grid gap-2"}>
-                            <Link to={"/terms"}>Terms of Service</Link>
-                            <Link to={"/privacy"}>Privacy policy</Link>
+                            <Link to={"/terms"}>{t("termsOfService")}</Link>
+                            <Link to={"/privacy"}>{t("privacyPolicy")}</Link>
                         </div>
                     </div>
                 </div>

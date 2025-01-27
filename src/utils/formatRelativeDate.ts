@@ -1,3 +1,5 @@
+import { t } from "i18next"
+
 export const formatRelativeDate = (lastAccess: string): string => {
     const lastAccessDate = new Date(lastAccess)
     if (isNaN(lastAccessDate.getTime())) return "Never"
@@ -8,11 +10,11 @@ export const formatRelativeDate = (lastAccess: string): string => {
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
 
     if (diffDays === 0) {
-        return "Today"
+        return t("today")
     } else if (diffDays === 1) {
-        return "Yesterday"
+        return t("yesterday")
     } else if (diffDays < 7) {
-        return `${diffDays} days ago`
+        return `${diffDays} ${t("daysAgo")}`
     } else {
         return new Intl.DateTimeFormat("en-GB", {
             weekday: "short",

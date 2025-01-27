@@ -7,7 +7,7 @@ import { setUser } from "../../redux/slices/authSlice"
 import { RootState } from "../../redux/store"
 import { doc, getDoc, updateDoc } from "firebase/firestore"
 import Loading from "./Loading"
-import { useLocation, useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { Team } from "../../types/Team"
 
 const AuthChecker = ({ children }: { children: React.ReactNode }) => {
@@ -15,7 +15,7 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
     const { user, status } = useSelector((state: RootState) => state.auth)
     const location = useLocation()
     const navigate = useNavigate()
-    const { boardID } = useParams()
+    // const { boardID } = useParams()
 
     useEffect(() => {
         window.scrollTo(0, 0)

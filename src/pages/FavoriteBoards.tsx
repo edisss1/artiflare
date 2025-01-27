@@ -8,6 +8,7 @@ import { AppDispatch, RootState } from "../redux/store"
 import { useSelector } from "react-redux"
 import { useEffect } from "react"
 import { getFavoriteBoards } from "../redux/slices/boardSlice"
+import { t } from "i18next"
 
 const FavoriteBoards = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -30,7 +31,7 @@ const FavoriteBoards = () => {
             <DashboardSidebar />
             <DashboardContainer>
                 <Header plan="pro" />
-                <BoardsManagement title="Favorite boards" />
+                <BoardsManagement title={t("favoriteBoards")} />
                 <BoardsContainer boards={favoriteBoards} />
             </DashboardContainer>
         </main>

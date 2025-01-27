@@ -7,6 +7,7 @@ import DashboardSidebar from "../components/organisms/DashboardSidebar"
 import { AppDispatch, RootState } from "../redux/store"
 import { getRecentBoards } from "../redux/slices/boardSlice"
 import { useEffect } from "react"
+import { t } from "i18next"
 
 const RecentBoards = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -28,7 +29,7 @@ const RecentBoards = () => {
             <DashboardSidebar />
             <DashboardContainer>
                 <Header plan="pro" />
-                <BoardsManagement title="Recently modified boards" />
+                <BoardsManagement title={t("recentlyModifiedBoards")} />
                 <BoardsContainer boards={recentBoards} />
             </DashboardContainer>
         </main>

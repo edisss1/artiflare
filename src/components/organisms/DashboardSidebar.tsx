@@ -7,11 +7,7 @@ import Button from "../atoms/Button.tsx"
 import { AppDispatch, RootState } from "../../redux/store.ts"
 import { useDispatch, useSelector } from "react-redux"
 import { setIsMobileSidebarOpened } from "../../redux/slices/miscStatesSlice.ts"
-
-// interface DashboardSidebarProps {
-//     isMobileSidebarOpened: boolean
-//     setIsMobileSidebarOpened: React.Dispatch<React.SetStateAction<boolean>>
-// }
+import { useTranslation } from "react-i18next"
 
 const DashboardSidebar = () => {
     const [query, setQuery] = useState("")
@@ -19,6 +15,7 @@ const DashboardSidebar = () => {
     const { isMobileSidebarOpened } = useSelector(
         (state: RootState) => state.miscStates
     )
+    const { t } = useTranslation()
 
     const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value)
@@ -53,7 +50,7 @@ const DashboardSidebar = () => {
                     <BurgerMenuIcon />
                 </Button>
                 <Search
-                    placeholder="Search by title"
+                    placeholder={t("searchByTitle")}
                     onChange={(e) => handleQueryChange(e)}
                     value={query}
                 />

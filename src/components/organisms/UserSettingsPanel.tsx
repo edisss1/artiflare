@@ -10,6 +10,7 @@ import SettingsHeader from "../atoms/SettingsHeader.tsx"
 import UserInfoSettings from "../molecules/UserInfoSettings.tsx"
 import { handleSignOut } from "../../utils/handleSignOut.ts"
 import { updateUserName } from "../../redux/slices/userManagementSlice.ts"
+import { t } from "i18next"
 
 const UserSettingsPanel = () => {
     const user = useSelector((state: RootState) => state.auth.user)
@@ -33,7 +34,7 @@ const UserSettingsPanel = () => {
 
     return (
         <div className="p-4">
-            <SettingsHeader>Profile details</SettingsHeader>
+            <SettingsHeader>{t("profileDetails")}</SettingsHeader>
             <UserInfoSettings
                 user={user}
                 handleUserDisplayNameChange={handleUserDisplayNameChange}
@@ -45,11 +46,10 @@ const UserSettingsPanel = () => {
                 className={"mt-[clamp(3rem,30vh,9rem)] flex flex-col relative"}
             >
                 <div className={"grid gap-2"}>
-                    <h3 className={"font-medium"}>Delete Profile</h3>
-                    <p>
-                        Deleting the profile will irreversibly remove all your
-                        boards{" "}
-                    </p>
+                    <h3 className={"font-medium"}>
+                        {t("deleteProfileHeader")}
+                    </h3>
+                    <p>{t("deleteProfileText")} </p>
                 </div>
                 <Button
                     onClick={openModal}
@@ -57,7 +57,7 @@ const UserSettingsPanel = () => {
                         "border-2 border-danger text-danger rounded-md  hover:bg-danger hover:text-typography-dark transition-colors duration-150 w-fit p-2 mt-4"
                     }
                 >
-                    Delete profile
+                    {t("deleteProfileHeader")}
                 </Button>
                 <Modal modalRef={modalRef}>
                     <UserDeletionModalContent />

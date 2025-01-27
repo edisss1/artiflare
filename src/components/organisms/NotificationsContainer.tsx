@@ -6,6 +6,7 @@ import { AppDispatch, RootState } from "../../redux/store.ts"
 import { getNotificationsForUser } from "../../redux/slices/notificationManagementSlice.ts"
 import { useDispatch } from "react-redux"
 import { useEffect } from "react"
+import { t } from "i18next"
 
 interface NotificationsProps {
     isContainerOpened: boolean
@@ -58,7 +59,7 @@ const NotificationsContainer = ({
             </div>
 
             <div className=" p-4 border-t-2 border-typography-light/30 dark:border-typography-dark/30">
-                <Button className="">View all notifications</Button>
+                <Button className="">{t("viewAllNotifications")}</Button>
             </div>
         </aside>
     )

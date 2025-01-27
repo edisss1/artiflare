@@ -7,11 +7,13 @@ import DashboardContainer from "../atoms/DashboardContainer"
 import { useEffect } from "react"
 import { fetchAllUserBoards } from "../../redux/slices/boardSlice"
 import { useDispatch } from "react-redux"
+import { useTranslation } from "react-i18next"
 
 const DashboardHome = () => {
     const dispatch: AppDispatch = useDispatch()
     const { boards } = useSelector((state: RootState) => state.boards)
     const { user } = useSelector((state: RootState) => state.auth)
+    const { t } = useTranslation()
 
     useEffect(() => {
         if (user) {
@@ -24,7 +26,7 @@ const DashboardHome = () => {
     return (
         <DashboardContainer>
             <Header plan="pro" />
-            <BoardsManagement title="Your boards" />
+            <BoardsManagement title={t("yourBoards")} />
             <BoardsContainer boards={boards} />
         </DashboardContainer>
     )

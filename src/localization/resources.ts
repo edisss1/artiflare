@@ -260,7 +260,28 @@ export const resources = {
                     content:
                         "If you have any questions or concerns about these Terms, please contact us at artiflare@gmail.com."
                 }
-            ]
+            ],
+            forFree: "Start for free",
+            upgradeNow: "Upgrade now",
+            contactUs: "Contact us",
+            recentlyModifiedBoards: "Recently modified boards",
+            favoriteBoards: "Favorite boards",
+            viewAllNotifications: "View all notifications",
+            inviteNewUsers: "Invite new users",
+            today: "Today",
+            yesterday: "Yesterday",
+            daysAgo: "days ago",
+            dontHaveATeam: "Don't have a team to join?",
+            createOne: "Create one",
+            join: "Join",
+            createATeam: "Create a team",
+            alreadyHaveATeam: "Already have a team to join?",
+            findIt: "Find it",
+            create: "Create",
+            createNewBoard: "Create new board",
+            boardTitleWarning:
+                "Board title should be at least 4 characters long",
+            boardTitle: "Board title"
         }
     },
     it: {
@@ -336,7 +357,7 @@ export const resources = {
             sortBy: "Ordina per",
             joinATeam: "Unisciti a un team",
             createNew: "Crea nuova tavola",
-            craetedBy: "Creata da",
+            createdBy: "Creata da",
             modified: "Modificata",
             by: "da",
             notifications: "Notifiche",
@@ -357,7 +378,7 @@ export const resources = {
             account: "Account",
             teamSettings: "Profilo della squadra",
             teamName: "Nome della squadra",
-            tamLogo: "Logo della squadra",
+            teamLogo: "Logo della squadra",
             deleteTeamText:
                 "La cancellazione del team rimuoverà irreversibilmente tutte le sue schede e disconnetterà gli utenti.",
             userManagement: "Gestione utenti",
@@ -367,7 +388,7 @@ export const resources = {
             membersInTeamPlural: "i membri sono in squadra",
             searchMember: "Cerca membro per nome o email",
             role: "Ruolo",
-            lastAccess: "Ultino accesso",
+            lastAccess: "Ultimo accesso",
             noBoards: "Non hai ancora tavole",
             privacyPolicySections: {
                 introduction:
@@ -512,7 +533,28 @@ export const resources = {
                     content:
                         "Se avete domande o dubbi su questi termini, vi preghiamo di contattarci all'indirizzo artiflare@gmail.com."
                 }
-            ]
+            ],
+            forFree: "Inizia gratuitamente",
+            upgradeNow: "Aggiorna ora",
+            contactUs: "Contattaci",
+            recentlyModifiedBoards: "Tavole modificate di recente",
+            favoriteBoards: "Tavole preferite",
+            viewAllNotifications: "Visualizza tutte le notifiche",
+            inviteNewUsers: "Invita nuovi utenti",
+            today: "Oggi",
+            yesterday: "Ieri",
+            daysAgo: "giorni fa",
+            dontHaveATeam: "Non hai una squadra da unirti?",
+            createOne: "Crea nuova",
+            join: "Unisciti",
+            createATeam: "Crea una squadra",
+            alreadyHaveATeam: "Hai gia una squadra da unirti?",
+            findIt: "Trova la tua squadra",
+            create: "Crea",
+            createNewBoard: "Crea nuova tavola",
+            boardTitleWarning:
+                "Il titolo della tavola deve essere lungo almeno 4 caratteri",
+            boardTitle: "Titolo della tavola"
         }
     }
 }

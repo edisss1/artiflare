@@ -53,7 +53,6 @@ const BoardsContainer = ({ boards }: BoardsContainerProps) => {
         dispatch(updateBoards(sortedBoards!))
     }, [sortedBy, dispatch])
 
-    console.log("Boards: ", boards)
     return (
         <div className="flex flex-col gap-4 relative ">
             {paginatedBoards?.length === 0 && (

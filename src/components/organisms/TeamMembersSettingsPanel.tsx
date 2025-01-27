@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux"
 import { getCurrentSelectedTeam } from "../../redux/slices/teamManagementSlice"
 import InviteIcon from "../icons/InviteIcon"
 import Button from "../atoms/Button"
+import { t } from "i18next"
 
 const TeamMembersSettingsPanel = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -24,21 +25,18 @@ const TeamMembersSettingsPanel = () => {
     return (
         <div className="">
             <div className="px-4 pt-4 flex items-center gap-6 mb-8">
-                <h2>Members</h2>
+                <h2>{t("members")}</h2>
                 <Button className="flex gap-2 items-center border-2 border-secondary rounded-lg hover:bg-secondary dark:hover:text-typography-light transition-colors duration-150 px-2 py-2">
-                    <InviteIcon /> <p>Invite new users</p>
+                    <InviteIcon /> <p>{t("inviteNewUsers")}</p>
                 </Button>
             </div>
             <div className="w-full flex items-center text-typography-light bg-secondary px-4 py-2">
                 <p className="flex gap-2">
                     {currentTeam?.members.length}
                     <span>
-                        {currentTeam
-                            ? currentTeam.members.length === 1
-                                ? "member is"
-                                : "members are"
-                            : ""}{" "}
-                        in team
+                        {currentTeam && currentTeam.members.length === 1
+                            ? t("memberInTeam")
+                            : t("membersInTeamPlural")}
                     </span>
                 </p>
             </div>

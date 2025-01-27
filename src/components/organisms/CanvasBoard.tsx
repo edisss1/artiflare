@@ -75,7 +75,7 @@ const CanvasBoard = ({ setCanvas }: CanvasBoardProps) => {
     return (
         <canvas
             ref={canvasRef}
-            className=" grid-pattern  relative  "
+            className=" grid-pattern  relative dark:bg-typography-dark  "
             id="canvas"
         ></canvas>
     )

@@ -19,6 +19,7 @@ const LanguageSwitch = () => {
 
     return (
         <select
+            className="bg-transparent border-2 border-typography-light rounded-md px-4 py-1 text-typography-light dark:text-typography-dark"
             value={currentLanguage}
             onChange={(e) => handleLanguageChange(e)}
         >

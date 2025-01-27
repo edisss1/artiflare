@@ -3,14 +3,9 @@ import Anchor from "../atoms/Anchor"
 import ScrollTo from "../atoms/ScrollTo"
 import ThemeSwitch from "../atoms/ThemeSwitch"
 import ChevronIcon from "../icons/ChevronIcon"
-import Button from "../atoms/Button"
-import { AppDispatch } from "../../redux/store"
-import { useDispatch } from "react-redux"
-import { setLanguage } from "../../redux/slices/languageSlice"
 import { useTranslation } from "react-i18next"
 
 const NavBar = () => {
-    const dispatch: AppDispatch = useDispatch()
     const { t } = useTranslation()
 
     return (

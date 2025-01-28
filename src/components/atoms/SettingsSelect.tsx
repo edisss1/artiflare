@@ -1,6 +1,5 @@
 import React from "react"
 import ChevronIcon from "../icons/ChevronIcon"
-import { User } from "firebase/auth"
 
 interface SettingsSelectProps {
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void

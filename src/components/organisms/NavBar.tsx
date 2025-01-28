@@ -27,18 +27,6 @@ const NavBar = () => {
                     />
                 </div>
 
-                {/* <Button
-                    onClick={() => dispatch(setLanguage("en"))}
-                    className=""
-                >
-                    EN
-                </Button>
-                <Button
-                    onClick={() => dispatch(setLanguage("it"))}
-                    className=""
-                >
-                    IT
-                </Button> */}
                 <ThemeSwitch />
             </div>
             <ScrollTo x={0} y={0}>

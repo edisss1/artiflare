@@ -24,17 +24,21 @@ const AuthWithProviders = () => {
         <div className=" flex flex-col gap-2 mt-4 ">
             <Button
                 onClick={handleSignInWithGoogle}
-                className="flex  items-center bg-none border-2 border-typography-light dark:border-typography-dark hover:bg-secondary transition-colors duration-150 p-2 rounded-md gap-2"
+                className="flex group   items-center bg-none border-2 border-typography-light dark:border-typography-dark hover:bg-secondary transition-colors duration-150 p-2 rounded-md gap-2"
             >
                 <GoogleIcon />
-                <p>{t("signInWithGoogle")}</p>
+                <p className="dark:group-hover:text-typography-light">
+                    {t("signInWithGoogle")}
+                </p>
             </Button>
             <Button
                 onClick={() => alert}
-                className="flex  items-center bg-none border-2 border-typography-light dark:border-typography-dark hover:bg-secondary transition-colors duration-150 p-2 rounded-md gap-2"
+                className="flex group items-center bg-none border-2 border-typography-light dark:border-typography-dark hover:bg-secondary transition-colors duration-150 p-2 rounded-md gap-2"
             >
                 <GithubIcon />
-                <p>{t("signInWithGithub")}</p>
+                <p className="dark:group-hover:text-typography-light">
+                    {t("signInWithGithub")}
+                </p>
             </Button>
         </div>
     )

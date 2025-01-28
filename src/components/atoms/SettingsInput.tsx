@@ -22,7 +22,7 @@ const SettingsInput = ({
             <label htmlFor={id}>{label}</label>
             <input
                 defaultValue={defaultValue}
-                className={`${className} p-2  bg-transparent border-2 border-typography-light rounded-md`}
+                className={`${className} p-2  bg-transparent border-2 border-typography-light dark:border-typography-dark rounded-md`}
                 value={value}
                 onChange={onChange}
                 type={type}

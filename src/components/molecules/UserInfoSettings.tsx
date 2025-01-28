@@ -50,14 +50,14 @@ const UserInfoSettings = ({
                     <Button
                         onClick={handleUserDisplayNameChange}
                         className={
-                            "border-2 border-typography-light px-2 py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark transition-colors duration-150"
+                            "border-2 border-typography-light dark:border-typography-dark px-2 py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:text-typography-light dark:hover:bg-bg-light transition-colors duration-150"
                         }
                     >
                         {t("change")}
                     </Button>
                     <Button
                         onClick={() => handleSignOut(dispatch)}
-                        className="border-2 border-typography-light px-2 py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark transition-colors duration-150"
+                        className="border-2 border-typography-light dark:border-typography-dark px-2 py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:text-typography-light dark:hover:bg-bg-light transition-colors duration-150"
                     >
                         {t("logOut")}
                     </Button>
@@ -91,14 +91,14 @@ const UserInfoSettings = ({
                 <div className={"flex gap-2 justify-center items-center"}>
                     <Button
                         className={
-                            "border-2 border-typography-light p-2 rounded-md hover:bg-bg-dark hover:text-typography-dark transition-colors duration-150"
+                            "border-2 border-typography-light dark:border-typography-dark p-2 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:text-typography-light dark:hover:bg-bg-light transition-colors duration-150"
                         }
                     >
                         {t("upload")}
                     </Button>
                     <Button
                         className={
-                            "border-2 border-typography-light p-2 rounded-md hover:bg-bg-dark hover:text-typography-dark transition-colors duration-150"
+                            "border-2 border-typography-light dark:border-typography-dark p-2 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:text-typography-light dark:hover:bg-bg-light transition-colors duration-150"
                         }
                     >
                         {t("remove")}

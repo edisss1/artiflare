@@ -8,10 +8,9 @@ import { useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch } from "react-redux"
 import { createTeam } from "../../redux/slices/teamManagementSlice"
-import { sendInvite } from "../../redux/slices/notificationManagementSlice"
 import { t } from "i18next"
-// import SuggestionList from "./SuggestionList"
-// import { fetchSuggestionsForInvites } from "../../utils/fetchSuggestionsForInvites"
+import InviteesContainer from "../molecules/InviteesContainer"
+import UserCard from "./UserCard"
 
 interface CreateTeamModalContentProps {
     setIsCreateModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -22,17 +21,13 @@ const CreateTeamModalContent = ({
 }: CreateTeamModalContentProps) => {
     const [teamType, setTeamType] = useState<TeamType["teamType"]>("private")
     const [teamTitle, setTeamTitle] = useState<string>("")
-    // const [userSearchQuery, setUserSearchQuery] = useState<string>("")
-    // const [suggestions, setSuggestions] = useState<string[]>([])
+
+    const sampleImg =
+        "https://lh3.googleusercontent.com/a/ACg8ocKPuh4rn6Ho7vC6rhVGc3hVOxAFn0oksoBj01B9H2hUfAv0OwpO=s96-c"
+
     const dispatch: AppDispatch = useDispatch()
 
     const user = useSelector((state: RootState) => state.auth.user)
-
-    // const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const value = e.target.value
-    //     setUserSearchQuery(value)
-    //     fetchSuggestionsForInvites(value, setSuggestions)
-    // }
 
     const handleJoinTeamModal = () => {
         setIsCreateModal(false)
@@ -52,8 +47,6 @@ const CreateTeamModalContent = ({
         }
     }
 
-    const invitees = ["8n0o9lzrPWZF3t9JHP1KBd0zH0i1"]
-
     return (
         <div className="flex flex-col items-center">
             <h3 className="font-medium text-xl text-center mb-6">
@@ -72,30 +65,15 @@ const CreateTeamModalContent = ({
                         options={teamTypeOptions}
                         onChange={handleTeamTypeChange}
                     />
-                    <div className="flex flex-col">
-                        {/* <FormInput
-                            value={userSearchQuery}
-                            onChange={}
-                            placeholder="Invite users to your team"
-                            type="text"
-                        /> */}
-                        {/* <SuggestionList
-                            suggestions={suggestions}
-                            searchQuery={userSearchQuery}
-                        /> */}
-                        <Button
-                            className=""
-                            children="Invite test"
-                            onClick={() =>
-                                dispatch(
-                                    sendInvite({
-                                        user,
-                                        invitees
-                                    })
-                                )
-                            }
-                        />
-                    </div>
+                    <FormInput
+                        value=""
+                        onChange={() => {}}
+                        placeholder="Search users by email or ID"
+                        type="text"
+                    />
+                    <InviteesContainer>
+                        <UserCard name="Sergey" img={sampleImg} />
+                    </InviteesContainer>
                 </div>
                 <div className="flex flex-col items-center mt-6 gap-6">
                     <p>{t("alreadyHaveATeam")}</p>

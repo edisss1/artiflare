@@ -3,7 +3,7 @@ import { IconProps } from "../../types/IconProps"
 const ChevronIcon = ({ className }: IconProps) => {
     return (
         <svg
-            className={`${className} [&>*]:stroke-bg-dark `}
+            className={`${className} [&>*]:stroke-bg-dark [&>*]:dark:stroke-bg-light `}
             width="20"
             height="20"
             viewBox="0 0 20 20"

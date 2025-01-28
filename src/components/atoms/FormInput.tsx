@@ -24,7 +24,7 @@ const FormInput = ({
             className={`${bg} ${maxWidth} w-full py-[0.9375rem] ps-3 border-2 ${
                 isIncorrect
                     ? "border-danger"
-                    : "border-typography-light dark:border-typography-dark"
+                    : "border-typography-light dark:border-typography-dark text-typography-light"
             }  rounded-md outline-none`}
             value={value}
             onChange={onChange}

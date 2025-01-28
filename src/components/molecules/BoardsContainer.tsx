@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react"
 import { fetchAllUserBoards, updateBoards } from "../../redux/slices/boardSlice"
 import Pagination from "../atoms/Pagination"
 import { Board as BoardType } from "../../types/Board"
+import { t } from "i18next"
 
 interface BoardsContainerProps {
     boards: BoardType[]
@@ -57,7 +58,7 @@ const BoardsContainer = ({ boards }: BoardsContainerProps) => {
         <div className="flex flex-col gap-4 relative ">
             {paginatedBoards?.length === 0 && (
                 <p className="text-center text-sm font-normal opacity-70 mt-8 ">
-                    You don't have any boards yet
+                    {t("noBoards")}
                 </p>
             )}
             {paginatedBoards?.map((board) => (

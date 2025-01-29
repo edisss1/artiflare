@@ -328,7 +328,6 @@ const authSlice = createSlice({
                 }
             )
             .addCase(signInWithGoogle.pending, (state) => {
-                state.status = "loading"
                 state.errorCode = undefined
             })
             .addCase(signInWithGoogle.rejected, (state, action) => {

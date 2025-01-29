@@ -270,6 +270,26 @@ export const deleteBoard = createAsyncThunk(
     }
 )
 
+export const renameBoard = createAsyncThunk(
+    "board/renameBoard",
+    async ({
+        boardID,
+        newBoardTitle
+    }: {
+        boardID: string | undefined
+        newBoardTitle: string
+    }) => {
+        if (!boardID) return
+
+        try {
+            const boardRef = doc(db, "boards", boardID)
+            await updateDoc(boardRef, { boardTitle: newBoardTitle })
+        } catch (err) {
+            console.error("Error renaming board:", err)
+        }
+    }
+)
+
 const boardSlice = createSlice({
     name: "board",
     initialState,
@@ -360,6 +380,18 @@ const boardSlice = createSlice({
             .addCase(deleteBoard.fulfilled, (state) => {
                 state.status = "succeeded"
                 state.error = undefined
+            })
+            .addCase(renameBoard.pending, (state) => {
+                state.status = "loading"
+                state.error = undefined
+            })
+            .addCase(renameBoard.fulfilled, (state) => {
+                state.status = "succeeded"
+                state.error = undefined
+            })
+            .addCase(renameBoard.rejected, (state, action) => {
+                state.status = "failed"
+                state.error = action.error.message
             })
     }
 })

@@ -64,7 +64,7 @@ export const resources = {
             alreadyHaveAnAccount: "Already have an account?",
             iAgreeToThe: "I agree to the",
             searchByTitle: "Search by title",
-            "home:": "Home",
+            home: "Home",
             recent: "Recent",
             favorites: "Favorites",
             yourBoards: "Your Boards",

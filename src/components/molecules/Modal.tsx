@@ -5,9 +5,14 @@ import CloseIcon from "../icons/CloseIcon.tsx"
 interface ModalProps {
     modalRef: React.MutableRefObject<HTMLDialogElement | null>
     children: React.ReactNode
+    minHeight?: string
 }
 
-const Modal = ({ modalRef, children }: ModalProps) => {
+const Modal = ({
+    modalRef,
+    children,
+    minHeight = "lg:min-h-[600px] max-lg:min-h-[300px]"
+}: ModalProps) => {
     const handleClickOutside = (e: MouseEvent) => {
         if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
             closeModal(modalRef)
@@ -24,7 +29,7 @@ const Modal = ({ modalRef, children }: ModalProps) => {
 
     return (
         <dialog
-            className="modal w-full max-w-[500px] lg:min-h-[600px] max-lg:min-h-[300px] p-9 text-typography-light dark:text-typography-dark dark:bg-bg-dark rounded-lg relative bg-bg-light dark:backdrop:bg-bg-light/25 backdrop:bg-bg-dark/30 backdrop:pointer-events-none"
+            className={`${minHeight} modal w-full max-w-[500px]  p-9 text-typography-light dark:text-typography-dark dark:bg-bg-dark rounded-lg relative bg-bg-light dark:backdrop:bg-bg-light/25 backdrop:bg-bg-dark/30 backdrop:pointer-events-none`}
             ref={modalRef}
         >
             <button

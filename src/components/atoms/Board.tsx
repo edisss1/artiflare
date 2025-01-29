@@ -14,6 +14,8 @@ import {
 } from "../../redux/slices/boardSlice"
 import MoreIcon from "../icons/MoreIcon"
 import { useTranslation } from "react-i18next"
+import Modal from "../molecules/Modal"
+import BoardRenameModalContent from "./BoardRenameModalContent"
 
 interface BoardProps {
     id: string | undefined
@@ -37,6 +39,7 @@ const Board = ({
     const [isPopoverOpen, setIsPopoverOpen] = useState(false)
     const winowWidth = window.innerWidth
     const { t } = useTranslation()
+    const modalRef = useRef<HTMLDialogElement | null>(null)
 
     return (
         <div className="flex  flex-col relative border-2 gap-2 px-4 py-2 group hover:bg-primary dark:hover:bg-primary-dark/70 dark:hover:text-typography-dark    transition-colors duration-150 border-typography-light dark:border-typography-dark/40 rounded-md">
@@ -93,9 +96,19 @@ const Board = ({
                     popoverRef={popoverRef}
                     isPopoverOpen={isPopoverOpen}
                     setIsPopoverOpen={setIsPopoverOpen}
-                    content={<PopoverBoardContent boardID={id} />}
+                    content={
+                        <PopoverBoardContent
+                            openBoardRenameModal={() =>
+                                modalRef.current?.showModal()
+                            }
+                            boardID={id}
+                        />
+                    }
                 />
             </div>
+            <Modal minHeight="" modalRef={modalRef}>
+                <BoardRenameModalContent boardID={id} modalRef={modalRef} />
+            </Modal>
         </div>
     )
 }

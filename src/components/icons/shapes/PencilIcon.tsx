@@ -1,6 +1,9 @@
-const PencilIcon = () => {
+import { IconProps } from "../../../types/IconProps"
+
+const PencilIcon = ({ className }: IconProps) => {
     return (
         <svg
+            className={className}
             width="24"
             height="24"
             viewBox="0 0 16 18"

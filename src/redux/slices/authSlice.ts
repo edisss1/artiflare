@@ -27,6 +27,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth/cordova"
 import { User } from "../../types/User.ts"
 import { Team } from "../../types/Team.ts"
 import { navigateTo } from "../../utils/navigate.ts"
+import { AppDispatch } from "../store.ts"
+import { setCurrentTeam } from "./teamManagementSlice.ts"
 
 const loadUserFromLocalStorage = (): User | null => {
     const firebaseAuthKey = Object.keys(localStorage).find((key) =>
@@ -101,6 +103,7 @@ const createDefaultTeam = async (user: User) => {
     }
 
     await updateDoc(userRef, updatedUserData)
+    await updateDoc(teamDoc, { id: teamDoc.id })
 
     return teamDoc.id
 }
@@ -224,10 +227,14 @@ export const createUserWithCredentials = createAsyncThunk(
     }
 )
 
-export const signOutUser = createAsyncThunk("auth/signOutUser", async () => {
-    await signOut(auth)
-    navigateTo("/")
-})
+export const signOutUser = createAsyncThunk(
+    "auth/signOutUser",
+    async (dispatch: AppDispatch) => {
+        dispatch(setCurrentTeam({} as Team))
+        await signOut(auth)
+        navigateTo("/")
+    }
+)
 
 export const deleteUserFromDatabase = createAsyncThunk(
     "auth/deleteUser",

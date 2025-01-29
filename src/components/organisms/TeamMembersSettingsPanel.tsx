@@ -1,26 +1,18 @@
-import { AppDispatch, RootState } from "../../redux/store"
+import { RootState } from "../../redux/store"
 import { useSelector } from "react-redux"
 import SearchMembers from "../atoms/SearchMembers"
 import MembersDisplay from "../molecules/MembersDisplay"
-import { useEffect } from "react"
-import { useDispatch } from "react-redux"
-import { getCurrentSelectedTeam } from "../../redux/slices/teamManagementSlice"
+
 import InviteIcon from "../icons/InviteIcon"
 import Button from "../atoms/Button"
 import { t } from "i18next"
 
 const TeamMembersSettingsPanel = () => {
-    const dispatch: AppDispatch = useDispatch()
     const user = useSelector((state: RootState) => state.auth.user)
 
-    const currentTeam = useSelector(
-        (state: RootState) => state.teamManagement.currentTeam
+    const { currentTeam } = useSelector(
+        (state: RootState) => state.teamManagement
     )
-
-    useEffect(() => {
-        dispatch(getCurrentSelectedTeam(user))
-        console.log("dispatched")
-    }, [])
 
     return (
         <div className="">

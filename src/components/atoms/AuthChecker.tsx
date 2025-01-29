@@ -4,15 +4,19 @@ import { onAuthStateChanged } from "firebase/auth"
 import { auth, db } from "../../firestore/firebaseConfig"
 import { User as LoggedUser, User } from "../../types/User"
 import { setUser } from "../../redux/slices/authSlice"
-import { RootState } from "../../redux/store"
+import { AppDispatch, RootState } from "../../redux/store"
 import { doc, getDoc, updateDoc } from "firebase/firestore"
 import Loading from "./Loading"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Team } from "../../types/Team"
 
 const AuthChecker = ({ children }: { children: React.ReactNode }) => {
-    const dispatch = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
     const { user, status } = useSelector((state: RootState) => state.auth)
+    const { currentTeam } = useSelector(
+        (state: RootState) => state.teamManagement
+    )
+
     const location = useLocation()
     const navigate = useNavigate()
     // const { boardID } = useParams()
@@ -60,6 +64,13 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                         emailVerified: firebaseUser.emailVerified
                     }
 
+                    console.log(
+                        `Current selected team in auth checker: ${loggedUser.currentSelectedTeam}`
+                    )
+                    console.log(
+                        `Current team object's id in auth checker: ${currentTeam?.id}`
+                    )
+
                     const currentTeamSnap = await getDoc(currentTeamDocRef)
                     if (currentTeamSnap.exists()) {
                         const currentTeamData = currentTeamSnap.data() as Team
@@ -82,6 +93,10 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                         lastAccessAt: new Date().toISOString()
                     })
 
+                    console.log(
+                        `User's selected team: ${loggedUser.currentSelectedTeam}`
+                    )
+
                     dispatch(setUser(loggedUser))
                 } catch (error) {
                     console.error("Error during authentication check:", error)
@@ -92,7 +107,7 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
         })
 
         return () => unsubscribe()
-    }, [dispatch])
+    }, [dispatch, user?.uid])
 
     useEffect(() => {
         if (status === "authenticated" && user) {

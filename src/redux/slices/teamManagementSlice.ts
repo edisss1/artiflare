@@ -8,6 +8,7 @@ import {
     doc,
     getDoc,
     getDocs,
+    onSnapshot,
     query,
     updateDoc,
     where
@@ -81,6 +82,11 @@ export const createTeam = createAsyncThunk(
                     role: "owner"
                 })
             })
+
+            await updateDoc(doc(db, "teams", docRef.id), {
+                id: docRef.id
+            })
+
             const currentTeamID = docRef.id
             dispatch(
                 updateCurrentSelectedTeam({
@@ -250,34 +256,51 @@ export const updateCurrentSelectedTeam = createAsyncThunk(
         selectedTeamID: string
         user: User | null
     }) => {
-        const userDocRef = doc(db, "users", user!.uid)
-        const userDoc = await getDoc(userDocRef)
-        if (userDoc.exists()) {
-            await updateDoc(userDocRef, { currentSelectedTeam: selectedTeamID })
+        try {
+            const userDocRef = doc(db, "users", user!.uid)
+            const userDoc = await getDoc(userDocRef)
+            if (userDoc.exists()) {
+                console.log(`Team updated to ${selectedTeamID}`)
+                await updateDoc(userDocRef, {
+                    currentSelectedTeam: selectedTeamID
+                })
+            }
+        } catch (err) {
+            console.error(err)
+            throw err
         }
     }
 )
 
-export const getCurrentSelectedTeam = createAsyncThunk(
-    "teamManagement/getCurrentSelectedTeam",
-    async (user: User | null) => {
-        const userDocRef = doc(db, "users", user!.uid)
-        const userDoc = await getDoc(userDocRef)
-        if (userDoc.exists()) {
-            const userData = userDoc.data() as User
-            const currentTeamDoc = await getDoc(
-                doc(db, "teams", userData.currentSelectedTeam)
+export const getCurrentSelectedTeam =
+    (user: User) => (dispatch: AppDispatch) => {
+        try {
+            const teamsRef = collection(db, "teams")
+            const q = query(
+                teamsRef,
+                where("id", "==", user.currentSelectedTeam)
             )
-            const currentTeamData = {
-                id: currentTeamDoc.id,
-                ...currentTeamDoc.data()
-            } as Team
-            console.log(`current team  id: ${currentTeamData.id}`)
 
-            return currentTeamData
+            return onSnapshot(q, (teamDocSnap) => {
+                const currentTeam = teamDocSnap.docs.map(
+                    (doc) =>
+                        ({
+                            id: doc.id,
+                            ...doc.data()
+                        } as Team)
+                )
+                console.log(
+                    `Current team from getCurrentTeam function: ${JSON.stringify(
+                        currentTeam[0]
+                    )}`
+                )
+                dispatch(setCurrentTeam(currentTeam[0]))
+            })
+        } catch (err) {
+            console.error(err)
+            throw err
         }
     }
-)
 
 export const uploadTeamLogo = createAsyncThunk(
     "teamManagement/uploadTeamLogo",
@@ -301,7 +324,11 @@ export const uploadTeamLogo = createAsyncThunk(
 const teamManagementSlice = createSlice({
     name: "teamManagement",
     initialState,
-    reducers: {},
+    reducers: {
+        setCurrentTeam: (state, action: PayloadAction<Team>) => {
+            state.currentTeam = action.payload
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(
@@ -352,9 +379,7 @@ const teamManagementSlice = createSlice({
                 state.error = "Failed to update current team"
                 state.status = "failed"
             })
-            .addCase(getCurrentSelectedTeam.fulfilled, (state, action) => {
-                state.currentTeam = action.payload
-            })
+
             .addCase(updateTeamName.fulfilled, (state) => {
                 state.status = "succeeded"
             })
@@ -365,4 +390,5 @@ const teamManagementSlice = createSlice({
     }
 })
 
+export const { setCurrentTeam } = teamManagementSlice.actions
 export default teamManagementSlice.reducer

@@ -2,6 +2,7 @@ import { useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch } from "react-redux"
 import {
+    getCurrentSelectedTeam,
     getTeams,
     updateCurrentSelectedTeam
 } from "../../redux/slices/teamManagementSlice"
@@ -32,7 +33,7 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
         if (user?.teams && user) {
             dispatch(getTeams(user))
         }
-    }, [])
+    }, [user])
 
     const teamOptions = teams.map((team) => {
         return {
@@ -47,8 +48,21 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
         const selectedTeamID = e.target.value
         dispatch(updateCurrentSelectedTeam({ selectedTeamID, user }))
 
-        navigate(`/app/settings/team/${selectedTeamID}`)
+        console.log("Current selected team :", currentTeam)
+
+        navigate(`/app/settings/team/${currentTeam?.id}`)
     }
+
+    useEffect(() => {
+        if (user) {
+            const unsubscribe = dispatch(getCurrentSelectedTeam(user))
+            return () => {
+                if (typeof unsubscribe === "function") {
+                    unsubscribe()
+                }
+            }
+        }
+    }, [user])
 
     return (
         <aside
@@ -77,7 +91,7 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
                         <h2 className={"font-medium mb-2"}>{t("account")}</h2>
                         <div>
                             <SettingsLink
-                                path={`/app/settings/team/${currentTeam?.id}`}
+                                path={`/app/settings/team/${user?.currentSelectedTeam}`}
                                 to={t("teamSettings")}
                                 icon={<TeamProfileIcon />}
                             />
@@ -90,7 +104,7 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
                         </h2>
                         <div>
                             <SettingsLink
-                                path={`/app/settings/team/${currentTeam?.id}/members`}
+                                path={`/app/settings/team/${user?.currentSelectedTeam}/members`}
                                 to={t("teamMembers")}
                                 icon={<TeamMembersIcon />}
                             />

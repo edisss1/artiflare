@@ -41,75 +41,107 @@ const Board = ({
     const { t } = useTranslation()
     const modalRef = useRef<HTMLDialogElement | null>(null)
 
+    const [copied, setCopied] = useState(false)
+
+    const copyToClipboard = async () => {
+        try {
+            const url = `${window.location.origin}/board/${id}`
+            await navigator.clipboard.writeText(url)
+            setCopied(true)
+
+            console.log("Board link copied to clipboard:", url)
+            setCopied(true)
+        } catch (err) {
+            console.error("Error copying to clipboard:", err)
+        }
+        setTimeout(() => setCopied(false), 3000)
+    }
+
     return (
-        <div className="flex  flex-col relative border-2 gap-2 px-4 py-2 group hover:bg-primary dark:hover:bg-primary-dark/70 dark:hover:text-typography-dark    transition-colors duration-150 border-typography-light dark:border-typography-dark/40 rounded-md">
-            <Link
-                className="max-w-[200px] truncate text-lg"
-                to={`/app/board/${id}`}
+        <>
+            <div
+                className={` flex ${
+                    isPopoverOpen ? "z-40" : "z-0"
+                }   flex-col relative border-2 gap-2 px-4 py-2 group hover:bg-primary dark:hover:bg-primary-dark/70 dark:hover:text-typography-dark    transition-colors duration-150 border-typography-light dark:border-typography-dark/40 rounded-md`}
             >
-                {title}
-            </Link>
-            <div className="flex max-lg:flex-col gap-2 max-xl:flex-col ">
-                <p className={"max-w-[200px] truncate"}>
-                    {t("createdBy")} {createdBy},
-                </p>
-                <div className={"flex gap-2"}>
-                    <p className="max-w-[400px] truncate text-nowrap max-md:text-balance ">
-                        {t("modified")}{" "}
-                        {formatRelativeDate(updatedAt!).toLowerCase()} {t("by")}{" "}
-                        {modifiedBy}
+                <Link
+                    className="max-w-[200px] truncate text-lg"
+                    to={`/app/board/${id}`}
+                >
+                    {title}
+                </Link>
+                <div className="flex max-lg:flex-col gap-2 max-xl:flex-col ">
+                    <p className={"max-w-[200px] truncate"}>
+                        {t("createdBy")} {createdBy},
                     </p>
+                    <div className={"flex gap-2"}>
+                        <p className="max-w-[400px] truncate text-nowrap max-md:text-balance ">
+                            {t("modified")}{" "}
+                            {formatRelativeDate(updatedAt!).toLowerCase()}{" "}
+                            {t("by")} {modifiedBy}
+                        </p>
+                    </div>
+                </div>
+                <div
+                    className={`absolute top-[50%] right-4 -translate-y-[50%] flex items-center gap-4  ${
+                        isPopoverOpen || winowWidth < 1024
+                            ? "opacity-100 pointer-events-auto"
+                            : "opacity-0 "
+                    } max-xl:opacity-100 group-hover:opacity-100 transition-opacity duration-150`}
+                >
+                    <Button
+                        onClick={() =>
+                            !isFavorite
+                                ? dispatch(addBoardToFavorites(id))
+                                : dispatch(removeBoardsFromFavorites(id))
+                        }
+                        className={`hover:bg-typography-dark/10 transition-colors duration-150 w-8 h-8 flex items-center justify-center rounded-sm `}
+                    >
+                        <FavoritesIcon
+                            fill={`${
+                                isFavorite
+                                    ? "fill-typography-light dark:fill-typography-dark "
+                                    : ""
+                            }`}
+                        />
+                    </Button>
+                    <Button
+                        onClick={() =>
+                            togglePopover(isPopoverOpen, setIsPopoverOpen)
+                        }
+                        className="relative hover:bg-typography-dark/10 transition-colors duration-150 w-8 h-8 flex items-center justify-center rounded-sm"
+                    >
+                        <MoreIcon />
+                    </Button>
+                    <Popover
+                        popoverRef={popoverRef}
+                        isPopoverOpen={isPopoverOpen}
+                        setIsPopoverOpen={setIsPopoverOpen}
+                        content={
+                            <PopoverBoardContent
+                                copyToClipboard={copyToClipboard}
+                                openBoardRenameModal={() =>
+                                    modalRef.current?.showModal()
+                                }
+                                boardID={id}
+                            />
+                        }
+                    />
                 </div>
             </div>
-            <div
-                className={`absolute top-[50%] right-4 -translate-y-[50%] flex items-center gap-4  ${
-                    isPopoverOpen || winowWidth < 1024
-                        ? "opacity-100 pointer-events-auto"
-                        : "opacity-0 "
-                } max-xl:opacity-100 group-hover:opacity-100 transition-opacity duration-150`}
-            >
-                <Button
-                    onClick={() =>
-                        !isFavorite
-                            ? dispatch(addBoardToFavorites(id))
-                            : dispatch(removeBoardsFromFavorites(id))
-                    }
-                    className={`hover:bg-typography-dark/10 transition-colors duration-150 w-8 h-8 flex items-center justify-center rounded-sm `}
-                >
-                    <FavoritesIcon
-                        fill={`${
-                            isFavorite
-                                ? "fill-typography-light dark:fill-typography-dark "
-                                : ""
-                        }`}
-                    />
-                </Button>
-                <Button
-                    onClick={() =>
-                        togglePopover(isPopoverOpen, setIsPopoverOpen)
-                    }
-                    className="relative hover:bg-typography-dark/10 transition-colors duration-150 w-8 h-8 flex items-center justify-center rounded-sm"
-                >
-                    <MoreIcon />
-                </Button>
-                <Popover
-                    popoverRef={popoverRef}
-                    isPopoverOpen={isPopoverOpen}
-                    setIsPopoverOpen={setIsPopoverOpen}
-                    content={
-                        <PopoverBoardContent
-                            openBoardRenameModal={() =>
-                                modalRef.current?.showModal()
-                            }
-                            boardID={id}
-                        />
-                    }
-                />
-            </div>
+
             <Modal minHeight="" modalRef={modalRef}>
                 <BoardRenameModalContent boardID={id} modalRef={modalRef} />
             </Modal>
-        </div>
+
+            <div
+                className={`${
+                    !copied ? "translate-y-[500px]" : "translate-y-0"
+                } bg-primary rounded-lg border-2 border-typography-light dark:border-typography-dark dark:bg-primary-dark px-4 py-2 fixed bottom-4 left-[55%] transform -translate-x-1/2 transition-transform duration-1000  `}
+            >
+                <span className=" ">Link copied to clipboard</span>
+            </div>
+        </>
     )
 }
 export default Board

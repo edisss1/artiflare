@@ -25,7 +25,11 @@ const User = ({ position }: { position: string }) => {
         >
             <div className="flex gap-2 items-center w-[calc(100%)] truncate ">
                 {user?.img ? (
-                    <img src={user.img} className="w-8 h-8 rounded-full" />
+                    <img
+                        src={user.img}
+                        className="w-8 h-8 rounded-full"
+                        loading="lazy"
+                    />
                 ) : (
                     <FallbackAvatar
                         width="w-8"

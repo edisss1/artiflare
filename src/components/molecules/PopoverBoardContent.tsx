@@ -9,26 +9,18 @@ import CopyLinkIcon from "../icons/CopyLinkIcon"
 interface PopoverBoardContentProps {
     boardID: string | undefined
     openBoardRenameModal: () => void
+    copyToClipboard: () => void
 }
 
 const PopoverBoardContent = ({
     boardID,
-    openBoardRenameModal
+    openBoardRenameModal,
+    copyToClipboard
 }: PopoverBoardContentProps) => {
     const dispatch: AppDispatch = useDispatch()
 
-    const copyToClipboard = async () => {
-        try {
-            const url = `${window.location.origin}/board/${boardID}`
-            await navigator.clipboard.writeText(url)
-            alert("Board link copied to clipboard")
-        } catch (err) {
-            console.error("Error copying to clipboard:", err)
-        }
-    }
-
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 z-0">
             <Button
                 className="flex gap-2 items-center"
                 onClick={() => dispatch(deleteBoard(boardID))}

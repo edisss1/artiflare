@@ -1,55 +1,22 @@
 const TrashCanIcon = () => {
     return (
         <svg
-            className="[&>*]:stroke-bg-dark [&>*]:dark:stroke-bg-light"
-            width="20"
+            className="[&>*]:fill-bg-dark dark:[&>*]:fill-bg-light"
             height="20"
-            viewBox="-0.5 0 25 25"
-            fill="none"
+            width="20"
+            version="1.1"
+            id="_x32_"
             xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
         >
-            <path
-                d="M6.5 7.08499V21.415C6.5 21.695 6.72 21.915 7 21.915H17C17.28 21.915 17.5 21.695 17.5 21.415V7.08499"
-                stroke="#0F0F0F"
-                strokeMiterlimit="10"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-            <path
-                d="M14 5.08499H10V3.58499C10 3.30499 10.22 3.08499 10.5 3.08499H13.5C13.78 3.08499 14 3.30499 14 3.58499V5.08499Z"
-                stroke="#0F0F0F"
-                strokeMiterlimit="10"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-            <path
-                d="M5 5.08499H19"
-                stroke="#0F0F0F"
-                strokeMiterlimit="10"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-            <path
-                d="M12 10.465V17.925"
-                stroke="#0F0F0F"
-                strokeMiterlimit="10"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-            <path
-                d="M15 9.465V18.925"
-                stroke="#0F0F0F"
-                strokeMiterlimit="10"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-            <path
-                d="M9 9.465V18.925"
-                stroke="#0F0F0F"
-                strokeMiterlimit="10"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
+            <g>
+                <path
+                    d="M410.886,43.93H301.533C299.778,19.793,280.576,0.093,256.005,0c-24.598,0.093-43.8,19.793-45.556,43.93
+		H101.115c-22.787,0-41.407,18.628-41.407,41.398v1.792v15.543v14.822c0,5.692,4.648,10.35,10.34,10.35h0.674l23.859,342.87
+		C96.152,493.408,116.075,512,138.853,512h75.745c22.76,0,60.027,0,82.814,0h75.726c22.769,0,42.701-18.592,44.281-41.296
+		l23.84-342.87h0.675c5.702,0,10.358-4.658,10.358-10.35v-14.822V87.12v-1.792C452.292,62.558,433.654,43.93,410.886,43.93z"
+                />
+            </g>
         </svg>
     )
 }

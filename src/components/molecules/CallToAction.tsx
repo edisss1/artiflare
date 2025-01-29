@@ -16,11 +16,10 @@ const CallToAction = () => {
         <section className="mt-[clamp(1rem,30vh,5rem)]  max-lg:items-center grid grid-cols-8 max-md:grid-cols-2 ">
             <div
                 className={
-                    "max-w-[800px] flex gap-[clamp(1rem,10vw,2.25rem)] flex-col col-start-3 col-span-2 max-md:col-start-1 w-full max-md:px-2"
+                    "max-w-[800px] max-md:max-w-[415px]  flex gap-[clamp(1rem,10vw,2.25rem)] flex-col col-start-3 col-span-2 max-md:col-start-1 w-full max-md:px-2"
                 }
             >
                 <Typewriter
-                    // text="Start collaborating creatively with your team in real time"
                     text={t("callToAction")}
                     delay={20}
                     styles={[

@@ -314,6 +314,9 @@ const boardSlice = createSlice({
         },
         updateFavoriteBoards: (state, action: PayloadAction<Board[]>) => {
             state.favoriteBoards = action.payload
+        },
+        updateBoardsPerPage: (state, action: PayloadAction<number>) => {
+            state.boardsPerPage = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -402,7 +405,8 @@ export const {
     setBoardsPerPage,
     updateSortedBy,
     updateRecentBoards,
-    updateFavoriteBoards
+    updateFavoriteBoards,
+    updateBoardsPerPage
 } = boardSlice.actions
 
 export default boardSlice.reducer

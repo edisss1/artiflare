@@ -52,7 +52,9 @@ const TeamSettingsPanel = () => {
     return (
         <div className="p-4">
             <SettingsHeader>{t("teamSettings")}</SettingsHeader>
-            <div className={`flex justify-between w-full max-w-[90%]`}>
+            <div
+                className={`flex justify-between w-full max-w-[90%] max-md:flex-col max-lg:items-start max-lg:gap-8`}
+            >
                 <div className={"grid gap-2 place-items-start"}>
                     <SettingsInput
                         value={currentTeam?.name}
@@ -76,10 +78,10 @@ const TeamSettingsPanel = () => {
                             <img
                                 src={currentTeam?.logo}
                                 alt="team logo"
-                                className="w-full object-cover rounded-full"
+                                className=" object-cover rounded-full w-[clamp(2rem,40vw,10rem)] "
                             />
                         ) : (
-                            <div className="w-full aspect-square bg-gray-500" />
+                            <div className="aspect-square bg-gray-500 w-[clamp(2rem,40vw,10rem)]" />
                         )}
                     </div>
 

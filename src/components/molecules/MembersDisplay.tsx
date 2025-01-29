@@ -8,15 +8,18 @@ interface MembersDisplayProps {
 
 const MembersDisplay = ({ currentTeam }: MembersDisplayProps) => {
     return (
-        <div className="flex flex-col gap-2 mx-8 mt-8">
+        <div className="flex flex-col gap-2 mx-8 mt-8 max-lg:min-h-[500px]">
             <div className="grid grid-cols-3">
                 <h3>{t("name")}</h3>
                 <h3>{t("role")}</h3>
                 <h3>{t("lastAccess")}</h3>
             </div>
             {currentTeam?.members.map((member) => (
-                <div key={member.uid} className="grid grid-cols-3 items-center">
-                    <div className="flex items-center gap-2">
+                <div
+                    key={member.uid}
+                    className="grid grid-cols-3 items-center "
+                >
+                    <div className="flex max-md:flex-col max-lg:items-start items-center gap-2">
                         <img
                             className="w-8 h-8 rounded-full"
                             src={member.img ? member.img : ""}
@@ -24,7 +27,9 @@ const MembersDisplay = ({ currentTeam }: MembersDisplayProps) => {
                         />
                         <div className="flex flex-col gap-2">
                             <p className="text-sm">{member.displayName}</p>
-                            <p className="text-xs">{member.email}</p>
+                            <p className="text-xs truncate max-w-[90px]">
+                                {member.email}
+                            </p>
                         </div>
                     </div>
                     <div className="col-start-2">

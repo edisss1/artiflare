@@ -137,9 +137,9 @@ const Board = ({
             <div
                 className={`${
                     !copied ? "translate-y-[500px]" : "translate-y-0"
-                } bg-primary rounded-lg border-2 border-typography-light dark:border-typography-dark dark:bg-primary-dark px-4 py-2 fixed bottom-4 left-[55%] transform -translate-x-1/2 transition-transform duration-1000  `}
+                } bg-primary rounded-lg border-2 border-typography-light dark:border-typography-dark dark:bg-primary-dark px-4 py-2 fixed bottom-4 left-[55%] self-center text-center max-w-[300px] w-full transform -translate-x-1/2 transition-transform duration-1000  `}
             >
-                <span className=" ">Link copied to clipboard</span>
+                <span className="text-center">Link copied to clipboard</span>
             </div>
         </>
     )

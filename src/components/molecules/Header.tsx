@@ -35,7 +35,7 @@ const Header = ({ plan }: HeaderProps) => {
             <div className="flex gap-2 items-center">
                 <Button
                     onClick={handleMobileSideBarOpen}
-                    className={"lg:hidden"}
+                    className={"md:hidden"}
                 >
                     <BurgerMenuIcon />
                 </Button>

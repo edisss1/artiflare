@@ -33,9 +33,9 @@ const UserInfoSettings = ({
 
     return (
         <div
-            className={`flex justify-between max-lg:flex-col max-lg:items-start max-lg:gap-8 w-full max-w-[90%]`}
+            className={`flex justify-between max-md:flex-col max-lg:items-start max-lg:gap-8 w-full max-w-[90%]`}
         >
-            <div className={"grid gap-2 place-items-start "}>
+            <div className={"grid gap-2 place-items-start max-md:gap-4 "}>
                 <SettingsInput
                     defaultValue={user?.displayName!}
                     className={"rounded-md w-full max-w-[200px] "}
@@ -46,7 +46,7 @@ const UserInfoSettings = ({
                     type={"text"}
                 />
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 ">
                     <Button
                         onClick={handleUserDisplayNameChange}
                         className={

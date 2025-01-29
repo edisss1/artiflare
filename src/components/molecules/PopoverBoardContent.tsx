@@ -37,7 +37,7 @@ const PopoverBoardContent = ({
             </Button>
             <Button
                 onClick={copyToClipboard}
-                className="flex gap-2 items-center"
+                className="flex gap-2 items-center "
             >
                 <CopyLinkIcon />
                 <p> Copy board link</p>

@@ -9,7 +9,7 @@ const NavBar = () => {
     const { t } = useTranslation()
 
     return (
-        <nav className="w-full max-w-[50%] max-lg:max-w-[100%] text-typography-light dark:text-typography-dark items-center flex justify-between mx-auto bg-primary dark:bg-primary-dark mt-9 px-6 py-4 rounded-md">
+        <nav className="w-full max-w-[50%] max-lg:max-w-[90%] text-typography-light dark:text-typography-dark items-center flex justify-between mx-auto bg-primary dark:bg-primary-dark mt-9 px-6 py-4 rounded-md">
             <Link to={"/"} className="text-xl ">
                 Artiflare
             </Link>

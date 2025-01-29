@@ -5,7 +5,7 @@ interface MiscStates {
 }
 
 const initialState: MiscStates = {
-    isMobileSidebarOpened: true
+    isMobileSidebarOpened: false
 }
 
 const miscStatesSlice = createSlice({

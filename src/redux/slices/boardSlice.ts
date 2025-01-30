@@ -15,6 +15,7 @@ import {
 } from "firebase/firestore"
 import { db } from "../../firestore/firebaseConfig"
 import { AppDispatch } from "../store"
+import { ExcalidrawElement } from "@excalidraw/excalidraw/types/element/types"
 
 interface BoardState {
     boards: Board[]
@@ -63,7 +64,7 @@ export const createBoard = createAsyncThunk(
                     updatedAt: new Date().toISOString(),
                     createdBy: user.displayName || user.email,
                     modifiedBy: user.displayName || user.email,
-                    data: {},
+                    elements: [],
                     members: [
                         {
                             uid: user.uid,
@@ -118,54 +119,56 @@ export const fetchAllUserBoards =
         }
     }
 
-export const getBoardByID = createAsyncThunk(
-    "board/getBoardByID",
-    async (boardID: string) => {
-        try {
-            const boardRef = doc(db, "boards", boardID)
-            const boardDoc = await getDoc(boardRef)
+export const getBoardByID = async (boardID: string) => {
+    try {
+        const boardRef = doc(db, "boards", boardID)
+        const boardDoc = await getDoc(boardRef)
 
-            if (boardDoc.exists()) {
-                const boardData = boardDoc.data()
+        if (boardDoc.exists()) {
+            const boardData = boardDoc.data()
+
+            if (boardData && typeof boardData.elements === "string") {
+                const elements: ExcalidrawElement[] = JSON.parse(
+                    boardData.elements
+                )
 
                 console.log("board doc data", boardData)
-
-                return boardData
-            } else {
-                console.error("Board not found")
-                throw new Error("Board not found")
+                return elements
             }
-        } catch (err) {
-            console.error(err)
-            throw err
+        } else {
+            console.error("Board not found")
+            throw new Error("Board not found")
         }
+    } catch (err) {
+        console.error(err)
+        throw err
     }
-)
+}
 
 export const updateBoard = createAsyncThunk(
     "board/updateBoard",
     async ({
         boardID,
-        newBoardData,
+        elements,
         user
     }: {
-        boardID: string
-        newBoardData: {}
+        boardID: string | undefined
+        elements: readonly ExcalidrawElement[]
 
-        user: User
+        user: User | null
     }) => {
+        if (!boardID || !user) return
+
         try {
             const boardRef = doc(db, "boards", boardID)
+
             await updateDoc(boardRef, {
-                data: newBoardData,
+                elements: JSON.stringify(elements),
                 updatedAt: new Date().toISOString(),
                 modifiedBy: user.displayName || user.email
             })
-
-            return { boardID, user, newBoardData }
         } catch (err) {
-            console.error((err as Error).message)
-            throw err
+            console.error(err)
         }
     }
 )
@@ -328,39 +331,22 @@ const boardSlice = createSlice({
             .addCase(createBoard.fulfilled, (state, action) => {
                 if (action.payload && state.currentBoard) {
                     state.status = "succeeded"
-                    state.currentBoard.data = action.payload.data
+                    state.currentBoard = action.payload
                 }
             })
             .addCase(createBoard.rejected, (state, action) => {
                 state.status = "failed"
                 state.error = action.error.message
             })
-            .addCase(getBoardByID.pending, (state) => {
-                state.status = "loading"
-                state.error = undefined
-            })
-            .addCase(
-                getBoardByID.fulfilled,
-                (state, action: PayloadAction<Board["data"]>) => {
-                    state.error = undefined
-                    state.status = "succeeded"
-                    if (state.currentBoard) {
-                        state.currentBoard.data = action.payload
-                    }
-                }
-            )
-            .addCase(getBoardByID.rejected, (state, action) => {
-                state.status = "failed"
-                state.error = action.error.message
-            })
+
             .addCase(updateBoard.pending, (state) => {
                 state.status = "loading"
                 state.error = undefined
             })
-            .addCase(updateBoard.fulfilled, (state, action) => {
+            .addCase(updateBoard.fulfilled, (state, action: any) => {
                 state.status = "succeeded"
                 if (state.currentBoard) {
-                    state.currentBoard.data = action.payload.newBoardData
+                    state.currentBoard.elements = action.payload.newBoardData
                     state.currentBoard.updatedAt = new Date().toISOString()
                 }
             })

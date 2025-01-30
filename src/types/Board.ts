@@ -9,7 +9,7 @@ export interface Board {
     updatedAt: string
     createdBy: string | null
     modifiedBy: string | null
-    data: {}
+    elements: any[]
     members: TeamMember[]
     isFavorite: boolean
 }

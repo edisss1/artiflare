@@ -5,6 +5,7 @@ import { Message } from "../../types/MessageType"
 import ChevronIcon from "../icons/ChevronIcon"
 import SendMessageIcon from "../icons/SendMessageIcon"
 import FormInput from "../atoms/FormInput"
+import User from "../atoms/User"
 
 const ChatContainer = () => {
     const [chatExpanded, setChatExtended] = useState(false)
@@ -39,11 +40,11 @@ const ChatContainer = () => {
     return (
         <div
             role="chat"
-            className={`absolute right-4 bottom-8 w-full max-w-[320px] border-2 border-typography-light grid chat-grid ${
+            className={` w-full max-w-[320px] border-2 border-typography-light grid chat-grid ${
                 chatExpanded ? "expanded " : "h-[56px]"
             }  bg-primary z-10 py-3 px-4 rounded-md `}
         >
-            <div className="w-full flex justify-between items-center mb-4">
+            <div className="w-full relative flex justify-between items-center mb-4">
                 <h3>Chat</h3>
                 <Button
                     onClick={handleChatExpanding}
@@ -57,7 +58,7 @@ const ChatContainer = () => {
                 </Button>
             </div>
             <div
-                className={`row-start-2 ${
+                className={`row-start-2  ${
                     chatExpanded
                         ? "visible h-auto"
                         : "invisible h-0 overflow-hidden"

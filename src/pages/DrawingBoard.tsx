@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../redux/store"
 import { getBoardByID, updateBoard } from "../redux/slices/boardSlice"
@@ -9,7 +9,6 @@ import ChatContainer from "../components/molecules/ChatContainer.tsx"
 
 import { Excalidraw, restoreElements } from "@excalidraw/excalidraw"
 import { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types/types"
-import { ExcalidrawElement } from "@excalidraw/excalidraw/types/element/types"
 import User from "../components/atoms/User.tsx"
 
 const DrawingBoard = () => {
@@ -19,13 +18,24 @@ const DrawingBoard = () => {
     const { boardID } = useParams()
     const { user } = useSelector((state: RootState) => state.auth)
 
-    const handleChange = (elements: readonly ExcalidrawElement[]) => {
-        const activeElements = elements.filter((element) => !element.isDeleted)
+    useEffect(() => {
+        if (!excalidrawAPI) return
 
-        if (activeElements.length > 0) {
-            dispatch(updateBoard({ boardID, elements, user }))
+        const handlePointerUp = () => {
+            const elements = excalidrawAPI.getSceneElements()
+            const activeElements = elements.filter(
+                (element) => !element.isDeleted
+            )
+
+            if (activeElements.length > 0) {
+                dispatch(updateBoard({ boardID, elements, user }))
+            }
         }
-    }
+
+        const unsubscribe = excalidrawAPI.onPointerUp(handlePointerUp)
+
+        return () => unsubscribe()
+    }, [excalidrawAPI])
 
     useEffect(() => {
         const loadBoard = async () => {
@@ -53,10 +63,7 @@ const DrawingBoard = () => {
 
                     <ChatContainer />
                 </div>
-                <Excalidraw
-                    onChange={handleChange}
-                    excalidrawAPI={(api) => setExcalidrawAPI(api)}
-                />
+                <Excalidraw excalidrawAPI={(api) => setExcalidrawAPI(api)} />
             </div>
         </>
     )

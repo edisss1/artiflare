@@ -42,7 +42,7 @@ const DashboardSidebar = () => {
             <div className="gap-[clamp(1rem,40vh,5rem)] h-full flex flex-col relative">
                 <Button
                     onClick={handleMobileSideBarClose}
-                    className={"md:hidden"}
+                    className={"lg:hidden"}
                 >
                     <BurgerMenuIcon />
                 </Button>
@@ -52,7 +52,7 @@ const DashboardSidebar = () => {
                     value={query}
                 />
                 <DashboardLinksContainer />
-                <User position="absolute bottom-0" />
+                <User position="absolute bottom-0 left-0" />
             </div>
         </aside>
     )

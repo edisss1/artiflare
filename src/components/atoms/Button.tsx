@@ -1,6 +1,6 @@
 interface ButtonProps {
     children: React.ReactNode
-    onClick?: () => void
+    onClick: () => void
     className: string
     disabled?: boolean
     ariaLabel?: string

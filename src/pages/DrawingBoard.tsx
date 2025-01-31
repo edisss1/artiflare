@@ -10,11 +10,13 @@ import ChatContainer from "../components/molecules/ChatContainer.tsx"
 import { Excalidraw, restoreElements } from "@excalidraw/excalidraw"
 import { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types/types"
 import User from "../components/atoms/User.tsx"
+import { Theme } from "@excalidraw/excalidraw/types/element/types"
 
 const DrawingBoard = () => {
     const dispatch: AppDispatch = useDispatch()
     const [excalidrawAPI, setExcalidrawAPI] =
         useState<ExcalidrawImperativeAPI | null>(null)
+    const [canvasTheme, setCanvasTheme] = useState<Theme>("light")
     const { boardID } = useParams()
     const { user } = useSelector((state: RootState) => state.auth)
 
@@ -53,6 +55,16 @@ const DrawingBoard = () => {
         loadBoard()
     }, [boardID, excalidrawAPI])
 
+    useEffect(() => {
+        const htmlElement = document.querySelector("html")
+
+        if (htmlElement) {
+            htmlElement.classList.length > 0
+                ? setCanvasTheme("dark")
+                : setCanvasTheme("light")
+        }
+    }, [canvasTheme])
+
     return (
         <>
             <CanvasNav />
@@ -63,7 +75,10 @@ const DrawingBoard = () => {
 
                     <ChatContainer />
                 </div>
-                <Excalidraw excalidrawAPI={(api) => setExcalidrawAPI(api)} />
+                <Excalidraw
+                    theme={canvasTheme}
+                    excalidrawAPI={(api) => setExcalidrawAPI(api)}
+                />
             </div>
         </>
     )

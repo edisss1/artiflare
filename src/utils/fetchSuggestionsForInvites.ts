@@ -18,7 +18,6 @@ export async function fetchSuggestionsForInvites(
         }
 
         setSuggestions(results.map((user) => user.name))
-        console.log("Suggestions:", results)
     } catch (error) {
         console.error("Error fetching suggestions:", error)
         setSuggestions([])

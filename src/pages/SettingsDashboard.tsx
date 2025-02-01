@@ -12,7 +12,6 @@ const SettingsDashboard = () => {
 
     const handleOpenPanel = () => {
         setIsPanelVisible((prev) => !prev)
-        console.log(isPanelVisible)
     }
 
     useEffect(() => {

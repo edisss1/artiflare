@@ -64,13 +64,6 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                         emailVerified: firebaseUser.emailVerified
                     }
 
-                    console.log(
-                        `Current selected team in auth checker: ${loggedUser.currentSelectedTeam}`
-                    )
-                    console.log(
-                        `Current team object's id in auth checker: ${currentTeam?.id}`
-                    )
-
                     const currentTeamSnap = await getDoc(currentTeamDocRef)
                     if (currentTeamSnap.exists()) {
                         const currentTeamData = currentTeamSnap.data() as Team
@@ -92,10 +85,6 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                     await updateDoc(userDocRef, {
                         lastAccessAt: new Date().toISOString()
                     })
-
-                    console.log(
-                        `User's selected team: ${loggedUser.currentSelectedTeam}`
-                    )
 
                     dispatch(setUser(loggedUser))
                 } catch (error) {

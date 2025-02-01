@@ -39,16 +39,13 @@ export const sendInvite = createAsyncThunk(
         invitees: string[]
     }) => {
         if (!user || invitees.length === 0) {
-            console.log("No user or invitees")
             return
         }
 
         try {
             const teamDoc = doc(db, "teams", user.currentSelectedTeam)
-            console.log(`teamDoc - ${teamDoc}`)
 
             const teamData = await getDoc(teamDoc)
-            console.log(`teamData - ${teamData}`)
 
             if (!teamData) return
 
@@ -66,13 +63,9 @@ export const sendInvite = createAsyncThunk(
                 teamID: teamData.id
             }
 
-            console.log(`Adding new invite - ${newInvitation} - to database`)
-
             const notificationsRef = collection(db, "notifications")
 
             await addDoc(notificationsRef, newInvitation)
-
-            console.log(`Sent invites to ${invitees}`)
         } catch (err) {
             console.error(err)
             throw new Error((err as Error).message)

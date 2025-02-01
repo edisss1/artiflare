@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../redux/store"
-import { getBoardByID, updateBoard } from "../redux/slices/boardSlice"
-import { useParams } from "react-router-dom"
+import {
+    checkMemebership,
+    getBoardByID,
+    updateBoard
+} from "../redux/slices/boardSlice"
+import { useNavigate, useParams } from "react-router-dom"
 
 import CanvasNav from "../components/molecules/CanvasNav.tsx"
 import ChatContainer from "../components/molecules/ChatContainer.tsx"
@@ -10,7 +14,13 @@ import ChatContainer from "../components/molecules/ChatContainer.tsx"
 import { Excalidraw, restoreElements } from "@excalidraw/excalidraw"
 import { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types/types"
 import User from "../components/atoms/User.tsx"
-import { Theme } from "@excalidraw/excalidraw/types/element/types"
+import {
+    ExcalidrawElement,
+    Theme
+} from "@excalidraw/excalidraw/types/element/types"
+import { collection, onSnapshot, query, where } from "firebase/firestore"
+import { db } from "../firestore/firebaseConfig.ts"
+import { Board } from "../types/Board.ts"
 
 const DrawingBoard = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -19,6 +29,8 @@ const DrawingBoard = () => {
     const [canvasTheme, setCanvasTheme] = useState<Theme>("light")
     const { boardID } = useParams()
     const { user } = useSelector((state: RootState) => state.auth)
+    const { isMemberOfBoard } = useSelector((state: RootState) => state.boards)
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (!excalidrawAPI) return
@@ -30,7 +42,9 @@ const DrawingBoard = () => {
             )
 
             if (activeElements.length > 0) {
-                dispatch(updateBoard({ boardID, elements, user }))
+                dispatch(
+                    updateBoard({ boardID, elements: activeElements, user })
+                )
             }
         }
 
@@ -40,20 +54,26 @@ const DrawingBoard = () => {
     }, [excalidrawAPI])
 
     useEffect(() => {
-        const loadBoard = async () => {
-            const savedElements = await getBoardByID(boardID!)
+        const queryBoards = query(
+            collection(db, "boards"),
+            where("id", "==", boardID)
+        )
 
-            if (savedElements) {
-                const loadedElements = restoreElements(savedElements, null)
+        onSnapshot(queryBoards, (boardSnap) => {
+            boardSnap.forEach((doc) => {
+                const savedElements = JSON.parse(
+                    doc.data().elements
+                ) as ExcalidrawElement[]
+                if (savedElements) {
+                    const loadedElements = restoreElements(savedElements, null)
 
-                if (excalidrawAPI) {
-                    excalidrawAPI.updateScene({ elements: loadedElements })
+                    if (excalidrawAPI) {
+                        excalidrawAPI.updateScene({ elements: loadedElements })
+                    }
                 }
-            }
-        }
-
-        loadBoard()
-    }, [boardID, excalidrawAPI])
+            })
+        })
+    }, [excalidrawAPI])
 
     useEffect(() => {
         const htmlElement = document.querySelector("html")
@@ -64,6 +84,22 @@ const DrawingBoard = () => {
                 : setCanvasTheme("light")
         }
     }, [canvasTheme])
+
+    useEffect(() => {
+        if (!user) {
+            navigate("/")
+            return
+        }
+        dispatch(checkMemebership({ boardID, userID: user.uid }))
+    }, [boardID, user, dispatch, navigate])
+
+    useEffect(() => {
+        if (isMemberOfBoard === false) {
+            navigate("/app/dashboard")
+        } else if (isMemberOfBoard === true) {
+            navigate(`/app/board/${boardID}`)
+        }
+    }, [isMemberOfBoard, boardID, navigate])
 
     return (
         <>

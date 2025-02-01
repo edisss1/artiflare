@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import DashboardLinksContainer from "../atoms/DashboardLinksContainer"
 import Search from "../atoms/Search"
 import User from "../atoms/User.tsx"
@@ -8,17 +8,20 @@ import { AppDispatch, RootState } from "../../redux/store.ts"
 import { useDispatch, useSelector } from "react-redux"
 import { setIsMobileSidebarOpened } from "../../redux/slices/miscStatesSlice.ts"
 import { useTranslation } from "react-i18next"
+import { setBoardSearchQuery } from "../../redux/slices/boardSlice.ts"
 
 const DashboardSidebar = () => {
-    const [query, setQuery] = useState("")
+    const { boardSearchQuery } = useSelector((state: RootState) => state.boards)
     const dispatch: AppDispatch = useDispatch()
     const { isMobileSidebarOpened } = useSelector(
         (state: RootState) => state.miscStates
     )
     const { t } = useTranslation()
 
-    const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setQuery(e.target.value)
+    const handleSearchQueryChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        dispatch(setBoardSearchQuery(e.target.value))
     }
 
     const handleMobileSideBarClose = () => {
@@ -48,8 +51,8 @@ const DashboardSidebar = () => {
                 </Button>
                 <Search
                     placeholder={t("searchByTitle")}
-                    onChange={(e) => handleQueryChange(e)}
-                    value={query}
+                    onChange={(e) => handleSearchQueryChange(e)}
+                    value={boardSearchQuery}
                 />
                 <DashboardLinksContainer />
                 <User position="absolute bottom-0 left-0" />

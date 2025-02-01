@@ -49,7 +49,6 @@ const Board = ({
             await navigator.clipboard.writeText(url)
             setCopied(true)
 
-            console.log("Board link copied to clipboard:", url)
             setCopied(true)
         } catch (err) {
             console.error("Error copying to clipboard:", err)

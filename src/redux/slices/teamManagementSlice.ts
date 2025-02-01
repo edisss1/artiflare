@@ -191,8 +191,6 @@ export const addNewUserToTeam = async (
             return
         }
 
-        console.log(`Added user ${inviteeDoc.id} to team ${teamDoc.id}`)
-
         teamData.members = teamData.members || []
         teamData.members.push()
 
@@ -260,7 +258,6 @@ export const updateCurrentSelectedTeam = createAsyncThunk(
             const userDocRef = doc(db, "users", user!.uid)
             const userDoc = await getDoc(userDocRef)
             if (userDoc.exists()) {
-                console.log(`Team updated to ${selectedTeamID}`)
                 await updateDoc(userDocRef, {
                     currentSelectedTeam: selectedTeamID
                 })
@@ -289,11 +286,7 @@ export const getCurrentSelectedTeam =
                             ...doc.data()
                         } as Team)
                 )
-                console.log(
-                    `Current team from getCurrentTeam function: ${JSON.stringify(
-                        currentTeam[0]
-                    )}`
-                )
+
                 dispatch(setCurrentTeam(currentTeam[0]))
             })
         } catch (err) {

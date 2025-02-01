@@ -48,8 +48,6 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
         const selectedTeamID = e.target.value
         dispatch(updateCurrentSelectedTeam({ selectedTeamID, user }))
 
-        console.log("Current selected team :", currentTeam)
-
         navigate(`/app/settings/team/${currentTeam?.id}`)
     }
 

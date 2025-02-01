@@ -22,7 +22,9 @@ const BoardsContainer = ({ boards }: BoardsContainerProps) => {
     const boardsPerPage = useSelector(
         (state: RootState) => state.boards.boardsPerPage
     )
-    const { sortedBy } = useSelector((state: RootState) => state.boards)
+    const { sortedBy, boardSearchQuery } = useSelector(
+        (state: RootState) => state.boards
+    )
 
     const totalPages = Math.ceil(boards.length / boardsPerPage)
 
@@ -40,13 +42,28 @@ const BoardsContainer = ({ boards }: BoardsContainerProps) => {
                 return boardsForSort.sort((a, b) =>
                     a.updatedAt < b.updatedAt ? -1 : 1
                 )
+            case "oldest-first":
+                return boardsForSort.sort((a, b) =>
+                    a.updatedAt > b.updatedAt ? -1 : 1
+                )
+
+            default:
+                return boardsForSort.sort((a, b) =>
+                    a.updatedAt < b.updatedAt ? -1 : 1
+                )
         }
     }, [sortedBy, boards])
+
+    const queriedBoards = useMemo(() => {
+        return sortedBoards.filter((board) =>
+            board.boardTitle.includes(boardSearchQuery)
+        )
+    }, [boardSearchQuery, boards])
 
     const paginatedBoards = useMemo(() => {
         const startIndex = (currentPage - 1) * boardsPerPage
         const endIndex = startIndex + boardsPerPage
-        return sortedBoards?.slice(startIndex, endIndex)
+        return queriedBoards?.slice(startIndex, endIndex)
     }, [currentPage, boardsPerPage, boards])
 
     useEffect(() => {

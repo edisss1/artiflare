@@ -26,6 +26,8 @@ interface BoardState {
     error: string | undefined
     boardsPerPage: number
     sortedBy: string
+    isMemberOfBoard: boolean | undefined
+    boardSearchQuery: string
 }
 
 const initialState: BoardState = {
@@ -36,7 +38,9 @@ const initialState: BoardState = {
     status: "idle",
     error: undefined,
     boardsPerPage: 4,
-    sortedBy: "last-opened"
+    sortedBy: "last-opened",
+    isMemberOfBoard: undefined,
+    boardSearchQuery: ""
 }
 
 export const createBoard = createAsyncThunk(
@@ -82,6 +86,10 @@ export const createBoard = createAsyncThunk(
 
                 await updateDoc(doc(db, "users", user.uid), {
                     boards: arrayUnion(docRef.id)
+                })
+
+                await updateDoc(doc(db, "boards", docRef.id), {
+                    id: docRef.id
                 })
 
                 return { id: docRef.id, ...boardData }
@@ -132,7 +140,6 @@ export const getBoardByID = async (boardID: string) => {
                     boardData.elements
                 )
 
-                console.log("board doc data", boardData)
                 return elements
             }
         } else {
@@ -169,6 +176,42 @@ export const updateBoard = createAsyncThunk(
             })
         } catch (err) {
             console.error(err)
+        }
+    }
+)
+
+export const checkMemebership = createAsyncThunk(
+    "board/checkMemebership",
+    async ({
+        boardID,
+        userID
+    }: {
+        boardID: string | undefined
+        userID: string | null
+    }) => {
+        if (!boardID || !userID) return
+        try {
+            const boardRef = doc(db, "boards", boardID)
+            const boardDoc = await getDoc(boardRef)
+
+            if (boardDoc.exists()) {
+                const boardData: Board = boardDoc.data() as Board
+                const members = boardData.members
+
+                if (members.length > 0) {
+                    const member = members.find(
+                        (member) => member.uid === userID
+                    )
+                    if (member?.uid === userID) {
+                        return true
+                    } else {
+                        return false
+                    }
+                }
+            }
+        } catch (err) {
+            console.error(err)
+            throw err
         }
     }
 )
@@ -320,6 +363,9 @@ const boardSlice = createSlice({
         },
         updateBoardsPerPage: (state, action: PayloadAction<number>) => {
             state.boardsPerPage = action.payload
+        },
+        setBoardSearchQuery: (state, action: PayloadAction<string>) => {
+            return { ...state, boardSearchQuery: action.payload }
         }
     },
     extraReducers: (builder) => {
@@ -382,6 +428,17 @@ const boardSlice = createSlice({
                 state.status = "failed"
                 state.error = action.error.message
             })
+            .addCase(checkMemebership.pending, (state) => {
+                state.status = "loading"
+                state.error = undefined
+            })
+            .addCase(checkMemebership.fulfilled, (state, action) => {
+                state.isMemberOfBoard = action.payload
+            })
+            .addCase(checkMemebership.rejected, (state, action) => {
+                state.status = "failed"
+                state.error = action.error.message
+            })
     }
 })
 
@@ -392,7 +449,8 @@ export const {
     updateSortedBy,
     updateRecentBoards,
     updateFavoriteBoards,
-    updateBoardsPerPage
+    updateBoardsPerPage,
+    setBoardSearchQuery
 } = boardSlice.actions
 
 export default boardSlice.reducer

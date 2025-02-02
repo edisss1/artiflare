@@ -5,18 +5,16 @@ import { useState } from "react"
 import NotificationsContainer from "../organisms/NotificationsContainer.tsx"
 import Button from "../atoms/Button.tsx"
 import BurgerMenuIcon from "../icons/BurgerMenuIcon.tsx"
-import { AppDispatch } from "../../redux/store.ts"
+import { AppDispatch, RootState } from "../../redux/store.ts"
 import { useDispatch } from "react-redux"
 import { setIsMobileSidebarOpened } from "../../redux/slices/miscStatesSlice.ts"
+import { useSelector } from "react-redux"
 
-type HeaderProps = {
-    plan: string
-}
-
-const Header = ({ plan }: HeaderProps) => {
+const Header = () => {
     const dispatch: AppDispatch = useDispatch()
 
     const [isContainerOpened, setIsContainerOpened] = useState(false)
+    const plan = useSelector((state: RootState) => state.auth.user?.plan)
 
     const handleNotificationsOpen = () => {
         setIsContainerOpened(true)
@@ -48,7 +46,10 @@ const Header = ({ plan }: HeaderProps) => {
             </div>
             <div className="flex items-center gap-6 ">
                 {plan === "free" && (
-                    <Button className="capitalize px-2 py-1  text-typography-light bg-secondary rounded-lg  ">
+                    <Button
+                        onClick={() => {}}
+                        className="capitalize px-2 py-1  text-typography-light bg-secondary rounded-lg  "
+                    >
                         upgrade
                     </Button>
                 )}

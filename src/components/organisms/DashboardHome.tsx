@@ -25,7 +25,7 @@ const DashboardHome = () => {
 
     return (
         <DashboardContainer>
-            <Header plan="pro" />
+            <Header />
             <BoardsManagement title={t("yourBoards")} />
             <BoardsContainer boards={boards} />
         </DashboardContainer>

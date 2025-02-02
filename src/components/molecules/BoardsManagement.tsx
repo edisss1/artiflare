@@ -45,6 +45,7 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
                     currentTeam: user.currentSelectedTeam
                 })
             )
+            setBoardTitle("")
             createBoardModalRef.current?.close()
         }
     }

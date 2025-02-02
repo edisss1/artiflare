@@ -128,7 +128,8 @@ export const signInWithGoogle = createAsyncThunk(
                 boards: userData?.boards || [],
                 currentSelectedTeam: userData?.currentSelectedTeam || "",
                 lastAccessAt: new Date().toISOString(),
-                emailVerified: result.user.emailVerified
+                emailVerified: result.user.emailVerified,
+                plan: userData?.plan || "free"
             }
 
             await setDoc(doc(db, "users", user.uid), user)
@@ -157,26 +158,31 @@ export const signInWithCredentials = createAsyncThunk(
                 password
             )
 
+            const userDocRef = doc(db, "users", result.user.uid)
+            const userDoc = await getDoc(userDocRef)
+            const userData = userDoc.data() as User
+
             const user: User = {
                 uid: result.user.uid,
                 img: result.user.photoURL,
                 displayName: result.user.displayName,
                 email: result.user.email,
-                teams: [],
-                boards: [],
-                currentSelectedTeam: "",
+                teams: userData.teams || [],
+                boards: userData.boards || [],
+                currentSelectedTeam: userData.currentSelectedTeam,
                 lastAccessAt: new Date().toISOString(),
-                emailVerified: result.user.emailVerified
+                emailVerified: result.user.emailVerified,
+                plan: userData.plan
             }
 
             await setDoc(doc(db, "users", user.uid), user)
 
-            if (!user.teams.length && user) {
-                const defaultTeamID = await createDefaultTeam(user)
-                setTimeout(() => {
-                    user.currentSelectedTeam = defaultTeamID
-                }, 1000)
-            }
+            // if (!user.teams.length && user) {
+            //     const defaultTeamID = await createDefaultTeam(user)
+            //     setTimeout(() => {
+            //         user.currentSelectedTeam = defaultTeamID
+            //     }, 1000)
+            // }
 
             return user
         } catch (err) {
@@ -205,7 +211,8 @@ export const createUserWithCredentials = createAsyncThunk(
                 boards: [],
                 currentSelectedTeam: "",
                 lastAccessAt: new Date().toISOString(),
-                emailVerified: result.user.emailVerified
+                emailVerified: result.user.emailVerified,
+                plan: "free"
             }
 
             sendEmailVerification(result.user)

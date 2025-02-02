@@ -13,9 +13,6 @@ import { Team } from "../../types/Team"
 const AuthChecker = ({ children }: { children: React.ReactNode }) => {
     const dispatch: AppDispatch = useDispatch()
     const { user, status } = useSelector((state: RootState) => state.auth)
-    const { currentTeam } = useSelector(
-        (state: RootState) => state.teamManagement
-    )
 
     const location = useLocation()
     const navigate = useNavigate()
@@ -32,15 +29,11 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                     const userDocRef = doc(db, "users", firebaseUser.uid)
                     const userDoc = await getDoc(userDocRef)
                     const userData = userDoc.data() as User
-                    // const isMemberOfBoard = userData?.boards.some(
-                    //     (board) => board.id === boardID
-                    // )
 
                     const isEmailVerifiedInFirestore = userData?.emailVerified
                     const isEmailVerifiedInAuth = firebaseUser.emailVerified
 
                     if (isEmailVerifiedInAuth && !isEmailVerifiedInFirestore) {
-                        // Update emailVerified in Firestore if needed
                         await updateDoc(userDocRef, {
                             emailVerified: true
                         })
@@ -61,7 +54,8 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                         boards: userData?.boards || [],
                         currentSelectedTeam: userData?.currentSelectedTeam,
                         lastAccessAt: userData?.lastAccessAt,
-                        emailVerified: firebaseUser.emailVerified
+                        emailVerified: firebaseUser.emailVerified,
+                        plan: userData?.plan
                     }
 
                     const currentTeamSnap = await getDoc(currentTeamDocRef)

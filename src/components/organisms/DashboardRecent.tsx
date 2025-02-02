@@ -27,7 +27,7 @@ const DashboardRecent = () => {
         <main className="dashboard">
             <DashboardSidebar />
             <DashboardContainer>
-                <Header plan="pro" />
+                <Header />
                 <BoardsManagement title="Recently modified boards" />
                 <BoardsContainer boards={recentBoards} />
             </DashboardContainer>

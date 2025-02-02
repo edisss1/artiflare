@@ -8,4 +8,5 @@ export interface User {
     currentSelectedTeam: string
     lastAccessAt?: string
     emailVerified: boolean
+    plan: "free" | "pro" | "enterprise"
 }

@@ -37,7 +37,6 @@ const UserInfoSettings = ({
         >
             <div className={"grid gap-2 place-items-start max-md:gap-4 "}>
                 <SettingsInput
-                    defaultValue={user?.displayName!}
                     className={"rounded-md w-full max-w-[200px] "}
                     label={t("name")}
                     id={`name`}
@@ -48,9 +47,10 @@ const UserInfoSettings = ({
 
                 <div className="flex items-center gap-4 ">
                     <Button
+                        disabled={user?.displayName === newUserName}
                         onClick={handleUserDisplayNameChange}
                         className={
-                            "border-2 border-typography-light dark:border-typography-dark px-2 py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:text-typography-light dark:hover:bg-bg-light transition-colors duration-150"
+                            "border-2 border-typography-light disabled:opacity-55 disabled:select-none dark:border-typography-dark px-2 py-1 rounded-md enabled:hover:bg-bg-dark enabled:hover:text-typography-dark enabled:dark:hover:text-typography-light enabled:dark:hover:bg-bg-light transition-colors duration-150"
                         }
                     >
                         {t("change")}
@@ -90,6 +90,7 @@ const UserInfoSettings = ({
                 )}
                 <div className={"flex gap-2 justify-center items-center"}>
                     <Button
+                        onClick={() => {}}
                         className={
                             "border-2 border-typography-light dark:border-typography-dark p-2 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:text-typography-light dark:hover:bg-bg-light transition-colors duration-150"
                         }
@@ -97,6 +98,7 @@ const UserInfoSettings = ({
                         {t("upload")}
                     </Button>
                     <Button
+                        onClick={() => {}}
                         className={
                             "border-2 border-typography-light dark:border-typography-dark p-2 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:text-typography-light dark:hover:bg-bg-light transition-colors duration-150"
                         }

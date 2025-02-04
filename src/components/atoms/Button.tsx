@@ -1,9 +1,10 @@
 interface ButtonProps {
     children: React.ReactNode
-    onClick: () => void
+    onClick?: () => void
     className: string
     disabled?: boolean
     ariaLabel?: string
+    type?: "submit" | "reset" | "button"
 }
 
 const Button = ({
@@ -11,7 +12,8 @@ const Button = ({
     ariaLabel,
     onClick,
     className,
-    disabled
+    disabled,
+    type
 }: ButtonProps) => {
     return (
         <button
@@ -19,6 +21,7 @@ const Button = ({
             disabled={disabled}
             className={className}
             onClick={onClick}
+            type={type!}
         >
             {children}
         </button>

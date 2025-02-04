@@ -24,6 +24,7 @@ interface TeamState {
     status: "idle" | "loading" | "succeeded" | "failed"
     error: string | undefined
     newTeamName: string
+    inviteeQueryResults: User | null
 }
 
 const initialState: TeamState = {
@@ -39,7 +40,8 @@ const initialState: TeamState = {
     currentTeam: undefined,
     status: "idle",
     error: undefined,
-    newTeamName: ""
+    newTeamName: "",
+    inviteeQueryResults: null
 }
 export const createTeam = createAsyncThunk(
     "teamManagement/createTeam",
@@ -201,27 +203,6 @@ export const addNewUserToTeam = async (
     }
 }
 
-export const searchUsers = async (queryString: string) => {
-    const usersCollectionRef = collection(db, "users")
-    const q = query(
-        usersCollectionRef,
-        where("name", ">=", queryString),
-        where("name", "<=", queryString + "\uf8ff"),
-        where("email", ">=", queryString)
-    )
-
-    const querySnap = await getDocs(q)
-
-    const users: User[] = []
-
-    querySnap.forEach((doc) => {
-        const userData = doc.data() as User
-        users.push(userData)
-    })
-
-    return users
-}
-
 export const updateTeamName = createAsyncThunk(
     "teamManagement/updateTeamName",
     async ({
@@ -294,6 +275,52 @@ export const getCurrentSelectedTeam =
             throw err
         }
     }
+
+export const searchForInvitees = createAsyncThunk(
+    "teamManagement/searchForInvitees",
+    async ({
+        queryStr,
+        userEmail,
+        userID
+    }: {
+        queryStr: string
+        userEmail: string | undefined | null
+        userID: string | null
+    }) => {
+        if (!queryStr || !userEmail || !userID) return null
+
+        try {
+            const usersRef = collection(db, "users")
+            let q
+
+            if (queryStr.includes("@")) {
+                q = query(
+                    usersRef,
+                    where("email", "==", queryStr),
+                    where("email", "!=", userEmail)
+                )
+            } else {
+                q = query(
+                    usersRef,
+                    where("uid", "==", queryStr),
+                    where("uid", "!=", userID)
+                )
+            }
+
+            const querySnap = await getDocs(q)
+
+            if (!querySnap.empty) {
+                const user = querySnap.docs[0].data() as User
+                return user
+            } else {
+                return null
+            }
+        } catch (err) {
+            console.error(err)
+            throw err
+        }
+    }
+)
 
 export const uploadTeamLogo = createAsyncThunk(
     "teamManagement/uploadTeamLogo",
@@ -379,6 +406,21 @@ const teamManagementSlice = createSlice({
             .addCase(uploadTeamLogo.fulfilled, (state) => {
                 state.error = undefined
                 state.status = "succeeded"
+            })
+            .addCase(searchForInvitees.pending, (state) => {
+                state.status = "loading"
+                state.error = undefined
+            })
+            .addCase(
+                searchForInvitees.fulfilled,
+                (state, action: PayloadAction<User | null>) => {
+                    state.status = "succeeded"
+                    state.inviteeQueryResults = action.payload
+                }
+            )
+            .addCase(searchForInvitees.rejected, (state, action) => {
+                state.error = action.error.message
+                state.status = "failed"
             })
     }
 })

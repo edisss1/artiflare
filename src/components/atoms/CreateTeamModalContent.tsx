@@ -3,14 +3,18 @@ import Button from "./Button"
 import FormInput from "./FormInput"
 import Select from "./Select"
 import { TeamType } from "../../types/TeamType"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch } from "react-redux"
-import { createTeam } from "../../redux/slices/teamManagementSlice"
+import {
+    createTeam,
+    searchForInvitees
+} from "../../redux/slices/teamManagementSlice"
 import { t } from "i18next"
 import InviteesContainer from "../molecules/InviteesContainer"
 import UserCard from "./UserCard"
+import SearchIcon from "../icons/SearchIcon"
 
 interface CreateTeamModalContentProps {
     setIsCreateModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -21,6 +25,10 @@ const CreateTeamModalContent = ({
 }: CreateTeamModalContentProps) => {
     const [teamType, setTeamType] = useState<TeamType["teamType"]>("private")
     const [teamTitle, setTeamTitle] = useState<string>("")
+    const { inviteeQueryResults, status } = useSelector(
+        (state: RootState) => state.teamManagement
+    )
+    const [inviteeQuery, setInviteeQuery] = useState<string>("")
 
     const sampleImg =
         "https://lh3.googleusercontent.com/a/ACg8ocKPuh4rn6Ho7vC6rhVGc3hVOxAFn0oksoBj01B9H2hUfAv0OwpO=s96-c"
@@ -47,6 +55,23 @@ const CreateTeamModalContent = ({
         }
     }
 
+    useEffect(() => {
+        console.log(inviteeQueryResults)
+    }, [inviteeQueryResults])
+
+    const handleInviteeSearch = () => {
+        dispatch(
+            searchForInvitees({
+                queryStr: inviteeQuery,
+                userEmail: user?.email,
+                userID: user?.uid!
+            })
+        )
+        console.log(status)
+        console.log(`Query: ${inviteeQuery}`)
+        setInviteeQuery("")
+    }
+
     return (
         <div className="flex flex-col items-center">
             <h3 className="font-medium text-xl text-center mb-6">
@@ -65,13 +90,28 @@ const CreateTeamModalContent = ({
                         options={teamTypeOptions}
                         onChange={handleTeamTypeChange}
                     />
-                    <FormInput
-                        value=""
-                        onChange={() => {}}
-                        placeholder="Search users by email or ID"
-                        type="text"
-                    />
+                    <form
+                        onSubmit={handleInviteeSearch}
+                        id="invitee-search"
+                        className="relative"
+                    >
+                        <FormInput
+                            value={inviteeQuery}
+                            onChange={(e) => setInviteeQuery(e.target.value)}
+                            placeholder="Search users by email or ID"
+                            type="text"
+                        />
+                        <Button
+                            type={"submit"}
+                            // onClick={handleInviteeSearch}
+                            className="bg-bg-light dark:bg-bg-dark z-40 absolute right-1 px-2 py-2 top-1/2 -translate-y-1/2 "
+                        >
+                            <SearchIcon className="w-6 h-6" />
+                        </Button>
+                    </form>
                     <InviteesContainer>
+                        <UserCard name="Sergey" img={sampleImg} />
+                        <UserCard name="Sergey" img={sampleImg} />
                         <UserCard name="Sergey" img={sampleImg} />
                     </InviteesContainer>
                 </div>

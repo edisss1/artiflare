@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../redux/store"
-import {
-    checkMemebership,
-    getBoardByID,
-    updateBoard
-} from "../redux/slices/boardSlice"
+import { checkMemebership, updateBoard } from "../redux/slices/boardSlice"
 import { useNavigate, useParams } from "react-router-dom"
 
 import CanvasNav from "../components/molecules/CanvasNav.tsx"
@@ -20,7 +16,6 @@ import {
 } from "@excalidraw/excalidraw/types/element/types"
 import { collection, onSnapshot, query, where } from "firebase/firestore"
 import { db } from "../firestore/firebaseConfig.ts"
-import { Board } from "../types/Board.ts"
 
 const DrawingBoard = () => {
     const dispatch: AppDispatch = useDispatch()

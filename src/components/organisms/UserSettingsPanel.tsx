@@ -11,6 +11,7 @@ import UserInfoSettings from "../molecules/UserInfoSettings.tsx"
 import { handleSignOut } from "../../utils/handleSignOut.ts"
 import { updateUserName } from "../../redux/slices/userManagementSlice.ts"
 import { t } from "i18next"
+import { useNavigate } from "react-router-dom"
 
 const UserSettingsPanel = () => {
     const user = useSelector((state: RootState) => state.auth.user)
@@ -18,14 +19,15 @@ const UserSettingsPanel = () => {
     const { newDisplayName } = useSelector(
         (state: RootState) => state.userManagement
     )
+    const navigate = useNavigate()
 
     const modalRef = useRef<HTMLDialogElement>(null)
 
     const handleUserDisplayNameChange = () => {
         if (newDisplayName !== "") {
             dispatch(updateUserName({ user, newDisplayName }))
-            return
         }
+        navigate(0)
     }
 
     const openModal = () => {

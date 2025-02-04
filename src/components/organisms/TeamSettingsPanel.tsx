@@ -11,11 +11,13 @@ import { useSelector } from "react-redux"
 import { useState } from "react"
 import FileUpload from "../atoms/FileUpload"
 import { t } from "i18next"
+import { useNavigate } from "react-router-dom"
 
 const TeamSettingsPanel = () => {
     const dispatch: AppDispatch = useDispatch()
     const user = useSelector((state: RootState) => state.auth.user)
     const teams = useSelector((state: RootState) => state.teamManagement.teams)
+    const navigate = useNavigate()
 
     // const [logoFile, setLogoFile] = useState<File | null>(null)
 
@@ -38,6 +40,7 @@ const TeamSettingsPanel = () => {
                 newTeamName: newTeamName!
             })
         )
+        navigate(0)
     }
 
     const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +60,7 @@ const TeamSettingsPanel = () => {
             >
                 <div className={"grid gap-2 place-items-start"}>
                     <SettingsInput
-                        value={currentTeam?.name}
+                        value={newTeamName}
                         onChange={(e) => handleNewTeamName(e)}
                         id="teamName"
                         type="text"
@@ -105,6 +108,7 @@ const TeamSettingsPanel = () => {
                     <p>{t("deleteTeamText")}</p>
                 </div>
                 <Button
+                    onClick={() => {}}
                     className={
                         "border-2 border-danger text-danger rounded-md  hover:bg-danger hover:text-typography-dark transition-colors duration-150 w-fit p-2 mt-4"
                     }

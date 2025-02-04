@@ -8,6 +8,7 @@ interface FormInputProps {
     autoComplete?: string
     isIncorrect?: boolean
     truncate?: boolean
+    className?: string
 }
 
 const FormInput = ({
@@ -19,11 +20,12 @@ const FormInput = ({
     maxWidth,
     autoComplete,
     isIncorrect,
-    truncate
+    truncate,
+    className
 }: FormInputProps) => {
     return (
         <input
-            className={`${bg} ${maxWidth} ${
+            className={`${bg} ${className} ${maxWidth} ${
                 truncate && "truncate"
             }  w-full py-[0.9375rem] ps-3 border-2 ${
                 isIncorrect

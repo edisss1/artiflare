@@ -23,9 +23,6 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
     const [boardTitle, setBoardTitle] = useState("")
     const [isCreateModal, setIsCreateModal] = useState(false)
 
-    const { sortedBy } = useSelector(
-        (setBoardTitle: RootState) => setBoardTitle.boards
-    )
     const { t } = useTranslation()
 
     const toggleCreateBoardModal = () => {
@@ -103,11 +100,7 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
                         id=""
                     >
                         {sortByOptions.map((option) => (
-                            <option
-                                key={option.value}
-                                value={option.value}
-                                selected={option.value === sortedBy}
-                            >
+                            <option key={option.value} value={option.value}>
                                 {option.label}
                             </option>
                         ))}

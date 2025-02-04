@@ -25,6 +25,7 @@ interface TeamState {
     error: string | undefined
     newTeamName: string
     inviteeQueryResults: User | null
+    invitees: User[]
 }
 
 const initialState: TeamState = {
@@ -41,7 +42,8 @@ const initialState: TeamState = {
     status: "idle",
     error: undefined,
     newTeamName: "",
-    inviteeQueryResults: null
+    inviteeQueryResults: null,
+    invitees: []
 }
 export const createTeam = createAsyncThunk(
     "teamManagement/createTeam",
@@ -347,6 +349,12 @@ const teamManagementSlice = createSlice({
     reducers: {
         setCurrentTeam: (state, action: PayloadAction<Team>) => {
             state.currentTeam = action.payload
+        },
+        updateInvitees: (state, action: PayloadAction<User>) => {
+            state.invitees = [...state.invitees, action.payload]
+        },
+        updateQueryResults: (state) => {
+            state.inviteeQueryResults = null
         }
     },
     extraReducers: (builder) => {
@@ -425,5 +433,6 @@ const teamManagementSlice = createSlice({
     }
 })
 
-export const { setCurrentTeam } = teamManagementSlice.actions
+export const { setCurrentTeam, updateInvitees, updateQueryResults } =
+    teamManagementSlice.actions
 export default teamManagementSlice.reducer

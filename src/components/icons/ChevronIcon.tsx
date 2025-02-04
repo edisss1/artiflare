@@ -3,7 +3,7 @@ import { IconProps } from "../../types/IconProps"
 const ChevronIcon = ({ className }: IconProps) => {
     return (
         <svg
-            className={`${className} [&>*]:stroke-bg-dark [&>*]:dark:stroke-bg-light `}
+            className={`${className} [&>*]:stroke-bg-dark `}
             width="20"
             height="20"
             viewBox="0 0 20 20"
@@ -12,7 +12,7 @@ const ChevronIcon = ({ className }: IconProps) => {
         >
             <path
                 d="M5 7.5L10 12.5L15 7.5"
-                stroke="#333333"
+                // stroke="#333333"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />

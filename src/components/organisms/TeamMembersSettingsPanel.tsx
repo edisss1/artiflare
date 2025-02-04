@@ -8,8 +8,6 @@ import Button from "../atoms/Button"
 import { t } from "i18next"
 
 const TeamMembersSettingsPanel = () => {
-    const user = useSelector((state: RootState) => state.auth.user)
-
     const { currentTeam } = useSelector(
         (state: RootState) => state.teamManagement
     )

@@ -9,12 +9,15 @@ import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch } from "react-redux"
 import {
     createTeam,
-    searchForInvitees
+    searchForInvitees,
+    updateInvitees,
+    updateQueryResults
 } from "../../redux/slices/teamManagementSlice"
 import { t } from "i18next"
 import InviteesContainer from "../molecules/InviteesContainer"
 import UserCard from "./UserCard"
 import SearchIcon from "../icons/SearchIcon"
+import AddIcon from "../icons/AddIcon"
 
 interface CreateTeamModalContentProps {
     setIsCreateModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -25,7 +28,7 @@ const CreateTeamModalContent = ({
 }: CreateTeamModalContentProps) => {
     const [teamType, setTeamType] = useState<TeamType["teamType"]>("private")
     const [teamTitle, setTeamTitle] = useState<string>("")
-    const { inviteeQueryResults, status } = useSelector(
+    const { inviteeQueryResults, status, invitees } = useSelector(
         (state: RootState) => state.teamManagement
     )
     const [inviteeQuery, setInviteeQuery] = useState<string>("")
@@ -57,9 +60,11 @@ const CreateTeamModalContent = ({
 
     useEffect(() => {
         console.log(inviteeQueryResults)
-    }, [inviteeQueryResults])
+        console.log(`Invitees array: ${invitees}`)
+    }, [inviteeQueryResults, invitees])
 
-    const handleInviteeSearch = () => {
+    const handleInviteeSearch = (e: React.ChangeEvent<HTMLFormElement>) => {
+        e.preventDefault()
         dispatch(
             searchForInvitees({
                 queryStr: inviteeQuery,
@@ -70,6 +75,14 @@ const CreateTeamModalContent = ({
         console.log(status)
         console.log(`Query: ${inviteeQuery}`)
         setInviteeQuery("")
+    }
+
+    const addInviteeToList = () => {
+        if (inviteeQueryResults) {
+            dispatch(updateInvitees(inviteeQueryResults))
+        }
+
+        dispatch(updateQueryResults())
     }
 
     return (
@@ -93,26 +106,41 @@ const CreateTeamModalContent = ({
                     <form
                         onSubmit={handleInviteeSearch}
                         id="invitee-search"
-                        className="relative"
+                        // className="relative"
+                        className="grid grid-cols-3 items-center "
                     >
                         <FormInput
+                            className="col-start-1 col-span-3 row-start-1 border-r-0 rounded-r-none "
                             value={inviteeQuery}
                             onChange={(e) => setInviteeQuery(e.target.value)}
                             placeholder="Search users by email or ID"
                             type="text"
                         />
-                        <Button
-                            type={"submit"}
-                            // onClick={handleInviteeSearch}
-                            className="bg-bg-light dark:bg-bg-dark z-40 absolute right-1 px-2 py-2 top-1/2 -translate-y-1/2 "
-                        >
-                            <SearchIcon className="w-6 h-6" />
-                        </Button>
+                        {inviteeQueryResults === null ? (
+                            <Button
+                                type={"submit"}
+                                // onClick={handleInviteeSearch}
+                                className="bg-bg-light dark:bg-bg-dark z-40 row-start-1 px-3  h-full border-2 border-l-0 rounded-r-lg border-typography-light dark:border-typography-dark  "
+                            >
+                                <SearchIcon className="w-6 h-6" />
+                            </Button>
+                        ) : (
+                            <Button
+                                onClick={addInviteeToList}
+                                className="bg-bg-light  z-40 row-start-1 px-3  h-full border-2 border-l-0 rounded-r-lg border-typography-light dark:border-typography-dark  "
+                            >
+                                <AddIcon />
+                            </Button>
+                        )}
                     </form>
                     <InviteesContainer>
-                        <UserCard name="Sergey" img={sampleImg} />
-                        <UserCard name="Sergey" img={sampleImg} />
-                        <UserCard name="Sergey" img={sampleImg} />
+                        {invitees.map((invitee) => (
+                            <UserCard
+                                key={invitee.uid}
+                                img={invitee.img}
+                                name={invitee.displayName}
+                            />
+                        ))}
                     </InviteesContainer>
                 </div>
                 <div className="flex flex-col items-center mt-6 gap-6">
@@ -126,8 +154,9 @@ const CreateTeamModalContent = ({
                 </div>
             </div>
             <Button
+                disabled={teamTitle === ""}
                 onClick={handleCreateNewTeam}
-                className="px-6 absolute bottom-6 border-2 border-typography-light dark:border-typography-dark py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:bg-bg-light dark:hover:text-typography-light transition-colors duration-150"
+                className="px-6 absolute bottom-6 border-2 disabled:opacity-50 border-typography-light dark:border-typography-dark py-1 rounded-md enabled:hover:bg-bg-dark enabled:hover:text-typography-dark enabled:dark:hover:bg-bg-light enabled:dark:hover:text-typography-light transition-colors duration-150"
             >
                 {t("create")}
             </Button>

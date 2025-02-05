@@ -36,7 +36,7 @@ export const sendInvite = createAsyncThunk(
     }: {
         user: User | null
 
-        invitees: string[]
+        invitees: User[]
     }) => {
         if (!user || invitees.length === 0) {
             return
@@ -47,6 +47,8 @@ export const sendInvite = createAsyncThunk(
 
             const teamData = await getDoc(teamDoc)
 
+            console.log(teamData)
+
             if (!teamData) return
 
             const newInvitation: Partial<NotificationType> = {
@@ -54,7 +56,7 @@ export const sendInvite = createAsyncThunk(
                 senderID: user.uid,
                 senderName: user.displayName || user.email,
                 timestamp: new Date().toISOString(),
-                receiversID: invitees.map((invitee) => invitee),
+                receiversID: invitees.map((invitee) => invitee.uid),
                 isRead: false,
                 team: teamData.data() as Team,
                 notificationText: `${
@@ -64,6 +66,12 @@ export const sendInvite = createAsyncThunk(
             }
 
             const notificationsRef = collection(db, "notifications")
+
+            console.log(
+                `invite sent for: ${JSON.stringify(invitees)}, to team: ${
+                    teamData.id
+                }`
+            )
 
             await addDoc(notificationsRef, newInvitation)
         } catch (err) {

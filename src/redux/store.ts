@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit"
-import shapeManagementReducer from "./slices/shapeManagementSlice"
 import authReducer from "./slices/authSlice"
 import boardReducer from "./slices/boardSlice"
 import userManagementReducer from "./slices/userManagementSlice.ts"
@@ -10,7 +9,6 @@ import languageReducer from "./slices/languageSlice"
 
 export const store = configureStore({
     reducer: {
-        shape: shapeManagementReducer,
         auth: authReducer,
         boards: boardReducer,
         userManagement: userManagementReducer,

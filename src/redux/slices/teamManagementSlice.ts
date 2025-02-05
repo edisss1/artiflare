@@ -360,6 +360,9 @@ const teamManagementSlice = createSlice({
             state.invitees = state.invitees.filter(
                 (invitee) => invitee.uid !== action.payload.uid
             )
+        },
+        clearInvitees: (state) => {
+            state.invitees = []
         }
     },
     extraReducers: (builder) => {
@@ -442,6 +445,7 @@ export const {
     setCurrentTeam,
     updateInvitees,
     updateQueryResults,
-    deleteInvitee
+    deleteInvitee,
+    clearInvitees
 } = teamManagementSlice.actions
 export default teamManagementSlice.reducer

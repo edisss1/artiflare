@@ -5,7 +5,7 @@ import { auth, db } from "../../firestore/firebaseConfig"
 import { User as LoggedUser, User } from "../../types/User"
 import { setUser } from "../../redux/slices/authSlice"
 import { AppDispatch, RootState } from "../../redux/store"
-import { doc, getDoc, updateDoc } from "firebase/firestore"
+import { doc, onSnapshot, getDoc, updateDoc } from "firebase/firestore"
 import Loading from "./Loading"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Team } from "../../types/Team"
@@ -16,81 +16,124 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
 
     const location = useLocation()
     const navigate = useNavigate()
-    // const { boardID } = useParams()
 
     useEffect(() => {
         window.scrollTo(0, 0)
     }, [location])
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
             if (firebaseUser) {
-                try {
-                    const userDocRef = doc(db, "users", firebaseUser.uid)
-                    const userDoc = await getDoc(userDocRef)
-                    const userData = userDoc.data() as User
+                const userDocRef = doc(db, "users", firebaseUser.uid)
 
-                    const isEmailVerifiedInFirestore = userData?.emailVerified
-                    const isEmailVerifiedInAuth = firebaseUser.emailVerified
+                const unsubscribeUser = onSnapshot(
+                    userDocRef,
+                    (docSnapshot) => {
+                        if (!docSnapshot.exists()) {
+                            console.error("User document does not exist!")
+                            return
+                        }
+                        const userData = docSnapshot.data() as User
 
-                    if (isEmailVerifiedInAuth && !isEmailVerifiedInFirestore) {
-                        await updateDoc(userDocRef, {
-                            emailVerified: true
-                        })
+                        if (
+                            firebaseUser.emailVerified &&
+                            !userData.emailVerified
+                        ) {
+                            updateDoc(userDocRef, {
+                                emailVerified: true
+                            }).catch((err) =>
+                                console.error(
+                                    "Error updating emailVerified:",
+                                    err
+                                )
+                            )
+                        }
+
+                        const lastAccess = userData.lastAccessAt
+                            ? new Date(userData.lastAccessAt).getTime()
+                            : 0
+                        const now = Date.now()
+                        if (now - lastAccess > 60000) {
+                            if (userData.currentSelectedTeam) {
+                                const currentTeamDocRef = doc(
+                                    db,
+                                    "teams",
+                                    userData.currentSelectedTeam
+                                )
+                                getDoc(currentTeamDocRef)
+                                    .then((currentTeamSnap) => {
+                                        if (currentTeamSnap.exists()) {
+                                            const currentTeamData =
+                                                currentTeamSnap.data() as Team
+                                            const updatedTeamMembers =
+                                                currentTeamData.members.map(
+                                                    (member) =>
+                                                        member.uid ===
+                                                        firebaseUser.uid
+                                                            ? {
+                                                                  ...member,
+                                                                  lastAccessAt:
+                                                                      new Date().toISOString()
+                                                              }
+                                                            : member
+                                                )
+                                            updateDoc(currentTeamDocRef, {
+                                                members: updatedTeamMembers
+                                            }).catch((err) =>
+                                                console.error(
+                                                    "Error updating team members:",
+                                                    err
+                                                )
+                                            )
+                                        }
+                                    })
+                                    .catch((err) =>
+                                        console.error(
+                                            "Error fetching team document:",
+                                            err
+                                        )
+                                    )
+                            }
+
+                            updateDoc(userDocRef, {
+                                lastAccessAt: new Date().toISOString()
+                            }).catch((err) =>
+                                console.error(
+                                    "Error updating lastAccessAt:",
+                                    err
+                                )
+                            )
+                        }
+
+                        const loggedUser: LoggedUser = {
+                            uid: firebaseUser.uid,
+                            email: firebaseUser.email,
+                            img: firebaseUser.photoURL,
+                            displayName: firebaseUser.displayName,
+                            teams: userData.teams || [],
+                            boards: userData.boards || [],
+                            currentSelectedTeam: userData.currentSelectedTeam,
+                            lastAccessAt: userData.lastAccessAt,
+                            emailVerified: firebaseUser.emailVerified,
+                            plan: userData.plan
+                        }
+
+                        dispatch(setUser(loggedUser))
                     }
+                )
 
-                    const currentTeamDocRef = doc(
-                        db,
-                        "teams",
-                        userData?.currentSelectedTeam
-                    )
-
-                    const loggedUser: LoggedUser = {
-                        uid: firebaseUser.uid,
-                        email: firebaseUser.email,
-                        img: firebaseUser.photoURL,
-                        displayName: firebaseUser.displayName,
-                        teams: userData?.teams || [],
-                        boards: userData?.boards || [],
-                        currentSelectedTeam: userData?.currentSelectedTeam,
-                        lastAccessAt: userData?.lastAccessAt,
-                        emailVerified: firebaseUser.emailVerified,
-                        plan: userData?.plan
-                    }
-
-                    const currentTeamSnap = await getDoc(currentTeamDocRef)
-                    if (currentTeamSnap.exists()) {
-                        const currentTeamData = currentTeamSnap.data() as Team
-                        const updatedTeamMembers = currentTeamData.members.map(
-                            (member) =>
-                                member.uid === loggedUser.uid
-                                    ? {
-                                          ...member,
-                                          lastAccessAt: new Date().toISOString()
-                                      }
-                                    : member
-                        )
-
-                        await updateDoc(currentTeamDocRef, {
-                            members: updatedTeamMembers
-                        })
-                    }
-
-                    await updateDoc(userDocRef, {
-                        lastAccessAt: new Date().toISOString()
-                    })
-
-                    dispatch(setUser(loggedUser))
-                } catch (error) {
-                    console.error("Error during authentication check:", error)
+                return () => {
+                    unsubscribeUser && unsubscribeUser()
                 }
             } else {
                 dispatch(setUser(null))
             }
         })
 
-        return () => unsubscribe()
-    }, [dispatch, user?.uid])
+        return () => {
+            unsubscribeAuth()
+        }
+    }, [dispatch])
 
     useEffect(() => {
         if (status === "authenticated" && user) {

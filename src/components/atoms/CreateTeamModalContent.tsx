@@ -8,6 +8,7 @@ import { useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch } from "react-redux"
 import {
+    clearInvitees,
     createTeam,
     deleteInvitee,
     searchForInvitees,
@@ -19,6 +20,7 @@ import InviteesContainer from "../molecules/InviteesContainer"
 import UserCard from "./UserCard"
 import SearchIcon from "../icons/SearchIcon"
 import AddIcon from "../icons/AddIcon"
+import { sendInvite } from "../../redux/slices/notificationManagementSlice"
 
 interface CreateTeamModalContentProps {
     setIsCreateModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -53,6 +55,14 @@ const CreateTeamModalContent = ({
     const handleCreateNewTeam = () => {
         if (user) {
             dispatch(createTeam({ teamTitle, teamType, user, dispatch }))
+
+            dispatch(sendInvite({ user, invitees }))
+
+            console.log(
+                `Team created, sent invites to: ${JSON.stringify(invitees)}`
+            )
+
+            dispatch(clearInvitees())
         }
     }
 

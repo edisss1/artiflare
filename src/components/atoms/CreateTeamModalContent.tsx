@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch } from "react-redux"
 import {
     createTeam,
+    deleteInvitee,
     searchForInvitees,
     updateInvitees,
     updateQueryResults
@@ -32,9 +33,6 @@ const CreateTeamModalContent = ({
         (state: RootState) => state.teamManagement
     )
     const [inviteeQuery, setInviteeQuery] = useState<string>("")
-
-    const sampleImg =
-        "https://lh3.googleusercontent.com/a/ACg8ocKPuh4rn6Ho7vC6rhVGc3hVOxAFn0oksoBj01B9H2hUfAv0OwpO=s96-c"
 
     const dispatch: AppDispatch = useDispatch()
 
@@ -136,6 +134,7 @@ const CreateTeamModalContent = ({
                     <InviteesContainer>
                         {invitees.map((invitee) => (
                             <UserCard
+                                onClick={() => dispatch(deleteInvitee(invitee))}
                                 key={invitee.uid}
                                 img={invitee.img}
                                 name={invitee.displayName}

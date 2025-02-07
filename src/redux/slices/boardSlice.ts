@@ -3,11 +3,14 @@ import { Board } from "../../types/Board"
 import { User } from "../../types/User"
 import {
     addDoc,
+    arrayRemove,
     arrayUnion,
     collection,
     deleteDoc,
+    deleteField,
     doc,
     getDoc,
+    getDocs,
     onSnapshot,
     query,
     updateDoc,
@@ -315,6 +318,22 @@ export const deleteBoard = createAsyncThunk(
             const boardDocRef = doc(db, "boards", boardID)
 
             await deleteDoc(boardDocRef)
+
+            const usersRef = collection(db, "users")
+            const q = query(
+                usersRef,
+                where("boards", "array-contains", boardID)
+            )
+
+            const querySnap = await getDocs(q)
+
+            querySnap.forEach(async (docSnap) => {
+                const userRef = doc(db, "users", docSnap.id)
+
+                await updateDoc(userRef, {
+                    boards: arrayRemove(boardID)
+                })
+            })
         } catch (err) {
             throw new Error(err as string)
         }

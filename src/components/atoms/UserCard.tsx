@@ -10,7 +10,10 @@ interface UserCardProps {
 const UserCard = ({ name, img, onClick }: UserCardProps) => {
     return (
         <div className="grid grid-cols-4 gap-2 max-w-[150px] items-center justify-start px-1 py-1 border-2 border-typography-light dark:border-typography-dark  rounded-md">
-            <img className="w-8 h-8 rounded-full col-span-1" src={img!} />
+            <img
+                className="w-full max-w-8 aspect-square rounded-full col-span-1"
+                src={img!}
+            />
             <p className="col-span-2 col-start-2 max-w-[80px] truncate text-xs">
                 {name}
             </p>

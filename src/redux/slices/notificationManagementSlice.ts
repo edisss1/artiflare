@@ -32,18 +32,17 @@ export const sendInvite = createAsyncThunk(
     "notificationManagement/sendInvite",
     async ({
         user,
+        teamID,
         invitees
     }: {
         user: User | null
-
+        teamID: string | undefined
         invitees: User[]
     }) => {
-        if (!user || invitees.length === 0) {
-            return
-        }
+        if (!user || invitees.length === 0 || !teamID) return
 
         try {
-            const teamDoc = doc(db, "teams", user.currentSelectedTeam)
+            const teamDoc = doc(db, "teams", teamID)
 
             const teamData = await getDoc(teamDoc)
 

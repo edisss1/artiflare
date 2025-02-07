@@ -21,6 +21,7 @@ import UserCard from "./UserCard"
 import SearchIcon from "../icons/SearchIcon"
 import AddIcon from "../icons/AddIcon"
 import { sendInvite } from "../../redux/slices/notificationManagementSlice"
+import { Team } from "../../types/Team"
 
 interface CreateTeamModalContentProps {
     setIsCreateModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -54,9 +55,20 @@ const CreateTeamModalContent = ({
 
     const handleCreateNewTeam = () => {
         if (user) {
-            dispatch(createTeam({ teamTitle, teamType, user, dispatch }))
-
-            dispatch(sendInvite({ user, invitees }))
+            dispatch(createTeam({ teamTitle, teamType, user, dispatch })).then(
+                (newTeam) => {
+                    if (newTeam.payload) {
+                        const newTeamPayload = newTeam.payload as Team
+                        dispatch(
+                            sendInvite({
+                                user,
+                                teamID: newTeamPayload.id,
+                                invitees
+                            })
+                        )
+                    }
+                }
+            )
 
             console.log(
                 `Team created, sent invites to: ${JSON.stringify(invitees)}`

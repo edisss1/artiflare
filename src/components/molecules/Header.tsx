@@ -9,12 +9,16 @@ import { AppDispatch, RootState } from "../../redux/store.ts"
 import { useDispatch } from "react-redux"
 import { setIsMobileSidebarOpened } from "../../redux/slices/miscStatesSlice.ts"
 import { useSelector } from "react-redux"
+import NotificationQuantity from "../atoms/NotificationQuantity.tsx"
 
 const Header = () => {
     const dispatch: AppDispatch = useDispatch()
 
     const [isContainerOpened, setIsContainerOpened] = useState(false)
     const plan = useSelector((state: RootState) => state.auth.user?.plan)
+    const { notifications } = useSelector(
+        (state: RootState) => state.notificationManagement
+    )
 
     const handleNotificationsOpen = () => {
         setIsContainerOpened(true)
@@ -55,13 +59,20 @@ const Header = () => {
                 )}
 
                 <div className="flex gap-4 items-center justify-center">
-                    <Button
-                        ariaLabel="Open notifications"
-                        onClick={handleNotificationsOpen}
-                        className={"w-8"}
-                    >
-                        <Bell />
-                    </Button>
+                    <div className="flex items-center justify-center relative ">
+                        <Button
+                            ariaLabel="Open notifications"
+                            onClick={handleNotificationsOpen}
+                            className={"w-8 "}
+                        >
+                            <Bell />
+                        </Button>
+                        {notifications.length > 0 && (
+                            <NotificationQuantity
+                                quantity={notifications.length}
+                            />
+                        )}
+                    </div>
                     <ThemeSwitch />
                 </div>
             </div>

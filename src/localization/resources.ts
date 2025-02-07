@@ -23,27 +23,9 @@ export const resources = {
                 "Available on any device, with no installations required.",
             pricingHeader: "Pricing",
             pricingBasic: "Basic",
-            pricingBasicFeatures: [
-                "1 Team",
-                "4 Boards",
-                "Basic Drawing Tools",
-                "Export as PNG",
-                "Basic Collaboration",
-                "Watermark on Exports"
-            ],
-            pricingProFeatures: [
-                "5 Teams",
-                "Unlimited Boards",
-                "Advanced Drawing Tools",
-                "Export Options",
-                "Advanced Collaboration"
-            ],
-            pricingEnterpriseFeatures: [
-                "Unlimited teams",
-                "Unlimited Boards",
-                "Premium Drawing Tools",
-                "Custom Branding"
-            ],
+            pricingBasicFeatures: ["1 Team", "4 Boards"],
+            pricingProFeatures: ["5 Teams", "Unlimited Boards"],
+            pricingEnterpriseFeatures: ["Unlimited teams", "Unlimited Boards"],
             pricingPro: "Pro",
             pricingEnterprise: "Enterprise",
             company: "Company",
@@ -309,26 +291,11 @@ export const resources = {
                 "Disponibile su qualsiasi dispositivo, senza necessità di installazioni.",
             pricingHeader: "Prezzo",
             pricingBasic: "Base",
-            pricingBasicFeatures: [
-                "1 Squadra",
-                "4 Tavole",
-                "Strumenti di disegno di base",
-                "Esportare come PNG",
-                "Collaborazione di base",
-                "Filigrana sulle esportazioni"
-            ],
-            pricingProFeatures: [
-                "5 Squadre",
-                "Tavole Illimitati",
-                "Strumenti avanzati di disegno",
-                "Opzioni di Esportazione",
-                "Collaborazione Avanzata"
-            ],
+            pricingBasicFeatures: ["1 Squadra", "4 Tavole"],
+            pricingProFeatures: ["5 Squadre", "Tavole Illimitati"],
             pricingEnterpriseFeatures: [
                 "Squadre Illimitate",
-                "Tavole Illimitati",
-                "Strumenti di disegno premium",
-                "Branding Personalizzato"
+                "Tavole Illimitati"
             ],
             pricingPro: "Pro",
             pricingEnterprise: "Azienda",

@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
+import LanguageSwitch from "../atoms/LanguageSwitch"
 
 const Footer = () => {
     const { t } = useTranslation()
@@ -48,8 +49,9 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-            <div className={"row-start-3 "}>
+            <div className={"row-start-3 flex flex-col w-fit gap-2"}>
                 <p>{new Date().getFullYear()} Artiflare</p>
+                <LanguageSwitch />
             </div>
         </footer>
     )

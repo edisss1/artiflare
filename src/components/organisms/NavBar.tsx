@@ -30,7 +30,7 @@ const NavBar = () => {
                 <ThemeSwitch />
             </div>
             <ScrollTo x={0} y={0}>
-                <ChevronIcon className="rotate-180 " />
+                <ChevronIcon className="rotate-180 dark:[&>*]:stroke-bg-light " />
                 <p>{t("backToTop")}</p>
             </ScrollTo>
         </nav>

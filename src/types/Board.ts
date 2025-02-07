@@ -12,4 +12,5 @@ export interface Board {
     elements: any[]
     members: TeamMember[]
     isFavorite: boolean
+    memberUIDs: string[]
 }

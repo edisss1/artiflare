@@ -35,12 +35,19 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
         }
     }, [user])
 
-    const teamOptions = teams.map((team) => {
-        return {
-            label: team.name,
-            value: team.id!
-        }
-    })
+    const teamOptions = [
+        {
+            label: currentTeam?.name || t("Select Team"), // Display current team's name or a fallback text
+            value: currentTeam?.id || "", // Use current team's ID or a fallback value
+            selected: true // You can also set a flag to indicate it's the selected team
+        },
+        ...teams
+            .filter((team) => team.id !== currentTeam?.id) // Exclude currentTeam from the rest
+            .map((team) => ({
+                label: team.name,
+                value: team.id!
+            }))
+    ]
 
     const handleCurrentTeamChange = (
         e: React.ChangeEvent<HTMLSelectElement>

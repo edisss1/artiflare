@@ -16,6 +16,7 @@ import {
 import { db } from "../../firestore/firebaseConfig"
 import { AppDispatch } from "../store"
 import { ExcalidrawElement } from "@excalidraw/excalidraw/types/element/types"
+import { TeamMember } from "../../types/Team"
 
 interface BoardState {
     boards: Board[]
@@ -79,7 +80,8 @@ export const createBoard = createAsyncThunk(
                             lastAccessAt: user.lastAccessAt!
                         }
                     ],
-                    isFavorite: false
+                    isFavorite: false,
+                    memberUIDs: [user.uid]
                 }
 
                 const docRef = await addDoc(boardsRef, boardData)
@@ -109,7 +111,10 @@ export const fetchAllUserBoards =
     (userUID: string) => (dispatch: AppDispatch) => {
         try {
             const boardsRef = collection(db, "boards")
-            const q = query(boardsRef, where("userUID", "==", userUID))
+            const q = query(
+                boardsRef,
+                where("memberUIDs", "array-contains", userUID)
+            )
 
             return onSnapshot(q, (snapshot) => {
                 const boards: Board[] = snapshot.docs.map(
@@ -336,6 +341,31 @@ export const renameBoard = createAsyncThunk(
     }
 )
 
+export const addMembersOfBoard = createAsyncThunk(
+    "board/chooseMembersForBoard",
+    async ({
+        members,
+        boardID
+    }: {
+        members: TeamMember[] | undefined
+        boardID: string | undefined
+    }) => {
+        if (!members || !boardID) return
+
+        try {
+            const boardDocRef = doc(db, "boards", boardID)
+
+            await updateDoc(boardDocRef, {
+                members: arrayUnion(...members),
+                memberUIDs: arrayUnion(...members.map((member) => member.uid))
+            })
+        } catch (err) {
+            console.error(err)
+            throw err
+        }
+    }
+)
+
 const boardSlice = createSlice({
     name: "board",
     initialState,
@@ -438,6 +468,10 @@ const boardSlice = createSlice({
             .addCase(checkMemebership.rejected, (state, action) => {
                 state.status = "failed"
                 state.error = action.error.message
+            })
+            .addCase(addMembersOfBoard.fulfilled, (state) => {
+                state.error = undefined
+                state.status = "succeeded"
             })
     }
 })

@@ -3,13 +3,18 @@ import add from "../../assets/Add.svg"
 import team from "../../assets/Team.svg"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch, useSelector } from "react-redux"
-import { createBoard, updateSortedBy } from "../../redux/slices/boardSlice"
+import {
+    addMembersOfBoard,
+    createBoard,
+    updateSortedBy
+} from "../../redux/slices/boardSlice"
 import Modal from "./Modal"
 import { useRef, useState } from "react"
 import CreateBoardModalContent from "../atoms/CreateBoardModalContent"
 import TeamManagementModal from "./TeamManagementModal"
 import { sortByOptions } from "../../constants/sortByOptions"
 import { useTranslation } from "react-i18next"
+import { Board } from "../../types/Board"
 
 interface BoardsManagementProps {
     title: string
@@ -22,6 +27,10 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
     const joinTeamModalRef = useRef<HTMLDialogElement | null>(null)
     const [boardTitle, setBoardTitle] = useState("")
     const [isCreateModal, setIsCreateModal] = useState(false)
+    const [areMembersChecked, setAreMembersChecked] = useState(false)
+    const { currentTeam } = useSelector(
+        (state: RootState) => state.teamManagement
+    )
 
     const { t } = useTranslation()
 
@@ -41,7 +50,23 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
                     boardTitle,
                     currentTeam: user.currentSelectedTeam
                 })
-            )
+            ).then((newBoard) => {
+                const newBoardPayload = newBoard.payload as Board
+                if (areMembersChecked) {
+                    console.log(
+                        `Board created: ${
+                            newBoardPayload.id
+                        } with members: ${JSON.stringify(currentTeam?.members)}`
+                    )
+                    console.log(`currentTeam: ${currentTeam}`)
+                    dispatch(
+                        addMembersOfBoard({
+                            members: currentTeam?.members,
+                            boardID: newBoardPayload.id
+                        })
+                    )
+                }
+            })
             setBoardTitle("")
             createBoardModalRef.current?.close()
         }
@@ -59,6 +84,10 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
         <>
             <Modal modalRef={createBoardModalRef}>
                 <CreateBoardModalContent
+                    isChecked={areMembersChecked}
+                    setIsChecked={() =>
+                        setAreMembersChecked(!areMembersChecked)
+                    }
                     setTitle={(e) => handleNewBoardTitle(e)}
                     title={boardTitle}
                     createBoard={createNewBoard}

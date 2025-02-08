@@ -1,9 +1,8 @@
 export interface Message {
-    id: string
+    id?: string
     senderID: string
-    senderName: string
-    receiverID: string
-    receiverName: string
+    senderName: string | null
     messageText: string
-    timestamp: Date
+    timestamp: string
+    roomID: string
 }

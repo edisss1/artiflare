@@ -36,11 +36,7 @@ const DrawingBoard = () => {
                 (element) => !element.isDeleted
             )
 
-            if (activeElements.length > 0) {
-                dispatch(
-                    updateBoard({ boardID, elements: activeElements, user })
-                )
-            }
+            dispatch(updateBoard({ boardID, elements: activeElements, user }))
         }
 
         const unsubscribe = excalidrawAPI.onPointerUp(handlePointerUp)

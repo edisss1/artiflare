@@ -15,4 +15,5 @@ export interface Team {
     creatorName: string | null
     teamType: "private" | "invite-only" | "public" | ""
     logo: string
+    roomID?: string
 }

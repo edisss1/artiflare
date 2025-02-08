@@ -9,7 +9,7 @@ const CanvasNav = () => {
     const currentBoard = boards.find((board) => board.id === boardID)
 
     return (
-        <nav className="absolute top-[1%] left-[5%] text-typography-light z-40  bg-primary p-2 rounded-md">
+        <nav className="absolute top-[1%] left-[5%] text-typography-light z-40 dark:bg-primary-dark dark:text-typography-dark bg-primary p-2 rounded-md">
             <div className="flex gap-2 items-center justify-center">
                 <Link className="text-xl " to={"/app/dashboard"}>
                     Artiflare

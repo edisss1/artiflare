@@ -97,7 +97,7 @@ const DrawingBoard = () => {
             <CanvasNav />
 
             <div style={{ width: "100vw", height: "100vh" }}>
-                <div className="absolute right-4 bottom-8 z-40 flex gap-12 w-full max-w-[550px] max-lg:flex-col max-lg:items-end max-lg:gap-4">
+                <div className="absolute right-4 bottom-8 z-40 flex flex-col items-end gap-4 w-full max-w-[550px] max-lg:flex-col max-lg:items-end max-lg:gap-4">
                     <User />
 
                     <ChatContainer />

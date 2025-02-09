@@ -58,7 +58,7 @@ const ChatContainer = () => {
     return (
         <div
             role="chat"
-            className={` w-full max-w-[320px]   border-2 border-typography-light grid chat-grid ${
+            className={` w-full max-w-[350px]   border-2 border-typography-light grid chat-grid ${
                 chatExpanded ? "expanded " : "h-[56px]"
             }  bg-primary dark:bg-primary-dark dark:text-typography-dark dark:border-bg-light/30 z-10 py-3 px-4 rounded-md `}
         >
@@ -71,7 +71,7 @@ const ChatContainer = () => {
                     <ChevronIcon
                         className={`${
                             chatExpanded ? "rotate-0" : "rotate-180"
-                        } transition-all duration-150`}
+                        } transition-all duration-150 [&>*]:dark:stroke-bg-light`}
                     />
                 </Button>
             </div>
@@ -108,7 +108,7 @@ const ChatContainer = () => {
                     <Button
                         type={"submit"}
                         // onClick={handleInviteeSearch}
-                        className="bg-bg-light dark:bg-bg-dark z-40 row-start-1 px-3  h-full border-2 border-l-0 rounded-r-lg border-typography-light dark:border-typography-dark  "
+                        className="bg-bg-light  z-40 row-start-1 px-3  h-full border-2 border-l-0 rounded-r-lg border-typography-light dark:border-typography-dark  "
                     >
                         <SendMessageIcon />
                     </Button>

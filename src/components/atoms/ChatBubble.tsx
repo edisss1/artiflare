@@ -26,11 +26,12 @@ const ChatBubble = ({ message, isUser }: ChatBubbleProps) => {
 
     const handleContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
+        if (!bubbleRef.current) return
 
         const { pageX, pageY } = e
 
-        const relativeY = pageY - bubbleRef.current!.getBoundingClientRect().y
-        const relativeX = pageX - bubbleRef.current!.getBoundingClientRect().x
+        const relativeY = pageY - bubbleRef.current.getBoundingClientRect().y
+        const relativeX = pageX - bubbleRef.current.getBoundingClientRect().x
 
         setContextMenu({ x: relativeX, y: relativeY })
 
@@ -39,28 +40,28 @@ const ChatBubble = ({ message, isUser }: ChatBubbleProps) => {
 
     return (
         <div
-            className={`group flex  relative ${
+            className={`group flex   ${
                 isUser ? "justify-end" : "justify-start"
             }`}
         >
             <div
                 ref={bubbleRef}
                 onContextMenu={handleContextMenu}
-                className={`max-w-[49%]   my-2 w-full p-4 rounded-md text-white ${
+                className={`max-w-[49%] relative overflow-visible  my-2 w-full p-4 rounded-md text-white ${
                     isUser
                         ? "bg-gray-400 text-left rounded-br-none "
                         : "bg-gray-500 text-left rounded-bl-none"
                 }`}
             >
                 {message.messageText}
+                {contextMenu && (
+                    <MessageOptions
+                        contextMenuRef={contextMenuRef}
+                        {...contextMenu}
+                        isUser={isUser}
+                    />
+                )}
             </div>
-            {contextMenu && (
-                <MessageOptions
-                    contextMenuRef={contextMenuRef}
-                    {...contextMenu}
-                    isUser={isUser}
-                />
-            )}
         </div>
     )
 }

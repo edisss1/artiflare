@@ -2,9 +2,9 @@ import { useDispatch } from "react-redux"
 import { AppDispatch } from "../../redux/store"
 import { deleteBoard } from "../../redux/slices/boardSlice"
 import TrashCanIcon from "../icons/TrashCanIcon"
-import PencilIcon from "../icons/shapes/PencilIcon"
 import Button from "../atoms/Button"
 import CopyLinkIcon from "../icons/CopyLinkIcon"
+import EditIcon from "../icons/EditIcon"
 
 interface PopoverBoardContentProps {
     boardID: string | undefined
@@ -32,7 +32,7 @@ const PopoverBoardContent = ({
                 onClick={openBoardRenameModal}
                 className="flex gap-2 items-center"
             >
-                <PencilIcon className="w-4 [&>*]:fill-bg-dark dark:[&>*]:fill-bg-light" />
+                <EditIcon className=" [&>*]:fill-bg-dark dark:[&>*]:fill-bg-light" />
                 Rename board
             </Button>
             <Button

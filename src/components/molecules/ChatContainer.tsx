@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import ChatBubble from "../atoms/ChatBubble"
 import Button from "../atoms/Button"
 import ChevronIcon from "../icons/ChevronIcon"
@@ -19,6 +19,7 @@ const ChatContainer = () => {
     const [sortedMessages, setSortedMessages] = useState<Message[] | undefined>(
         []
     )
+    const messagesRef = useRef<HTMLDivElement | null>(null)
 
     const handleChatExpanding = () => {
         setChatExtended(!chatExpanded)
@@ -35,6 +36,12 @@ const ChatContainer = () => {
         )
 
         setMessage("")
+
+        setTimeout(() => {
+            if (messagesRef.current) {
+                messagesRef.current.scrollTop = messagesRef.current.scrollHeight
+            }
+        }, 200)
     }
 
     useEffect(() => {
@@ -58,11 +65,17 @@ const ChatContainer = () => {
     return (
         <div
             role="chat"
-            className={` w-full max-w-[350px]   border-2 border-typography-light grid chat-grid ${
-                chatExpanded ? "expanded " : "h-[56px]"
+            className={` w-full max-w-[350px]  flex flex-col justify-end    border-2 border-typography-light  chat-grid ${
+                chatExpanded
+                    ? "h-[300px] "
+                    : "h-[56px] items-center justify-center"
             }  bg-primary dark:bg-primary-dark dark:text-typography-dark dark:border-bg-light/30 z-10 py-3 px-4 rounded-md `}
         >
-            <div className="w-full relative flex justify-between items-center mb-4 ">
+            <div
+                className={`w-full relative flex justify-between items-center ${
+                    chatExpanded ? "mb-6" : "mb-0"
+                }  `}
+            >
                 <h3>Chat</h3>
                 <Button
                     onClick={handleChatExpanding}
@@ -76,13 +89,16 @@ const ChatContainer = () => {
                 </Button>
             </div>
             <div
-                className={`row-start-2  ${
+                className={` ${
                     chatExpanded
-                        ? "visible h-auto"
-                        : "invisible h-0 overflow-hidden"
-                } animate-extend`}
+                        ? "visible h-full max-h-[220px]"
+                        : "invisible h-0"
+                } animate-extend flex flex-col justify-end`}
             >
-                <div className="max-h-[200px] px-1 overflow-y-auto custom-scrollbar-modal">
+                <div
+                    className="max-h-[200px] px-1 overflow-y-auto custom-scrollbar-modal "
+                    ref={messagesRef}
+                >
                     {sortedMessages &&
                         sortedMessages.map((message) => (
                             <ChatBubble
@@ -95,7 +111,7 @@ const ChatContainer = () => {
                     onSubmit={handleMessageSubmit}
                     id="invitee-search"
                     // className="relative"
-                    className="grid grid-cols-3 items-center mt-4 "
+                    className="grid grid-cols-3 items-center mt-4  "
                 >
                     <FormInput
                         autoComplete="off"

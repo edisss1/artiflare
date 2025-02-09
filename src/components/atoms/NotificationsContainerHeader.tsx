@@ -1,6 +1,6 @@
 import Button from "./Button.tsx"
 import CloseIcon from "../icons/CloseIcon.tsx"
-import ReadIcon from "../icons/shapes/ReadIcon.tsx"
+import ReadIcon from "../icons/ReadIcon.tsx"
 import { useTranslation } from "react-i18next"
 
 function NotificationsContainerHeader(props: { onClick: () => void }) {

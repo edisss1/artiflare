@@ -7,6 +7,7 @@ import {
     doc,
     onSnapshot,
     query,
+    updateDoc,
     where
 } from "firebase/firestore"
 import { db } from "../../firestore/firebaseConfig"
@@ -100,6 +101,30 @@ export const deleteMessage = createAsyncThunk(
     }
 )
 
+export const submitEditedMessage = createAsyncThunk(
+    "messaging/submitEditedMessage",
+    async ({
+        messageID,
+        message
+    }: {
+        messageID: string | undefined
+        message: string
+    }) => {
+        if (!messageID || !message) return
+
+        try {
+            const messageRef = doc(db, "messages", messageID)
+
+            await updateDoc(messageRef, {
+                messageText: message
+            })
+        } catch (err) {
+            console.error(err)
+            throw err
+        }
+    }
+)
+
 const messagingSlice = createSlice({
     name: "messaging",
     initialState,
@@ -131,6 +156,18 @@ const messagingSlice = createSlice({
                 state.status = "succeeded"
             })
             .addCase(deleteMessage.rejected, (state, action) => {
+                state.error = action.error.message
+                state.status = "failed"
+            })
+            .addCase(submitEditedMessage.pending, (state) => {
+                state.error = undefined
+                state.status = "loading"
+            })
+            .addCase(submitEditedMessage.fulfilled, (state) => {
+                state.status = "succeeded"
+                state.error = undefined
+            })
+            .addCase(submitEditedMessage.rejected, (state, action) => {
                 state.error = action.error.message
                 state.status = "failed"
             })

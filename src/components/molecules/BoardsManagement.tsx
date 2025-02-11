@@ -121,7 +121,7 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
                     </div>
                 </div>
                 <div className="flex gap-2 items-center mt-9">
-                    <p>Sort by</p>
+                    <p>{t("sortBy")}</p>
                     <select
                         onChange={(e) => handleSortedByChange(e)}
                         className="p-2 bg-bg-light dark:bg-bg-dark border-2 max-w-fit  border-typography-light dark:border-typography-dark rounded-md"

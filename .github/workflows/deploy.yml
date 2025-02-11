@@ -1,4 +1,4 @@
-name: Deploy Artiflare
+name: Deploy Vite to GitHub Pages
 
 on:
     push:
@@ -9,32 +9,34 @@ jobs:
     deploy:
         runs-on: ubuntu-latest
         steps:
-            - name: Check
-              uses: actions/checkout@v2
+            - name: Checkout code
+              uses: actions/checkout@v3
 
-            - name: Node.js setup
-              uses: actions/setup-node@v2
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
               with:
                   node-version: "22.x"
+
             - name: Set environment variables
-              env:
-                  VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
-                  VITE_AUTH: ${{ secrets.VITE_AUTH }}
-                  VITE_PROJECT_ID: ${{ secrets.VITE_PROJECT_ID }}
-                  VITE_BUCKET: ${{ secrets.VITE_BUCKET }}
-                  VITE_SENDER_ID: ${{ secrets.VITE_SENDER_ID }}
-                  VITE_APP_ID: ${{ secrets.VITE_APP_ID }}
-                  VITE_MEASUREMENT: ${{ secrets.VITE_MEASUREMENT }}
-              run: echo "Env was loaded successfully"
+              run: |
+                  echo "VITE_API_KEY=${{ secrets.VITE_API_KEY }}" >> $GITHUB_ENV
+                  echo "VITE_AUTH=${{ secrets.VITE_AUTH }}" >> $GITHUB_ENV
+                  echo "VITE_PROJECT_ID=${{ secrets.VITE_PROJECT_ID }}" >> $GITHUB_ENV
+                  echo "VITE_BUCKET=${{ secrets.VITE_BUCKET }}" >> $GITHUB_ENV
+                  echo "VITE_SENDER_ID=${{ secrets.VITE_SENDER_ID }}" >> $GITHUB_ENV
+                  echo "VITE_APP_ID=${{ secrets.VITE_APP_ID }}" >> $GITHUB_ENV
+                  echo "VITE_MEASUREMENT=${{ secrets.VITE_MEASUREMENT }}" >> $GITHUB_ENV
+
             - name: Install dependencies
               run: npm install
-            - name: Build app
+
+            - name: Build Vite project
               run: npm run build
 
-            - name: Deploy
+            - name: Deploy to GitHub Pages
               uses: peaceiris/actions-gh-pages@v3
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
                   publish_dir: ./dist
                   publish_branch: gh-pages
-                  force-orphan: true
+                  force_orphan: true

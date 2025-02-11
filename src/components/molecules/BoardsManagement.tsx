@@ -130,7 +130,7 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
                     >
                         {sortByOptions.map((option) => (
                             <option key={option.value} value={option.value}>
-                                {option.label}
+                                {t(option.label)}
                             </option>
                         ))}
                     </select>

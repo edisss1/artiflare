@@ -1,14 +1,14 @@
 export const sortByOptions = [
     {
         value: "last-opened",
-        label: "Last opened"
+        label: "lastOpened"
     },
     {
         value: "newest-first",
-        label: "Newest first"
+        label: "newestFirst"
     },
     {
         value: "oldest-first",
-        label: "Oldest first"
+        label: "oldestFirst"
     }
 ]

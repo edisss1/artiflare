@@ -263,7 +263,17 @@ export const resources = {
             createNewBoard: "Create new board",
             boardTitleWarning:
                 "Board title should be at least 4 characters long",
-            boardTitle: "Board title"
+            boardTitle: "Board title",
+            chatTitle: "Chat",
+            enterMessage: "Enter you message...",
+            edit: "Edit",
+            copy: "Copy",
+            lastOpened: "Last opened",
+            newestFirst: "Newest first",
+            oldestFirst: "Oldest first",
+            deleteBoard: "Delete Board",
+            renameBoard: "Rename Board",
+            copyBoardLink: "Copy board Link"
         }
     },
     it: {
@@ -521,7 +531,17 @@ export const resources = {
             createNewBoard: "Crea nuova tavola",
             boardTitleWarning:
                 "Il titolo della tavola deve essere lungo almeno 4 caratteri",
-            boardTitle: "Titolo della tavola"
+            boardTitle: "Titolo della tavola",
+            chatTitle: "Chat",
+            enterMessage: "Inserisci il messaggio...",
+            edit: "Modifica",
+            copy: "Copia",
+            lastOpened: "Ultima apertura",
+            newestFirst: "Nuove prime",
+            oldestFirst: "Vecchie prime",
+            deleteBoard: "Rimuovi tavola",
+            renameBoard: "Rinomina tavola",
+            copyBoardLink: "Copia link"
         }
     }
 }

@@ -5,6 +5,7 @@ import TrashCanIcon from "../icons/TrashCanIcon"
 import Button from "../atoms/Button"
 import CopyLinkIcon from "../icons/CopyLinkIcon"
 import EditIcon from "../icons/EditIcon"
+import { t } from "i18next"
 
 interface PopoverBoardContentProps {
     boardID: string | undefined
@@ -26,21 +27,21 @@ const PopoverBoardContent = ({
                 onClick={() => dispatch(deleteBoard(boardID))}
             >
                 <TrashCanIcon />
-                <p>Delete board</p>
+                <p>{t("deleteBoard")}</p>
             </Button>
             <Button
                 onClick={openBoardRenameModal}
                 className="flex gap-2 items-center"
             >
                 <EditIcon className=" [&>*]:fill-bg-dark dark:[&>*]:fill-bg-light" />
-                Rename board
+                <p>{t("renameBoard")}</p>
             </Button>
             <Button
                 onClick={copyToClipboard}
                 className="flex gap-2 items-center "
             >
                 <CopyLinkIcon />
-                <p> Copy board link</p>
+                <p> {t("copyBoardLink")} </p>
             </Button>
         </div>
     )

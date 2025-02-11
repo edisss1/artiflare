@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux"
 import { getMessages, sendMessage } from "../../redux/slices/messagingSlice"
 import { useSelector } from "react-redux"
 import { Message } from "../../types/MessageType"
+import { t } from "i18next"
 
 const ChatContainer = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -79,7 +80,7 @@ const ChatContainer = () => {
                     chatExpanded ? "mb-6" : "mb-0"
                 }  `}
             >
-                <h3>Chat</h3>
+                <h3>{t("chatTitle")}</h3>
                 <Button
                     onClick={handleChatExpanding}
                     className="hover:bg-bg-dark/40 dark:hover:bg-bg-light/40 transition-colors duration-100 rounded-full p-1"
@@ -121,7 +122,7 @@ const ChatContainer = () => {
                         className="col-start-1 col-span-3 row-start-1 border-r-0 rounded-r-none "
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Enter your message..."
+                        placeholder={t("enterMessage")}
                         type="text"
                     />
                     <Button

@@ -6,5 +6,6 @@ export default defineConfig({
     plugins: [react()],
     define: {
         "process.env.IS_PREACT": JSON.stringify("true")
-    }
+    },
+    base: "/artiflare/"
 })

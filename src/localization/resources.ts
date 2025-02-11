@@ -533,7 +533,7 @@ export const resources = {
                 "Il titolo della tavola deve essere lungo almeno 4 caratteri",
             boardTitle: "Titolo della tavola",
             chatTitle: "Chat",
-            enterMessage: "Inserisci il messaggio...",
+            enterMessage: "Scrivi un messaggio...",
             edit: "Modifica",
             copy: "Copia",
             lastOpened: "Ultima apertura",

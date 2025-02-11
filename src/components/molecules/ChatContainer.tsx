@@ -23,6 +23,9 @@ const ChatContainer = () => {
 
     const handleChatExpanding = () => {
         setChatExtended(!chatExpanded)
+        if (messagesRef.current) {
+            messagesRef.current.scrollTop = messagesRef.current.scrollHeight
+        }
     }
 
     const handleMessageSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -96,7 +99,7 @@ const ChatContainer = () => {
                 } animate-extend flex flex-col justify-end`}
             >
                 <div
-                    className="max-h-[200px] px-1 overflow-y-auto custom-scrollbar-modal "
+                    className="max-h-[300px] flex flex-col justify-end h-full px-1 overflow-y-auto custom-scrollbar-modal "
                     ref={messagesRef}
                 >
                     {sortedMessages &&
@@ -118,7 +121,7 @@ const ChatContainer = () => {
                         className="col-start-1 col-span-3 row-start-1 border-r-0 rounded-r-none "
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Search users by email or ID"
+                        placeholder="Enter your message..."
                         type="text"
                     />
                     <Button

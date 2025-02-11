@@ -10,17 +10,14 @@ type ChatBubbleProps = {
 const ChatBubble = ({ message, isUser }: ChatBubbleProps) => {
     const bubbleRef = useRef<HTMLDivElement | null>(null)
     const contextMenuRef = useRef<HTMLDivElement | null>(null)
-    const [contextMenu, setContextMenu] = useState<{
-        x: number
-        y: number
-    } | null>(null)
+    const [y, setY] = useState<number | null>(null)
 
     const handleClickOutside = (e: MouseEvent) => {
         if (
             contextMenuRef.current &&
             !contextMenuRef.current.contains(e.target as Node)
         ) {
-            setContextMenu(null)
+            setY(null)
         }
     }
 
@@ -28,12 +25,11 @@ const ChatBubble = ({ message, isUser }: ChatBubbleProps) => {
         e.preventDefault()
         if (!bubbleRef.current) return
 
-        const { pageX, pageY } = e
+        const { pageY } = e
 
         const relativeY = pageY - bubbleRef.current.getBoundingClientRect().y
-        const relativeX = pageX - bubbleRef.current.getBoundingClientRect().x
 
-        setContextMenu({ x: relativeX, y: relativeY })
+        setY(relativeY)
 
         document.addEventListener("click", handleClickOutside)
     }
@@ -54,10 +50,11 @@ const ChatBubble = ({ message, isUser }: ChatBubbleProps) => {
                 }`}
             >
                 {message.messageText}
-                {contextMenu && (
+                {y && (
                     <MessageOptions
+                        messageID={message.id}
+                        y={y}
                         contextMenuRef={contextMenuRef}
-                        {...contextMenu}
                         isUser={isUser}
                     />
                 )}

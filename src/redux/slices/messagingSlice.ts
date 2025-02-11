@@ -3,6 +3,8 @@ import { Message } from "../../types/MessageType"
 import {
     addDoc,
     collection,
+    deleteDoc,
+    doc,
     onSnapshot,
     query,
     where
@@ -82,6 +84,22 @@ export const getMessages = async (
     }
 }
 
+export const deleteMessage = createAsyncThunk(
+    "messaging/deleteMessage",
+    async (messageID: string | undefined) => {
+        if (!messageID) return
+
+        try {
+            const messagesRef = collection(db, "messages")
+
+            await deleteDoc(doc(messagesRef, messageID))
+        } catch (err) {
+            console.error(err)
+            throw err
+        }
+    }
+)
+
 const messagingSlice = createSlice({
     name: "messaging",
     initialState,
@@ -101,6 +119,18 @@ const messagingSlice = createSlice({
                 state.status = "succeeded"
             })
             .addCase(sendMessage.rejected, (state, action) => {
+                state.error = action.error.message
+                state.status = "failed"
+            })
+            .addCase(deleteMessage.pending, (state) => {
+                state.error = undefined
+                state.status = "loading"
+            })
+            .addCase(deleteMessage.fulfilled, (state) => {
+                state.error = undefined
+                state.status = "succeeded"
+            })
+            .addCase(deleteMessage.rejected, (state, action) => {
                 state.error = action.error.message
                 state.status = "failed"
             })

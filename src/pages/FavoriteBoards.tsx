@@ -30,7 +30,7 @@ const FavoriteBoards = () => {
         <main className="dashboard">
             <DashboardSidebar />
             <DashboardContainer>
-                <Header plan="pro" />
+                <Header />
                 <BoardsManagement title={t("favoriteBoards")} />
                 <BoardsContainer boards={favoriteBoards} />
             </DashboardContainer>

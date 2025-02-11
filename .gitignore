@@ -15,6 +15,10 @@ dist-ssr
 .prettierignore
 prettierrc.json
 .idea
+tsconfig.app.tsbuildinfo
+tsconfig.node.tsbuildinfo
+dist
+
 
 # Editor directories and files
 .vscode/*

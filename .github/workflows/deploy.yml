@@ -26,6 +26,7 @@ jobs:
                   echo "VITE_SENDER_ID=${{ secrets.VITE_SENDER_ID }}" >> $GITHUB_ENV
                   echo "VITE_APP_ID=${{ secrets.VITE_APP_ID }}" >> $GITHUB_ENV
                   echo "VITE_MEASUREMENT=${{ secrets.VITE_MEASUREMENT }}" >> $GITHUB_ENV
+                  echo "VITE_BASE_URL=${{ secrets.VITE_BASE_URL}}" >> $GITHUB_ENV
 
             - name: Install dependencies
               run: npm install

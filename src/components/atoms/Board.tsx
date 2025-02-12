@@ -46,7 +46,7 @@ const Board = ({
     const copyToClipboard = async () => {
         try {
             const baseUrl = `${window.location.origin}${
-                import.meta.env.BASE_URL
+                import.meta.env.VITE_BASE_URL
             }`.replace(/\/$/, "")
             const hashPrefix = window.location.hash.startsWith("#") ? "/#" : "#"
             const url = `${baseUrl}${hashPrefix}/app/board/${id}`

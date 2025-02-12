@@ -12,6 +12,7 @@ import { handleSignOut } from "../../utils/handleSignOut.ts"
 import { updateUserName } from "../../redux/slices/userManagementSlice.ts"
 import { t } from "i18next"
 import { useNavigate } from "react-router-dom"
+import { openModal } from "../../utils/openModal.ts"
 
 const UserSettingsPanel = () => {
     const user = useSelector((state: RootState) => state.auth.user)
@@ -28,10 +29,6 @@ const UserSettingsPanel = () => {
             dispatch(updateUserName({ user, newDisplayName }))
         }
         navigate(0)
-    }
-
-    const openModal = () => {
-        modalRef.current?.showModal()
     }
 
     return (
@@ -54,14 +51,14 @@ const UserSettingsPanel = () => {
                     <p>{t("deleteProfileText")} </p>
                 </div>
                 <Button
-                    onClick={openModal}
+                    onClick={() => openModal(modalRef)}
                     className={
                         "border-2 border-danger text-danger rounded-md  hover:bg-danger hover:text-typography-dark transition-colors duration-150 w-fit p-2 mt-4"
                     }
                 >
                     {t("deleteProfileHeader")}
                 </Button>
-                <Modal modalRef={modalRef}>
+                <Modal minHeight="lg:min-h-[300px] " modalRef={modalRef}>
                     <UserDeletionModalContent />
                 </Modal>
             </div>

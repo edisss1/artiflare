@@ -3,7 +3,7 @@ import { IconProps } from "../../types/IconProps"
 const SearchIcon = ({ className }: IconProps) => {
     return (
         <svg
-            className={`[&>*]:fill-bg-dark [&>*]:dark:fill-bg-light ${className}`}
+            className={`[&>*]:fill-bg-dark  ${className}`}
             width="16"
             height="16"
             viewBox="0 0 10 10"

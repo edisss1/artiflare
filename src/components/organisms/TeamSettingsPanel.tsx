@@ -14,6 +14,7 @@ import { t } from "i18next"
 import { useNavigate } from "react-router-dom"
 import Modal from "../molecules/Modal"
 import TeamDeletionModalContent from "../atoms/TeamDeletionModalContent"
+import { openModal } from "../../utils/openModal"
 
 const TeamSettingsPanel = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -53,10 +54,6 @@ const TeamSettingsPanel = () => {
                 file: e.target.files![0]
             })
         )
-    }
-
-    const openModal = () => {
-        modalRef.current?.showModal()
     }
 
     return (
@@ -116,7 +113,7 @@ const TeamSettingsPanel = () => {
                 </div>
                 <Button
                     disabled={user?.teams.length === 1}
-                    onClick={openModal}
+                    onClick={() => openModal(modalRef)}
                     className={
                         "border-2 border-danger text-danger rounded-md  disabled:opacity-40 disabled:cursor-not-allowed  enabled:hover:bg-danger enabled:hover:text-typography-dark transition-colors duration-150 w-fit p-2 mt-4"
                     }

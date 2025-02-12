@@ -6,18 +6,27 @@ import MembersDisplay from "../molecules/MembersDisplay"
 import InviteIcon from "../icons/InviteIcon"
 import Button from "../atoms/Button"
 import { t } from "i18next"
+import Modal from "../molecules/Modal"
+import MemberInviteModalContent from "../atoms/MemberInviteModalContent"
+import { useRef } from "react"
+import { openModal } from "../../utils/openModal"
 
 const TeamMembersSettingsPanel = () => {
     const { currentTeam } = useSelector(
         (state: RootState) => state.teamManagement
     )
+    const modalRef = useRef<HTMLDialogElement | null>(null)
 
     return (
         <div className="">
             <div className="px-4 pt-4 flex items-center gap-6 mb-8">
                 <h2>{t("members")}</h2>
-                <Button className="flex gap-2 items-center border-2 border-secondary rounded-lg hover:bg-secondary dark:hover:text-typography-light transition-colors duration-150 px-2 py-2">
-                    <InviteIcon /> <p>{t("inviteNewUsers")}</p>
+                <Button
+                    onClick={() => openModal(modalRef)}
+                    className="flex gap-2 items-center group border-2 border-secondary rounded-lg hover:bg-secondary dark:hover:text-typography-light transition-colors duration-150 px-2 py-2"
+                >
+                    <InviteIcon className="group-hover:[&>*]:stroke-bg-dark transition-colors duration-150" />
+                    <p>{t("inviteNewUsers")}</p>
                 </Button>
             </div>
             <div className="w-full flex items-center text-typography-light bg-secondary px-4 py-2">
@@ -32,6 +41,13 @@ const TeamMembersSettingsPanel = () => {
             </div>
             <SearchMembers />
             <MembersDisplay currentTeam={currentTeam} />
+            <Modal
+                maxHeight="max-h-[450px] h-full"
+                minHeight="min-h-[400px]"
+                modalRef={modalRef}
+            >
+                <MemberInviteModalContent />
+            </Modal>
         </div>
     )
 }

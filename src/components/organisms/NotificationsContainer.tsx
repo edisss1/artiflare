@@ -5,8 +5,9 @@ import { useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store.ts"
 import { getNotificationsForUser } from "../../redux/slices/notificationManagementSlice.ts"
 import { useDispatch } from "react-redux"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { t } from "i18next"
+import { handleClickOutside } from "../../utils/handleClickOutside.ts"
 
 interface NotificationsProps {
     isContainerOpened: boolean
@@ -17,11 +18,21 @@ const NotificationsContainer = ({
     isContainerOpened,
     closeContainer
 }: NotificationsProps) => {
+    const notificationsRef = useRef<HTMLDivElement | null>(null)
     const { notifications } = useSelector(
         (state: RootState) => state.notificationManagement
     )
     const dispatch: AppDispatch = useDispatch()
     const user = useSelector((state: RootState) => state.auth.user)
+
+    // const handleClickOutsideNotifications = (e: MouseEvent) => {
+    //     if (
+    //         notificationsRef.current &&
+    //         !notificationsRef.current.contains(e.target as Node)
+    //     ) {
+    //         closeContainer()
+    //     }
+    // }
 
     useEffect(() => {
         if (user) {
@@ -30,10 +41,21 @@ const NotificationsContainer = ({
             return () => unsubscribe()
         }
     }, [])
+    useEffect(() => {
+        document.addEventListener("mousedown", (e) => {
+            handleClickOutside(e, notificationsRef, closeContainer)
+        })
+
+        return () =>
+            document.removeEventListener("mousedown", (e) => {
+                handleClickOutside(e, notificationsRef, closeContainer)
+            })
+    }, [])
 
     return (
         <aside
-            className={`bg-primary  dark:bg-primary-dark fixed h-screen flex flex-col justify-between w-full drop-shadow-2xl max-w-[350px] z-10 right-0 top-0 ${
+            ref={notificationsRef}
+            className={`bg-primary max-lg:max-w-[70%]  dark:bg-primary-dark fixed h-screen flex flex-col justify-between w-full drop-shadow-2xl max-w-[350px] z-10 right-0 top-0 ${
                 !isContainerOpened ? "translate-x-full" : "translate-x-0"
             } transition-all duration-150 ease-in `}
         >

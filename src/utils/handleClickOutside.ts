@@ -3,10 +3,9 @@ export function handleClickOutside(
     ref:
         | React.MutableRefObject<HTMLDivElement | null>
         | React.MutableRefObject<HTMLDialogElement | null>,
-    isPopoverOpen: boolean,
-    setIsPopoverOpen: React.Dispatch<React.SetStateAction<boolean>>
+    closeFunction: () => void
 ) {
     if (ref.current && !ref.current.contains(event.target as Node)) {
-        setIsPopoverOpen(!isPopoverOpen)
+        closeFunction()
     }
 }

@@ -23,7 +23,7 @@ interface FormProps {
     passwordMatch?: boolean
     email: string
     password: string
-    name: string
+    name?: string
     confirmedPassword?: string
     errorCode: string | undefined
     isAgreed?: boolean

@@ -10,6 +10,7 @@ import { setIsMobileSidebarOpened } from "../../redux/slices/miscStatesSlice.ts"
 import { useTranslation } from "react-i18next"
 import { setBoardSearchQuery } from "../../redux/slices/boardSlice.ts"
 import { handleClickOutside } from "../../utils/handleClickOutside.ts"
+import { useLocation } from "react-router-dom"
 
 const DashboardSidebar = () => {
     const sidebarRef = useRef<HTMLDivElement | null>(null)
@@ -19,6 +20,7 @@ const DashboardSidebar = () => {
         (state: RootState) => state.miscStates
     )
     const { t } = useTranslation()
+    const location = useLocation()
 
     const handleSearchQueryChange = (
         e: React.ChangeEvent<HTMLInputElement>
@@ -49,6 +51,10 @@ const DashboardSidebar = () => {
             })
         }
     }, [])
+
+    useEffect(() => {
+        windowWidth < 1024 && dispatch(setIsMobileSidebarOpened(false))
+    }, [location])
 
     return (
         <aside

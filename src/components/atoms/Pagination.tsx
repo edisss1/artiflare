@@ -15,7 +15,7 @@ const Pagination = ({
         setCurrentPage(page)
     }
     return (
-        <div className="flex gap-4 w-full items-center justify-center absolute bottom-0 max-lg:bg-bg-light max-lg:dark:bg-bg-dark">
+        <div className="flex gap-4 w-full items-center flex-wrap   justify-center absolute bottom-0 max-lg:bg-bg-light max-lg:dark:bg-bg-dark">
             {currentPage !== 1 && (
                 <Button
                     className="border-2 border-typography-light px-4 py-1 rounded-md hover:bg-bg-dark dark:hover:bg-bg-light dark:hover:text-typography-light hover:text-typography-dark transition-all duration-150"

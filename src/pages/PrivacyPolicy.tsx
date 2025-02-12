@@ -21,7 +21,7 @@ const PrivacyPolicy = () => {
     return (
         <>
             <NavBar />
-            <div className="flex flex-col items-center mt-8 max-w-[700px] mx-auto">
+            <div className="flex flex-col items-center mt-8 max-w-[700px] mx-auto max-md:mx-4">
                 <div className="mb-4 flex flex-col items-center">
                     <h1 className="text-xl font-medium mb-4">Privacy Policy</h1>
                     <p>{t("privacyPolicySections.introduction")}</p>

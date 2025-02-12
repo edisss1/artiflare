@@ -16,7 +16,7 @@ const TermsOfService = () => {
     return (
         <>
             <NavBar />
-            <div className="flex flex-col items-center mt-6">
+            <div className="flex flex-col items-center mt-6 max-md:mx-4">
                 <h1 className="self-center text-xl">{t("termsOfService")}</h1>
                 {termsOfService.map((section) => (
                     <TermsOfServiceSection key={section.title} {...section} />

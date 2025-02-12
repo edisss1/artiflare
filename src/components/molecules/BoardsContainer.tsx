@@ -40,11 +40,11 @@ const BoardsContainer = ({ boards }: BoardsContainerProps) => {
                 )
             case "newest-first":
                 return boardsForSort.sort((a, b) =>
-                    a.updatedAt < b.updatedAt ? -1 : 1
+                    a.updatedAt > b.updatedAt ? -1 : 1
                 )
             case "oldest-first":
                 return boardsForSort.sort((a, b) =>
-                    a.updatedAt > b.updatedAt ? -1 : 1
+                    a.updatedAt < b.updatedAt ? -1 : 1
                 )
 
             default:
@@ -79,12 +79,12 @@ const BoardsContainer = ({ boards }: BoardsContainerProps) => {
     }, [sortedBy, dispatch])
 
     useEffect(() => {
-        windowWidth <= 1280 && dispatch(updateBoardsPerPage(3))
+        windowWidth <= 1280 && dispatch(updateBoardsPerPage(2))
     }, [windowWidth])
 
     return (
         <>
-            <div className="flex flex-col gap-4 relative min-h-[420px] ">
+            <div className="flex flex-col gap-4 relative min-h-[420px] max-lg:min-h-[300px]">
                 {paginatedBoards?.length === 0 && (
                     <p className="text-center text-sm font-normal opacity-70 mt-8 ">
                         {t("noBoards")}

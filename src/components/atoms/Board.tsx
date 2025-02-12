@@ -45,10 +45,13 @@ const Board = ({
 
     const copyToClipboard = async () => {
         try {
-            const url = `${window.location.origin}/board/${id}`
-            await navigator.clipboard.writeText(url)
-            setCopied(true)
+            const baseUrl = `${window.location.origin}${
+                import.meta.env.BASE_URL
+            }`.replace(/\/$/, "")
+            const hashPrefix = window.location.hash.startsWith("#") ? "/#" : "#"
+            const url = `${baseUrl}${hashPrefix}/app/board/${id}`
 
+            await navigator.clipboard.writeText(url)
             setCopied(true)
         } catch (err) {
             console.error("Error copying to clipboard:", err)

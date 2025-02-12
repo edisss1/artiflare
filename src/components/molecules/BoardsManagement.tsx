@@ -93,16 +93,19 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
                     createBoard={createNewBoard}
                 />
             </Modal>
-            <Modal modalRef={joinTeamModalRef}>
+            <Modal
+                minHeight="lg:min-h-[600px] max-lg:min-h-[550px]"
+                modalRef={joinTeamModalRef}
+            >
                 <TeamManagementModal
                     isCreateModal={isCreateModal}
                     setIsCreateModal={setIsCreateModal}
                 />
             </Modal>
             <div className="grid grid-rows-2 max-md:place-items-center mt-[clamp(1.5rem,40vh,5rem)] mb-9">
-                <div className="flex items-center w-full justify-between">
+                <div className="flex items-center w-full max-md:flex-col max-md:gap-4 justify-between">
                     <h2 className="text-xl">{title}</h2>
-                    <div className="flex gap-4 max-md:flex-col text-typography-light">
+                    <div className="flex gap-4  text-typography-light">
                         <Button
                             // disabled={user?.teams && user?.teams.length >= 1}
                             onClick={toggleJoinTeamModal}

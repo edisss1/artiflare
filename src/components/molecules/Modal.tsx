@@ -29,7 +29,7 @@ const Modal = ({
 
     return (
         <dialog
-            className={`${minHeight} modal w-full max-w-[500px]  p-9 text-typography-light dark:text-typography-dark dark:bg-bg-dark rounded-lg relative bg-bg-light dark:backdrop:bg-bg-light/25 backdrop:bg-bg-dark/30 backdrop:pointer-events-none`}
+            className={`${minHeight} modal w-full max-w-[500px]  max-lg:max-w-[400px] p-9 text-typography-light dark:text-typography-dark dark:bg-bg-dark rounded-lg relative bg-bg-light dark:backdrop:bg-bg-light/25 backdrop:bg-bg-dark/30 backdrop:pointer-events-none`}
             ref={modalRef}
         >
             <button

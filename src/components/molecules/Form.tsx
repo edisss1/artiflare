@@ -62,7 +62,7 @@ const Form = ({
 
     return (
         <form onSubmit={onSubmit} className="mt-4 w-full">
-            <fieldset className="flex flex-col gap-2 items-center mt-4 w-full text-typography-light">
+            <fieldset className="flex flex-col gap-2 items-center max-md:max-w-[90%] max-md:mx-auto mt-4 w-full text-typography-light">
                 <FormInput
                     value={email}
                     onChange={(e) => dispatch(setEmail(e.target.value))}

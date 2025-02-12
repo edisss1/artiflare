@@ -61,7 +61,7 @@ const DashboardSidebar = () => {
             ref={sidebarRef}
             className={`w-full max-lg:absolute max-lg:z-40 max-lg:top-0 ${
                 isMobileSidebarOpened ? "left-0 " : "-left-[1000px]"
-            } h-screen py-9 px-4 min-w-fit max-w-[230px] bg-primary dark:bg-primary-dark dark:text-typography-dark border-r-2 border-r-typography-light min-h-screen relative transition-all duration-150 `}
+            } h-screen py-9 px-4 min-w-fit max-w-[230px] bg-primary dark:bg-primary-dark dark:text-typography-dark border-r-2 border-r-typography-light min-h-[100dvh] relative transition-all duration-150 `}
         >
             <div className="gap-[clamp(1rem,40vh,5rem)] h-full flex flex-col relative">
                 <Button

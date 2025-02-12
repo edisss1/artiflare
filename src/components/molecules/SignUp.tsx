@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import AuthWithProviders from "../atoms/AuthWithProviders"
 import Form from "./Form"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { createUserWithCredentials } from "../../redux/slices/authSlice"
 import { useState } from "react"
 import H2 from "../atoms/H2"
@@ -15,11 +15,16 @@ const SignUp = () => {
     )
     const [isAgreed, setIsAgreed] = useState(false)
     const { t } = useTranslation()
+    const navigate = useNavigate()
 
     const handleUserSignUp = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (isAgreed && confirmedPassword && email && password) {
-            dispatch(createUserWithCredentials({ email, password }))
+            dispatch(createUserWithCredentials({ email, password })).then(
+                () => {
+                    navigate(0)
+                }
+            )
         }
     }
 

@@ -8,16 +8,19 @@ import {
     uploadTeamLogo
 } from "../../redux/slices/teamManagementSlice"
 import { useSelector } from "react-redux"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import FileUpload from "../atoms/FileUpload"
 import { t } from "i18next"
 import { useNavigate } from "react-router-dom"
+import Modal from "../molecules/Modal"
+import TeamDeletionModalContent from "../atoms/TeamDeletionModalContent"
 
 const TeamSettingsPanel = () => {
     const dispatch: AppDispatch = useDispatch()
     const user = useSelector((state: RootState) => state.auth.user)
     const teams = useSelector((state: RootState) => state.teamManagement.teams)
     const navigate = useNavigate()
+    const modalRef = useRef<HTMLDialogElement | null>(null)
 
     // const [logoFile, setLogoFile] = useState<File | null>(null)
 
@@ -50,6 +53,10 @@ const TeamSettingsPanel = () => {
                 file: e.target.files![0]
             })
         )
+    }
+
+    const openModal = () => {
+        modalRef.current?.showModal()
     }
 
     return (
@@ -108,13 +115,17 @@ const TeamSettingsPanel = () => {
                     <p>{t("deleteTeamText")}</p>
                 </div>
                 <Button
-                    onClick={() => {}}
+                    disabled={user?.teams.length === 1}
+                    onClick={openModal}
                     className={
-                        "border-2 border-danger text-danger rounded-md  hover:bg-danger hover:text-typography-dark transition-colors duration-150 w-fit p-2 mt-4"
+                        "border-2 border-danger text-danger rounded-md  disabled:opacity-40 disabled:cursor-not-allowed  enabled:hover:bg-danger enabled:hover:text-typography-dark transition-colors duration-150 w-fit p-2 mt-4"
                     }
                 >
                     {t("delete")} {currentTeam?.name}
                 </Button>
+                <Modal modalRef={modalRef}>
+                    <TeamDeletionModalContent />
+                </Modal>
             </div>
         </div>
     )

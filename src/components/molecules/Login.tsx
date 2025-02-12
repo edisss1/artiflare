@@ -1,7 +1,7 @@
 import Form from "./Form"
 
 import AuthWithProviders from "../atoms/AuthWithProviders"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import { signInWithCredentials } from "../../redux/slices/authSlice"
@@ -14,10 +14,13 @@ const Login = () => {
         (state: RootState) => state.auth
     )
     const { t } = useTranslation()
+    const navigate = useNavigate()
 
     const handleUserSignIn = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
-        dispatch(signInWithCredentials({ email, password }))
+        dispatch(signInWithCredentials({ email, password })).then(() => {
+            navigate(0)
+        })
     }
 
     return (

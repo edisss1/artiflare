@@ -3,8 +3,10 @@ import { Team, TeamMember } from "../../types/Team"
 import { db, storage } from "../../firestore/firebaseConfig"
 import {
     addDoc,
+    arrayRemove,
     arrayUnion,
     collection,
+    deleteDoc,
     doc,
     getDoc,
     getDocs,
@@ -343,6 +345,48 @@ export const uploadTeamLogo = createAsyncThunk(
     }
 )
 
+export const deleteTeam = createAsyncThunk(
+    "teamManagement/deleteTeam",
+    async (teamID: string | undefined) => {
+        if (!teamID) return
+
+        const teamDocRef = doc(db, "teams", teamID)
+        const usersRef = collection(db, "users")
+        const boardsRef = collection(db, "boards")
+
+        const teamsQuery = query(
+            usersRef,
+            where("teams", "array-contains", {
+                teamID: teamID
+            })
+        )
+        const boardsQuery = query(boardsRef, where("teamID", "==", teamID))
+
+        const teamsQuerySnap = await getDocs(teamsQuery)
+        const boardsQuerySnap = await getDocs(boardsQuery)
+
+        teamsQuerySnap.forEach(async (docSnap) => {
+            const userRef = doc(db, "users", docSnap.data().creatorID)
+            await updateDoc(userRef, {
+                teams: arrayRemove({
+                    teamID: teamID
+                })
+            })
+            const userData = docSnap.data() as User
+            await updateDoc(userRef, {
+                currentSelectedTeam: userData.teams[0].teamID
+            })
+        })
+
+        boardsQuerySnap.forEach(async (docSnap) => {
+            const boardRef = doc(db, "boards", docSnap.id)
+            await deleteDoc(boardRef)
+        })
+
+        await deleteDoc(teamDocRef)
+    }
+)
+
 const teamManagementSlice = createSlice({
     name: "teamManagement",
     initialState,
@@ -435,6 +479,18 @@ const teamManagementSlice = createSlice({
                 }
             )
             .addCase(searchForInvitees.rejected, (state, action) => {
+                state.error = action.error.message
+                state.status = "failed"
+            })
+            .addCase(deleteTeam.pending, (state) => {
+                state.error = undefined
+                state.status = "loading"
+            })
+            .addCase(deleteTeam.fulfilled, (state) => {
+                state.error = undefined
+                state.status = "succeeded"
+            })
+            .addCase(deleteTeam.rejected, (state, action) => {
                 state.error = action.error.message
                 state.status = "failed"
             })

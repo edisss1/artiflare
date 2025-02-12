@@ -26,7 +26,6 @@ import {
 import { createUserWithEmailAndPassword } from "firebase/auth/cordova"
 import { User } from "../../types/User.ts"
 import { Team } from "../../types/Team.ts"
-import { navigateTo } from "../../utils/navigate.ts"
 import { AppDispatch } from "../store.ts"
 import { setCurrentTeam } from "./teamManagementSlice.ts"
 
@@ -239,7 +238,6 @@ export const signOutUser = createAsyncThunk(
     async (dispatch: AppDispatch) => {
         dispatch(setCurrentTeam({} as Team))
         await signOut(auth)
-        navigateTo("/")
     }
 )
 

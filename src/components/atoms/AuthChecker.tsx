@@ -156,10 +156,7 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                 navigate("/app/dashboard", { replace: true })
             }
         } else if (status === "unauthenticated") {
-            if (
-                !location.pathname.startsWith("/") ||
-                location.pathname.startsWith("/app")
-            ) {
+            if (location.pathname.startsWith("/app")) {
                 navigate("/auth/signup", { replace: true })
             }
         }

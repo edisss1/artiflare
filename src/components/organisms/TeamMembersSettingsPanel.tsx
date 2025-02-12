@@ -46,7 +46,7 @@ const TeamMembersSettingsPanel = () => {
                 minHeight="min-h-[400px]"
                 modalRef={modalRef}
             >
-                <MemberInviteModalContent />
+                <MemberInviteModalContent modalRef={modalRef} />
             </Modal>
         </div>
     )

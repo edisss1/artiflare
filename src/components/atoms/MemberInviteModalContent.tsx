@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useSelector } from "react-redux"
 import {
+    clearInvitees,
     deleteInvitee,
     searchForInvitees,
     updateInvitees,
@@ -16,7 +17,13 @@ import InviteesContainer from "../molecules/InviteesContainer"
 import UserCard from "./UserCard"
 import { sendInvite } from "../../redux/slices/notificationManagementSlice"
 
-const MemberInviteModalContent = () => {
+interface MemberInviteModalContentProps {
+    modalRef: React.MutableRefObject<HTMLDialogElement | null>
+}
+
+const MemberInviteModalContent = ({
+    modalRef
+}: MemberInviteModalContentProps) => {
     const dispatch: AppDispatch = useDispatch()
     const { user } = useSelector((state: RootState) => state.auth)
     const [query, setQuery] = useState("")
@@ -43,6 +50,19 @@ const MemberInviteModalContent = () => {
         }
 
         dispatch(updateQueryResults())
+    }
+
+    const handleInvites = () => {
+        dispatch(
+            sendInvite({
+                user,
+                teamID: user?.currentSelectedTeam,
+                invitees
+            })
+        )
+        modalRef.current?.close()
+
+        dispatch(clearInvitees())
     }
 
     return (
@@ -90,15 +110,7 @@ const MemberInviteModalContent = () => {
                 </InviteesContainer>
             </div>
             <Button
-                onClick={() =>
-                    dispatch(
-                        sendInvite({
-                            user,
-                            teamID: user?.currentSelectedTeam,
-                            invitees
-                        })
-                    )
-                }
+                onClick={handleInvites}
                 className="border-2  max-w-[60%] w-full py-3 border-secondary rounded-lg hover:bg-secondary dark:hover:text-typography-light transition-colors duration-150"
             >
                 Send invites

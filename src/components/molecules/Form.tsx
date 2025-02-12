@@ -4,6 +4,7 @@ import { AppDispatch } from "../../redux/store"
 import {
     setConfirmedPassword,
     setEmail,
+    setName,
     setPassword
 } from "../../redux/slices/authSlice"
 import React, { useEffect, useState } from "react"
@@ -12,6 +13,8 @@ import { Link, useLocation } from "react-router-dom"
 import { handleAuthError } from "../../utils/handleAuthError"
 import Checkbox from "../atoms/Checkbox"
 import { useTranslation } from "react-i18next"
+import HidePassword from "../icons/HidePassword"
+import ShowPassword from "../icons/ShowPassword"
 
 interface FormProps {
     onSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void
@@ -20,6 +23,7 @@ interface FormProps {
     passwordMatch?: boolean
     email: string
     password: string
+    name: string
     confirmedPassword?: string
     errorCode: string | undefined
     isAgreed?: boolean
@@ -32,6 +36,7 @@ const Form = ({
     isSignUp,
     email,
     password,
+    name,
     confirmedPassword,
     errorCode,
     isAgreed,
@@ -43,6 +48,8 @@ const Form = ({
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
         undefined
     )
+
+    const [inputType, setInputType] = useState<"password" | "text">("password")
 
     const location = useLocation()
 
@@ -63,6 +70,15 @@ const Form = ({
     return (
         <form onSubmit={onSubmit} className="mt-4 w-full">
             <fieldset className="flex flex-col gap-2 items-center max-md:max-w-[90%] max-md:mx-auto mt-4 w-full text-typography-light">
+                {isSignUp && (
+                    <FormInput
+                        value={name}
+                        onChange={(e) => dispatch(setName(e.target.value))}
+                        placeholder="enter your name"
+                        type="text"
+                        autoComplete="off"
+                    />
+                )}
                 <FormInput
                     value={email}
                     onChange={(e) => dispatch(setEmail(e.target.value))}
@@ -70,14 +86,31 @@ const Form = ({
                     type="email"
                     autoComplete="off"
                 />
-                <FormInput
-                    isIncorrect={!passwordMatch && isSignUp}
-                    value={password}
-                    onChange={(e) => dispatch(setPassword(e.target.value))}
-                    placeholder={t("password").toLowerCase()}
-                    type="password"
-                    autoComplete="current-password"
-                />
+                <div className="w-full relative">
+                    <FormInput
+                        isIncorrect={!passwordMatch && isSignUp}
+                        value={password}
+                        onChange={(e) => dispatch(setPassword(e.target.value))}
+                        placeholder={t("password").toLowerCase()}
+                        type={inputType}
+                        autoComplete="current-password"
+                    />
+                    {inputType === "password" ? (
+                        <Button
+                            onClick={() => setInputType("text")}
+                            className="absolute right-4 top-[50%] -translate-y-[50%] "
+                        >
+                            <ShowPassword />
+                        </Button>
+                    ) : (
+                        <Button
+                            onClick={() => setInputType("password")}
+                            className="absolute right-4 top-[50%] -translate-y-[50%]"
+                        >
+                            <HidePassword />
+                        </Button>
+                    )}
+                </div>
                 {isSignUp && (
                     <FormInput
                         isIncorrect={!passwordMatch}
@@ -86,8 +119,13 @@ const Form = ({
                             dispatch(setConfirmedPassword(e.target.value))
                         }
                         placeholder={t("confirmPassword").toLowerCase()}
-                        type="password"
+                        type={inputType}
                     />
+                )}
+                {!passwordMatch && confirmedPassword && (
+                    <p className="text-danger text-sm block my-2 ">
+                        Passwords do not match
+                    </p>
                 )}
                 {isSignUp && (
                     <div className="flex gap-2 self-start items-center text-typography-light dark:text-typography-dark">
@@ -110,6 +148,7 @@ const Form = ({
                         </div>
                     </div>
                 )}
+
                 {!isSignUp && (
                     <Link
                         className="self-end text-typography-light opacity-60 hover:opacity-100 dark:text-typography-dark transition-opacity duration-150"
@@ -118,11 +157,7 @@ const Form = ({
                         {t("forgotPassword")}
                     </Link>
                 )}
-                {!passwordMatch && confirmedPassword && (
-                    <p className="text-danger text-sm block ">
-                        Passwords do not match
-                    </p>
-                )}
+
                 {errorMessage && (
                     <p className="text-danger text-sm block ">{errorMessage}</p>
                 )}

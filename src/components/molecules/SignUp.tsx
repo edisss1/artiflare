@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next"
 
 const SignUp = () => {
     const dispatch: AppDispatch = useDispatch()
-    const { email, password, confirmedPassword, errorCode } = useSelector(
+    const { email, password, confirmedPassword, errorCode, name } = useSelector(
         (state: RootState) => state.auth
     )
     const [isAgreed, setIsAgreed] = useState(false)
@@ -20,7 +20,7 @@ const SignUp = () => {
     const handleUserSignUp = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (isAgreed && confirmedPassword && email && password) {
-            dispatch(createUserWithCredentials({ email, password })).then(
+            dispatch(createUserWithCredentials({ email, password, name })).then(
                 () => {
                     navigate(0)
                 }
@@ -42,6 +42,7 @@ const SignUp = () => {
                     isAgreed={isAgreed}
                     email={email}
                     password={password}
+                    name={name}
                     confirmedPassword={confirmedPassword}
                     errorCode={errorCode}
                     setIsAgreed={setIsAgreed}

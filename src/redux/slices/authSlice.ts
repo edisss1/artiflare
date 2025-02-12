@@ -59,6 +59,7 @@ interface AuthState {
     password: string
     confirmedPassword: string
     errorCode: string | undefined
+    name: string
 }
 
 const initialState: AuthState = {
@@ -67,7 +68,8 @@ const initialState: AuthState = {
     password: "",
     email: "",
     confirmedPassword: "",
-    errorCode: undefined
+    errorCode: undefined,
+    name: ""
 }
 
 const createDefaultTeam = async (user: User) => {
@@ -193,7 +195,15 @@ export const signInWithCredentials = createAsyncThunk(
 
 export const createUserWithCredentials = createAsyncThunk(
     "auth/createUserWithCredentials",
-    async ({ email, password }: { email: string; password: string }) => {
+    async ({
+        email,
+        password,
+        name
+    }: {
+        email: string
+        password: string
+        name: string
+    }) => {
         try {
             const result = await createUserWithEmailAndPassword(
                 auth,
@@ -204,7 +214,7 @@ export const createUserWithCredentials = createAsyncThunk(
             const user: User = {
                 uid: result.user.uid,
                 img: result.user.photoURL,
-                displayName: result.user.displayName ?? result.user.email,
+                displayName: name,
                 email: result.user.email,
                 teams: [],
                 boards: [],
@@ -327,6 +337,9 @@ const authSlice = createSlice({
         },
         setConfirmedPassword: (state, action: PayloadAction<string>) => {
             state.confirmedPassword = action.payload
+        },
+        setName: (state, action: PayloadAction<string>) => {
+            state.name = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -398,7 +411,8 @@ export const {
     clearUser,
     setEmail,
     setPassword,
-    setConfirmedPassword
+    setConfirmedPassword,
+    setName
 } = authSlice.actions
 
 export default authSlice.reducer

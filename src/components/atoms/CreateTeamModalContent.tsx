@@ -3,7 +3,7 @@ import Button from "./Button"
 import FormInput from "./FormInput"
 import Select from "./Select"
 import { TeamType } from "../../types/TeamType"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch } from "react-redux"
@@ -32,7 +32,7 @@ const CreateTeamModalContent = ({
 }: CreateTeamModalContentProps) => {
     const [teamType, setTeamType] = useState<TeamType["teamType"]>("private")
     const [teamTitle, setTeamTitle] = useState<string>("")
-    const { inviteeQueryResults, status, invitees } = useSelector(
+    const { inviteeQueryResults, invitees } = useSelector(
         (state: RootState) => state.teamManagement
     )
     const [inviteeQuery, setInviteeQuery] = useState<string>("")
@@ -74,11 +74,6 @@ const CreateTeamModalContent = ({
         }
     }
 
-    useEffect(() => {
-        console.log(inviteeQueryResults)
-        console.log(`Invitees array: ${invitees}`)
-    }, [inviteeQueryResults, invitees])
-
     const handleInviteeSearch = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         dispatch(
@@ -88,8 +83,7 @@ const CreateTeamModalContent = ({
                 userID: user?.uid!
             })
         )
-        console.log(status)
-        console.log(`Query: ${inviteeQuery}`)
+
         setInviteeQuery("")
     }
 

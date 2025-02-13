@@ -28,6 +28,8 @@ interface TeamState {
     newTeamName: string
     inviteeQueryResults: User | null
     invitees: User[]
+    teamQueryResults: Team[] | null
+    teamResults: Team[]
 }
 
 const initialState: TeamState = {
@@ -45,7 +47,9 @@ const initialState: TeamState = {
     error: undefined,
     newTeamName: "",
     inviteeQueryResults: null,
-    invitees: []
+    invitees: [],
+    teamQueryResults: null,
+    teamResults: []
 }
 export const createTeam = createAsyncThunk(
     "teamManagement/createTeam",
@@ -387,6 +391,64 @@ export const deleteTeam = createAsyncThunk(
     }
 )
 
+export const searchTeams = createAsyncThunk(
+    "teamManagement/searchTeams",
+    async ({ queryStr }: { queryStr: string }) => {
+        if (!queryStr) return null
+
+        try {
+            const teamsRef = collection(db, "teams")
+            const nameQuery = query(
+                teamsRef,
+                where("name", ">=", queryStr),
+                where("name", "<=", queryStr + "\uf8ff"),
+                where("teamType", "==", "public")
+            )
+
+            const idQuery = query(
+                teamsRef,
+                where("id", ">=", queryStr),
+                where("id", "<=", queryStr + "\uf8ff"),
+                where("teamType", "==", "public")
+            )
+
+            console.log(`Query: ${queryStr}`)
+
+            const nameQuerySnap = await getDocs(nameQuery)
+            const idQuerySnap = await getDocs(idQuery)
+
+            // console.log(
+            //     `Docs data: ${JSON.stringify(
+            //         nameQuerySnap.docs.forEach((doc) => {
+            //             console.log(doc.data())
+            //         })
+            //     )}, ${JSON.stringify(
+            //         idQuerySnap.docs.forEach((doc) => {
+            //             console.log(doc.data())
+            //         })
+            //     )}`
+            // )
+
+            let resultsMap = new Map()
+
+            nameQuerySnap.forEach((docSnap) => {
+                resultsMap.set(docSnap.id, docSnap.data())
+            })
+
+            idQuerySnap.forEach((docSnap) => {
+                resultsMap.set(docSnap.id, docSnap.data())
+            })
+            const results = Array.from(resultsMap.values()) as Team[]
+            console.log(`Results: ${JSON.stringify(results)}`)
+
+            return results
+        } catch (err) {
+            console.error(err)
+            throw err
+        }
+    }
+)
+
 const teamManagementSlice = createSlice({
     name: "teamManagement",
     initialState,
@@ -400,6 +462,9 @@ const teamManagementSlice = createSlice({
         updateQueryResults: (state) => {
             state.inviteeQueryResults = null
         },
+        updateTeamResults: (state, action: PayloadAction<Team[]>) => {
+            state.teamResults = [...state.teamResults, ...action.payload]
+        },
         deleteInvitee: (state, action: PayloadAction<User>) => {
             state.invitees = state.invitees.filter(
                 (invitee) => invitee.uid !== action.payload.uid
@@ -407,6 +472,10 @@ const teamManagementSlice = createSlice({
         },
         clearInvitees: (state) => {
             state.invitees = []
+        },
+        clearTeams: (state) => {
+            state.teamQueryResults = null
+            state.teamResults = []
         }
     },
     extraReducers: (builder) => {
@@ -437,17 +506,6 @@ const teamManagementSlice = createSlice({
                 state.status = "loading"
                 state.error = undefined
             })
-            // .addCase(joinTeam.fulfilled, (state) => {
-            //     state.status = "succeeded"
-            // })
-            // .addCase(joinTeam.rejected, (state) => {
-            //     state.error = "Failed to join team"
-            //     state.status = "failed"
-            // })
-            // .addCase(joinTeam.pending, (state) => {
-            //     state.status = "loading"
-            //     state.error = undefined
-            // })
             .addCase(updateCurrentSelectedTeam.fulfilled, (state) => {
                 state.status = "succeeded"
                 state.error = undefined
@@ -482,6 +540,21 @@ const teamManagementSlice = createSlice({
                 state.error = action.error.message
                 state.status = "failed"
             })
+            .addCase(searchTeams.pending, (state) => {
+                state.error = undefined
+                state.status = "loading"
+            })
+            .addCase(searchTeams.fulfilled, (state, action) => {
+                if (action.payload) {
+                    state.error = undefined
+                    state.status = "succeeded"
+                    state.teamQueryResults = action.payload
+                }
+            })
+            .addCase(searchTeams.rejected, (state, action) => {
+                state.error = action.error.message
+                state.status = "failed"
+            })
             .addCase(deleteTeam.pending, (state) => {
                 state.error = undefined
                 state.status = "loading"
@@ -502,6 +575,8 @@ export const {
     updateInvitees,
     updateQueryResults,
     deleteInvitee,
-    clearInvitees
+    clearInvitees,
+    updateTeamResults,
+    clearTeams
 } = teamManagementSlice.actions
 export default teamManagementSlice.reducer

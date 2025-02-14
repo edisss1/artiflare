@@ -16,6 +16,9 @@ import {
 } from "@excalidraw/excalidraw/types/element/types"
 import { collection, onSnapshot, query, where } from "firebase/firestore"
 import { db } from "../firestore/firebaseConfig.ts"
+import Button from "../components/atoms/Button.tsx"
+import ChatIcon from "../components/icons/ChatIcon.tsx"
+import MobileBoardControls from "../components/molecules/MobileBoardControls.tsx"
 
 const DrawingBoard = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -26,6 +29,7 @@ const DrawingBoard = () => {
     const { user } = useSelector((state: RootState) => state.auth)
     const { isMemberOfBoard } = useSelector((state: RootState) => state.boards)
     const navigate = useNavigate()
+    const [isMobileControlsOpen, setIsMobileControlsOpen] = useState(false)
 
     useEffect(() => {
         if (!excalidrawAPI) return
@@ -97,11 +101,23 @@ const DrawingBoard = () => {
             <CanvasNav />
 
             <div style={{ width: "100vw", height: "100vh" }}>
-                <div className="absolute right-4 bottom-8 z-40 flex flex-col items-end gap-4 w-full max-w-[500px] max-lg:flex-col max-lg:items-end max-lg:gap-4">
+                <div className="absolute max-lg:hidden right-4 bottom-8 z-40 flex flex-col items-end gap-4 w-full max-w-[500px] max-lg:flex-col max-lg:items-end max-lg:gap-4">
                     <User />
-
                     <ChatContainer />
                 </div>
+                <div className="absolute right-8 bottom-24 z-40 flex flex-col items-end gap-2">
+                    <Button
+                        onClick={() =>
+                            setIsMobileControlsOpen(!isMobileControlsOpen)
+                        }
+                        className=" z-40 lg:hidden bg-primary dark:bg-primary-dark p-2 rounded-full"
+                    >
+                        <ChatIcon />
+                    </Button>
+
+                    {isMobileControlsOpen && <MobileBoardControls />}
+                </div>
+
                 <Excalidraw
                     theme={canvasTheme}
                     excalidrawAPI={(api) => setExcalidrawAPI(api)}

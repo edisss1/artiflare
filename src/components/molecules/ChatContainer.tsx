@@ -69,7 +69,7 @@ const ChatContainer = () => {
     return (
         <div
             role="chat"
-            className={` w-full max-w-[350px]  flex flex-col justify-end    border-2 border-typography-light  chat-grid ${
+            className={` w-full max-w-[350px]   flex flex-col justify-end    border-2 border-typography-light  chat-grid ${
                 chatExpanded
                     ? "h-[300px] "
                     : "h-[56px] items-center justify-center"
@@ -97,10 +97,10 @@ const ChatContainer = () => {
                     chatExpanded
                         ? "visible h-full max-h-[220px]"
                         : "invisible h-0"
-                } animate-extend flex flex-col justify-end`}
+                } animate-extend flex flex-col justify-end `}
             >
                 <div
-                    className="max-h-[300px] flex flex-col justify-end h-full px-1 overflow-y-auto custom-scrollbar-modal "
+                    className="flex-1 max-h-[300px] overflow-y-auto px-1 custom-scrollbar-modal"
                     ref={messagesRef}
                 >
                     {sortedMessages &&
@@ -113,8 +113,7 @@ const ChatContainer = () => {
                 </div>
                 <form
                     onSubmit={handleMessageSubmit}
-                    id="invitee-search"
-                    // className="relative"
+                    id="message-submit"
                     className="grid grid-cols-3 items-center mt-4  "
                 >
                     <FormInput

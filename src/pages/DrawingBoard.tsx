@@ -123,7 +123,7 @@ const DrawingBoard = () => {
                     <User />
                     <ChatContainer />
                 </div>
-                <div className="absolute right-8 bottom-24 z-40 flex flex-col items-end gap-2">
+                <div className="absolute right-4 bottom-20 z-40 flex flex-col items-end gap-2">
                     <Button
                         onClick={() =>
                             setIsMobileControlsOpen(!isMobileControlsOpen)

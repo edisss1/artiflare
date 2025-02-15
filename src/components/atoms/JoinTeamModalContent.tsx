@@ -14,11 +14,13 @@ import TeamSuggestionsList from "./TeamSuggestionsList"
 
 interface JoinTeamModalContentProps {
     setIsCreateModal: React.Dispatch<React.SetStateAction<boolean>>
+    modalRef: React.MutableRefObject<HTMLDialogElement | null>
 }
 
 const JoinTeamModalContent = ({
     setIsCreateModal
-}: JoinTeamModalContentProps) => {
+}: // modalRef
+JoinTeamModalContentProps) => {
     const dispatch: AppDispatch = useDispatch()
     const { teamQueryResults, teamResults } = useSelector(
         (state: RootState) => state.teamManagement

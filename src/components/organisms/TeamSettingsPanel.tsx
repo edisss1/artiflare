@@ -4,6 +4,7 @@ import Button from "../atoms/Button"
 import SettingsHeader from "../atoms/SettingsHeader"
 import SettingsInput from "../atoms/SettingsInput"
 import {
+    deleteTeam,
     updateTeamName,
     uploadTeamLogo
 } from "../../redux/slices/teamManagementSlice"
@@ -54,6 +55,12 @@ const TeamSettingsPanel = () => {
                 file: e.target.files![0]
             })
         )
+    }
+
+    const handleDelete = () => {
+        dispatch(deleteTeam(user?.currentSelectedTeam))
+
+        modalRef.current?.close()
     }
 
     return (
@@ -121,7 +128,7 @@ const TeamSettingsPanel = () => {
                     {t("delete")} {currentTeam?.name}
                 </Button>
                 <Modal modalRef={modalRef}>
-                    <TeamDeletionModalContent />
+                    <TeamDeletionModalContent onDelete={handleDelete} />
                 </Modal>
             </div>
         </div>

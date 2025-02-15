@@ -4,18 +4,26 @@ import CreateTeamModalContent from "../atoms/CreateTeamModalContent"
 interface TeamManagementModalProps {
     isCreateModal: boolean
     setIsCreateModal: React.Dispatch<React.SetStateAction<boolean>>
+    modalRef: React.MutableRefObject<HTMLDialogElement | null>
 }
 
 const TeamManagementModal = ({
     isCreateModal,
-    setIsCreateModal
+    setIsCreateModal,
+    modalRef
 }: TeamManagementModalProps) => {
     return (
         <div>
             {isCreateModal ? (
-                <CreateTeamModalContent setIsCreateModal={setIsCreateModal} />
+                <CreateTeamModalContent
+                    modalRef={modalRef}
+                    setIsCreateModal={setIsCreateModal}
+                />
             ) : (
-                <JoinTeamModalContent setIsCreateModal={setIsCreateModal} />
+                <JoinTeamModalContent
+                    modalRef={modalRef}
+                    setIsCreateModal={setIsCreateModal}
+                />
             )}
         </div>
     )

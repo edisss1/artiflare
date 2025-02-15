@@ -92,6 +92,7 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
                 modalRef={joinTeamModalRef}
             >
                 <TeamManagementModal
+                    modalRef={joinTeamModalRef}
                     isCreateModal={isCreateModal}
                     setIsCreateModal={setIsCreateModal}
                 />
@@ -101,7 +102,6 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
                     <h2 className="text-xl">{title}</h2>
                     <div className="flex gap-4  text-typography-light">
                         <Button
-                            // disabled={user?.teams && user?.teams.length >= 1}
                             onClick={toggleJoinTeamModal}
                             className="flex gap-2 items-center px-2 py-3 w-max bg-primary rounded-md hover:shadow-lg transition-all duration-200 hover:shadow-primary/80"
                         >

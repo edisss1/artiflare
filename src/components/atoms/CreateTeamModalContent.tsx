@@ -25,10 +25,12 @@ import { Team } from "../../types/Team"
 
 interface CreateTeamModalContentProps {
     setIsCreateModal: React.Dispatch<React.SetStateAction<boolean>>
+    modalRef: React.MutableRefObject<HTMLDialogElement | null>
 }
 
 const CreateTeamModalContent = ({
-    setIsCreateModal
+    setIsCreateModal,
+    modalRef
 }: CreateTeamModalContentProps) => {
     const [teamType, setTeamType] = useState<TeamType["teamType"]>("private")
     const [teamTitle, setTeamTitle] = useState<string>("")
@@ -71,6 +73,7 @@ const CreateTeamModalContent = ({
             )
 
             dispatch(clearInvitees())
+            modalRef.current?.close()
         }
     }
 

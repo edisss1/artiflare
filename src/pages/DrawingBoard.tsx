@@ -24,7 +24,9 @@ const DrawingBoard = () => {
     const dispatch: AppDispatch = useDispatch()
     const [excalidrawAPI, setExcalidrawAPI] =
         useState<ExcalidrawImperativeAPI | null>(null)
-    const [canvasTheme, setCanvasTheme] = useState<Theme>("light")
+    const [canvasTheme, setCanvasTheme] = useState<string>(
+        localStorage.getItem("theme") || "light"
+    )
     const { boardID } = useParams()
     const { user } = useSelector((state: RootState) => state.auth)
     const { isMemberOfBoard } = useSelector((state: RootState) => state.boards)
@@ -39,14 +41,12 @@ const DrawingBoard = () => {
             const activeElements = elements.filter(
                 (element) => !element.isDeleted
             )
-
             dispatch(updateBoard({ boardID, elements: activeElements, user }))
         }
 
         const unsubscribe = excalidrawAPI.onPointerUp(handlePointerUp)
-
         return () => unsubscribe()
-    }, [excalidrawAPI])
+    }, [excalidrawAPI, boardID, dispatch, user])
 
     useEffect(() => {
         const queryBoards = query(
@@ -61,24 +61,42 @@ const DrawingBoard = () => {
                 ) as ExcalidrawElement[]
                 if (savedElements) {
                     const loadedElements = restoreElements(savedElements, null)
-
                     if (excalidrawAPI) {
                         excalidrawAPI.updateScene({ elements: loadedElements })
                     }
                 }
             })
         })
-    }, [excalidrawAPI])
+    }, [excalidrawAPI, boardID])
 
     useEffect(() => {
-        const htmlElement = document.querySelector("html")
+        if (!excalidrawAPI) return
 
-        if (htmlElement) {
-            htmlElement.classList.length > 0
-                ? setCanvasTheme("dark")
-                : setCanvasTheme("light")
+        const htmlElement = document.documentElement
+
+        const updateExcalidrawTheme = () => {
+            const newTheme = htmlElement.classList.contains("dark")
+                ? "dark"
+                : "light"
+            setCanvasTheme(newTheme)
+            excalidrawAPI.updateScene({ appState: { theme: newTheme } })
+            console.log("Updated Excalidraw theme to:", newTheme)
         }
-    }, [])
+
+        updateExcalidrawTheme()
+
+        const observer = new MutationObserver((mutationsList) => {
+            for (const mutation of mutationsList) {
+                if (mutation.attributeName === "class") {
+                    updateExcalidrawTheme()
+                }
+            }
+        })
+
+        observer.observe(htmlElement, { attributes: true })
+
+        return () => observer.disconnect()
+    }, [excalidrawAPI])
 
     useEffect(() => {
         if (!user) {
@@ -98,7 +116,7 @@ const DrawingBoard = () => {
 
     return (
         <>
-            <CanvasNav />
+            <CanvasNav themeSwitchVisible />
 
             <div style={{ width: "100vw", height: "100vh" }}>
                 <div className="absolute max-lg:hidden right-4 bottom-8 z-40 flex flex-col items-end gap-4 w-full max-w-[500px] max-lg:flex-col max-lg:items-end max-lg:gap-4">
@@ -110,7 +128,7 @@ const DrawingBoard = () => {
                         onClick={() =>
                             setIsMobileControlsOpen(!isMobileControlsOpen)
                         }
-                        className=" z-40 lg:hidden bg-primary dark:bg-primary-dark p-2 rounded-full"
+                        className="z-40 lg:hidden bg-primary dark:bg-primary-dark p-2 rounded-full"
                     >
                         <ChatIcon />
                     </Button>
@@ -119,11 +137,12 @@ const DrawingBoard = () => {
                 </div>
 
                 <Excalidraw
-                    theme={canvasTheme}
+                    theme={canvasTheme as Theme}
                     excalidrawAPI={(api) => setExcalidrawAPI(api)}
                 />
             </div>
         </>
     )
 }
+
 export default DrawingBoard

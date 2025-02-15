@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next"
 import { setBoardSearchQuery } from "../../redux/slices/boardSlice.ts"
 import { handleClickOutside } from "../../utils/handleClickOutside.ts"
 import { useLocation } from "react-router-dom"
+import UpgradeButton from "../atoms/UpgradeButton.tsx"
 
 const DashboardSidebar = () => {
     const sidebarRef = useRef<HTMLDivElement | null>(null)
@@ -19,6 +20,7 @@ const DashboardSidebar = () => {
     const { isMobileSidebarOpened } = useSelector(
         (state: RootState) => state.miscStates
     )
+    const { user } = useSelector((state: RootState) => state.auth)
     const { t } = useTranslation()
     const location = useLocation()
 
@@ -61,7 +63,7 @@ const DashboardSidebar = () => {
             ref={sidebarRef}
             className={`w-full max-lg:absolute max-lg:z-40 max-lg:top-0 ${
                 isMobileSidebarOpened ? "left-0 " : "-left-[1000px]"
-            } h-screen py-9 px-4 min-w-fit max-w-[230px] bg-primary dark:bg-primary-dark dark:text-typography-dark border-r-2 border-r-typography-light min-h-[100dvh] relative transition-all duration-150 `}
+            } h-screen py-9 px-4 min-w-fit max-w-[230px] bg-primary dark:bg-primary-dark dark:text-typography-dark border-r-2 border-r-typography-light min-h-[100dvh] relative transition-all duration-150 h- `}
         >
             <div className="gap-[clamp(1rem,40vh,5rem)] h-full flex flex-col relative">
                 <Button
@@ -76,7 +78,12 @@ const DashboardSidebar = () => {
                     value={boardSearchQuery}
                 />
                 <DashboardLinksContainer />
-                <User position="absolute bottom-0 left-0" />
+                <div className="absolute bottom-0 left-0 flex gap-2 items-center">
+                    <User />
+                    {user?.plan === "free" && (
+                        <UpgradeButton isHidden="md:hidden" />
+                    )}
+                </div>
             </div>
         </aside>
     )

@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux"
 import { setIsMobileSidebarOpened } from "../../redux/slices/miscStatesSlice.ts"
 import { useSelector } from "react-redux"
 import NotificationQuantity from "../atoms/NotificationQuantity.tsx"
+import UpgradeButton from "../atoms/UpgradeButton.tsx"
 
 const Header = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -33,11 +34,11 @@ const Header = () => {
     }
 
     return (
-        <nav className="flex justify-between relative  w-full  items-center ps-9 max-md:ps-2 py-2  dark:text-typography-dark text-typography-light  rounded-md ">
+        <nav className="flex justify-between relative max-md:justify-center max-md:gap-4  w-full  items-center ps-9 max-md:ps-2 py-2  dark:text-typography-dark text-typography-light  rounded-md ">
             <div className="flex gap-2 items-center">
                 <Button
                     onClick={handleMobileSideBarOpen}
-                    className={"md:hidden"}
+                    className={"lg:hidden"}
                 >
                     <BurgerMenuIcon />
                 </Button>
@@ -49,14 +50,7 @@ const Header = () => {
                 </p>
             </div>
             <div className="flex items-center gap-6 ">
-                {plan === "free" && (
-                    <Button
-                        onClick={() => {}}
-                        className="capitalize px-2 py-1  text-typography-light bg-secondary rounded-lg  "
-                    >
-                        upgrade
-                    </Button>
-                )}
+                {plan === "free" && <UpgradeButton isHidden="max-md:hidden" />}
 
                 <div className="flex gap-4 items-center justify-center">
                     <div className="flex items-center justify-center relative ">

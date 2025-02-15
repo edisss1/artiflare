@@ -46,8 +46,6 @@ export const sendInvite = createAsyncThunk(
 
             const teamData = await getDoc(teamDoc)
 
-            console.log(teamData)
-
             if (!teamData) return
 
             const newInvitation: Partial<NotificationType> = {
@@ -65,12 +63,6 @@ export const sendInvite = createAsyncThunk(
             }
 
             const notificationsRef = collection(db, "notifications")
-
-            console.log(
-                `invite sent for: ${JSON.stringify(invitees)}, to team: ${
-                    teamData.id
-                }`
-            )
 
             await addDoc(notificationsRef, newInvitation)
         } catch (err) {

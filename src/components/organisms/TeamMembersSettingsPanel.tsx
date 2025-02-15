@@ -8,7 +8,7 @@ import Button from "../atoms/Button"
 import { t } from "i18next"
 import Modal from "../molecules/Modal"
 import MemberInviteModalContent from "../atoms/MemberInviteModalContent"
-import React, { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { openModal } from "../../utils/openModal"
 
 const TeamMembersSettingsPanel = () => {
@@ -17,10 +17,6 @@ const TeamMembersSettingsPanel = () => {
     )
     const modalRef = useRef<HTMLDialogElement | null>(null)
     const [query, setQuery] = useState("")
-
-    useEffect(() => {
-        console.log(query)
-    }, [query])
 
     return (
         <div className="">

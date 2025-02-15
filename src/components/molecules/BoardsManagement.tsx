@@ -53,12 +53,6 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
             ).then((newBoard) => {
                 const newBoardPayload = newBoard.payload as Board
                 if (areMembersChecked) {
-                    console.log(
-                        `Board created: ${
-                            newBoardPayload.id
-                        } with members: ${JSON.stringify(currentTeam?.members)}`
-                    )
-                    console.log(`currentTeam: ${currentTeam}`)
                     dispatch(
                         addMembersOfBoard({
                             members: currentTeam?.members,

@@ -1,4 +1,3 @@
-import { useState } from "react"
 import SearchIcon from "../icons/SearchIcon"
 
 interface SearchMembersProps {

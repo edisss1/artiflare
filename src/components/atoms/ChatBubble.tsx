@@ -32,7 +32,6 @@ const ChatBubble = ({ message, isUser }: ChatBubbleProps) => {
 
     const handleMessageEditing = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log(editingInputRef.current)
         if (editedMessage && editingInputRef.current) {
             dispatch(
                 submitEditedMessage({

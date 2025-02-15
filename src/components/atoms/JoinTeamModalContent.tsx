@@ -8,7 +8,7 @@ import {
     updateTeamResults
 } from "../../redux/slices/teamManagementSlice"
 import { useSelector } from "react-redux"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import TeamSuggestionsList from "./TeamSuggestionsList"
 
@@ -39,10 +39,6 @@ const JoinTeamModalContent = ({
 
         setTeamQuery("")
     }
-
-    useEffect(() => {
-        console.log(`teamQueryResults`, teamQueryResults)
-    }, [teamQueryResults])
 
     return (
         <div className="flex flex-col items-center">

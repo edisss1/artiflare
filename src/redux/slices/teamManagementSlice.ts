@@ -3,17 +3,16 @@ import { Team, TeamMember } from "../../types/Team"
 import { db, storage } from "../../firestore/firebaseConfig"
 import {
     addDoc,
-    arrayRemove,
     arrayUnion,
     collection,
-    deleteDoc,
     doc,
     getDoc,
     getDocs,
     onSnapshot,
     query,
     updateDoc,
-    where
+    where,
+    writeBatch
 } from "firebase/firestore"
 import { User } from "../../types/User"
 import { AppDispatch } from "../store"
@@ -354,40 +353,50 @@ export const deleteTeam = createAsyncThunk(
     async (teamID: string | undefined) => {
         if (!teamID) return
 
-        const teamDocRef = doc(db, "teams", teamID)
-        const usersRef = collection(db, "users")
-        const boardsRef = collection(db, "boards")
+        try {
+            const teamDocRef = doc(db, "teams", teamID)
+            const teamData = await getDoc(teamDocRef)
 
-        const teamsQuery = query(
-            usersRef,
-            where("teams", "array-contains", {
-                teamID: teamID
+            if (!teamData.exists()) {
+                throw new Error("Team doesn't exist")
+            }
+
+            const members = teamData.data().members as TeamMember[]
+
+            const batch = writeBatch(db)
+
+            for (const member of members) {
+                const userDocRef = doc(db, "users", member.uid)
+                const userDoc = await getDoc(userDocRef)
+
+                if (userDoc.exists()) {
+                    const userData = userDoc.data() as User
+                    const updatedTeams = userData.teams.filter(
+                        (team) => team.teamID !== teamID
+                    )
+                    batch.update(userDocRef, { teams: updatedTeams })
+                    await updateDoc(userDocRef, {
+                        currentSelectedTeam: userData.teams[0].teamID
+                    })
+                }
+            }
+
+            const boardsQuery = query(
+                collection(db, "boards"),
+                where("teamID", "==", teamID)
+            )
+            const boardsQuerySnap = await getDocs(boardsQuery)
+
+            boardsQuerySnap.forEach((boardDocSnap) => {
+                batch.delete(boardDocSnap.ref)
             })
-        )
-        const boardsQuery = query(boardsRef, where("teamID", "==", teamID))
 
-        const teamsQuerySnap = await getDocs(teamsQuery)
-        const boardsQuerySnap = await getDocs(boardsQuery)
+            batch.delete(teamDocRef)
 
-        teamsQuerySnap.forEach(async (docSnap) => {
-            const userRef = doc(db, "users", docSnap.data().creatorID)
-            await updateDoc(userRef, {
-                teams: arrayRemove({
-                    teamID: teamID
-                })
-            })
-            const userData = docSnap.data() as User
-            await updateDoc(userRef, {
-                currentSelectedTeam: userData.teams[0].teamID
-            })
-        })
-
-        boardsQuerySnap.forEach(async (docSnap) => {
-            const boardRef = doc(db, "boards", docSnap.id)
-            await deleteDoc(boardRef)
-        })
-
-        await deleteDoc(teamDocRef)
+            batch.commit()
+        } catch (err) {
+            throw new Error(err as string)
+        }
     }
 )
 
@@ -416,18 +425,6 @@ export const searchTeams = createAsyncThunk(
 
             const nameQuerySnap = await getDocs(nameQuery)
             const idQuerySnap = await getDocs(idQuery)
-
-            // console.log(
-            //     `Docs data: ${JSON.stringify(
-            //         nameQuerySnap.docs.forEach((doc) => {
-            //             console.log(doc.data())
-            //         })
-            //     )}, ${JSON.stringify(
-            //         idQuerySnap.docs.forEach((doc) => {
-            //             console.log(doc.data())
-            //         })
-            //     )}`
-            // )
 
             let resultsMap = new Map()
 

@@ -8,7 +8,7 @@ import Button from "../atoms/Button"
 import { t } from "i18next"
 import Modal from "../molecules/Modal"
 import MemberInviteModalContent from "../atoms/MemberInviteModalContent"
-import { useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { openModal } from "../../utils/openModal"
 
 const TeamMembersSettingsPanel = () => {
@@ -16,6 +16,11 @@ const TeamMembersSettingsPanel = () => {
         (state: RootState) => state.teamManagement
     )
     const modalRef = useRef<HTMLDialogElement | null>(null)
+    const [query, setQuery] = useState("")
+
+    useEffect(() => {
+        console.log(query)
+    }, [query])
 
     return (
         <div className="">
@@ -39,8 +44,8 @@ const TeamMembersSettingsPanel = () => {
                     </span>
                 </p>
             </div>
-            <SearchMembers />
-            <MembersDisplay currentTeam={currentTeam} />
+            <SearchMembers query={query} setQuery={setQuery} />
+            <MembersDisplay query={query} teamMembers={currentTeam?.members} />
             <Modal
                 maxHeight="max-h-[450px] h-full"
                 minHeight="min-h-[400px]"

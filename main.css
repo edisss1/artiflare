@@ -91,7 +91,7 @@ body::-webkit-scrollbar-thumb {
     @apply bg-typography-light dark:bg-typography-dark rounded-lg;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
     .dashboard {
         grid-template-columns: 1fr;
         grid-template-areas:

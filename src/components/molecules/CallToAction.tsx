@@ -13,7 +13,7 @@ const CallToAction = () => {
     const gradientStyles =
         "bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-transparent bg-clip-text"
     return (
-        <section className="mt-[clamp(1rem,30vh,5rem)]  max-lg:items-center grid grid-cols-8 max-md:grid-cols-2 ">
+        <section className="mt-[clamp(1rem,30vh,5rem)] px-[5%]  max-lg:items-center grid grid-cols-8 max-md:grid-cols-2 ">
             <div
                 className={
                     "max-w-[800px] max-md:max-w-[415px]  flex gap-[clamp(1rem,10vw,2.25rem)] flex-col lg:col-start-3 lg:col-span-2 max-md:col-start-1 max-lg:col-start-2 max-lg:col-span-6 w-full max-md:px-2"

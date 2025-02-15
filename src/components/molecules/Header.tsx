@@ -34,7 +34,7 @@ const Header = () => {
     }
 
     return (
-        <nav className="flex justify-between relative max-md:justify-center max-md:gap-4  w-full  items-center ps-9 max-md:ps-2 py-2  dark:text-typography-dark text-typography-light  rounded-md ">
+        <nav className="flex justify-between relative max-[400px]:justify-center max-md:gap-4  w-full  items-center ps-9 max-md:ps-2 py-2  dark:text-typography-dark text-typography-light  rounded-md ">
             <div className="flex gap-2 items-center">
                 <Button
                     onClick={handleMobileSideBarOpen}

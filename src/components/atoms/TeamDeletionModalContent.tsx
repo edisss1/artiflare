@@ -21,7 +21,7 @@ const TeamDeletionModalContent = () => {
             <Button
                 onClick={() => {
                     dispatch(deleteTeam(user?.currentSelectedTeam))
-                    // navigate(0)
+                    navigate(0)
                 }}
                 className={
                     "mt-8 border-2 text-danger border-danger px-4 py-1 rounded-lg hover:rounded-md hover:bg-danger hover:text-typography-dark transition-colors duration-150"

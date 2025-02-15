@@ -6,6 +6,7 @@ import {
     sendPasswordResetEmail,
     signInWithEmailAndPassword,
     signInWithPopup,
+    signInWithRedirect,
     signOut
 } from "firebase/auth"
 import { GoogleAuthProvider } from "firebase/auth"
@@ -148,6 +149,11 @@ export const signInWithGoogle = createAsyncThunk(
         }
     }
 )
+
+export const signInWithGoogleRedirect = async () => {
+    const provider = new GoogleAuthProvider()
+    await signInWithRedirect(auth, provider)
+}
 
 export const signInWithCredentials = createAsyncThunk(
     "auth/signInWithCredentials",

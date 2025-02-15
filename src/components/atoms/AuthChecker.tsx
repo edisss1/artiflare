@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { onAuthStateChanged } from "firebase/auth"
+import { getRedirectResult, onAuthStateChanged } from "firebase/auth"
 import { auth, db } from "../../firestore/firebaseConfig"
 import { User as LoggedUser, User } from "../../types/User"
 import { setUser } from "../../redux/slices/authSlice"
@@ -134,6 +134,19 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
             unsubscribeAuth()
         }
     }, [dispatch])
+
+    useEffect(() => {
+        const checkRedirect = async () => {
+            try {
+                const result = await getRedirectResult(auth)
+                console.log(result?.user)
+            } catch (err) {
+                throw new Error("Error getting redirect result")
+            }
+        }
+
+        checkRedirect()
+    }, [])
 
     useEffect(() => {
         if (status === "authenticated" && user) {

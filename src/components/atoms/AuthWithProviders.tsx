@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { signInWithGoogle } from "../../redux/slices/authSlice"
 import { Navigate, useNavigate } from "react-router-dom"
 import GoogleIcon from "../icons/GoogleIcon.tsx"
-import GithubIcon from "../icons/GithubIcon.tsx"
 import { useTranslation } from "react-i18next"
 
 const AuthWithProviders = () => {
@@ -32,16 +31,6 @@ const AuthWithProviders = () => {
                 <GoogleIcon />
                 <p className="dark:group-hover:text-typography-light">
                     {t("signInWithGoogle")}
-                </p>
-            </Button>
-            <Button
-                disabled
-                onClick={() => alert}
-                className="flex group items-center disabled:pointer-events-none disabled:opacity-30 bg-none border-2 border-typography-light dark:border-typography-dark hover:bg-secondary transition-colors duration-150 p-2 rounded-md gap-2"
-            >
-                <GithubIcon />
-                <p className="dark:group-hover:text-typography-light">
-                    {t("signInWithGithub")}
                 </p>
             </Button>
         </div>

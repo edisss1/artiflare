@@ -21,9 +21,7 @@ const SignUp = () => {
         e.preventDefault()
         if (isAgreed && confirmedPassword && email && password) {
             dispatch(createUserWithCredentials({ email, password, name })).then(
-                () => {
-                    navigate(0)
-                }
+                () => navigate(0)
             )
         }
     }

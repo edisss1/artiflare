@@ -18,9 +18,9 @@ const Login = () => {
 
     const handleUserSignIn = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
-        dispatch(signInWithCredentials({ email, password })).then(() => {
+        dispatch(signInWithCredentials({ email, password })).then(() =>
             navigate(0)
-        })
+        )
     }
 
     return (

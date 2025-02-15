@@ -166,7 +166,7 @@ export const signInWithCredentials = createAsyncThunk(
             const user: User = {
                 uid: result.user.uid,
                 img: result.user.photoURL,
-                displayName: result.user.displayName,
+                displayName: userData.displayName,
                 email: result.user.email,
                 teams: userData.teams || [],
                 boards: userData.boards || [],
@@ -177,13 +177,6 @@ export const signInWithCredentials = createAsyncThunk(
             }
 
             await setDoc(doc(db, "users", user.uid), user)
-
-            // if (!user.teams.length && user) {
-            //     const defaultTeamID = await createDefaultTeam(user)
-            //     setTimeout(() => {
-            //         user.currentSelectedTeam = defaultTeamID
-            //     }, 1000)
-            // }
 
             return user
         } catch (err) {
@@ -225,6 +218,7 @@ export const createUserWithCredentials = createAsyncThunk(
             }
 
             sendEmailVerification(result.user)
+            console.log("Email sent to:", result.user.email)
 
             await setDoc(doc(db, "users", user.uid), user)
 

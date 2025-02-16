@@ -39,6 +39,9 @@ const MembersDisplay = ({ teamMembers, query }: MembersDisplayProps) => {
                                     />
                                 ) : (
                                     <FallbackAvatar
+                                        width="w-8"
+                                        height="h-8"
+                                        rounded="rounded-full"
                                         username={
                                             member.displayName! || member.email!
                                         }

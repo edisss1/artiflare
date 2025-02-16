@@ -114,7 +114,7 @@ const AuthChecker = ({ children }: { children: React.ReactNode }) => {
                             boards: userData.boards || [],
                             currentSelectedTeam: userData.currentSelectedTeam,
                             lastAccessAt: userData.lastAccessAt,
-                            emailVerified: firebaseUser.emailVerified,
+                            emailVerified: userData.emailVerified,
                             plan: userData.plan
                         }
 

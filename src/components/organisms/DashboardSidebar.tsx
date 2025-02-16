@@ -80,7 +80,7 @@ const DashboardSidebar = () => {
                     />
                 </div>
                 <DashboardLinksContainer />
-                <div className="absolute bottom-0 left-0 flex gap-2 items-center">
+                <div className="absolute bottom-8 left-0 flex gap-2 items-center">
                     <User />
                     {user?.plan === "free" && (
                         <UpgradeButton isHidden="md:hidden" />

@@ -60,6 +60,7 @@ JoinTeamModalContentProps) => {
                 /> */}
                 <div className=" w-full max-w-[300px]  relative">
                     <FormInput
+                        id="team-search-input"
                         className={`${
                             teamResults.length > 0
                                 ? "rounded-b-none"

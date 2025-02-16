@@ -75,6 +75,7 @@ const MemberInviteModalContent = ({
                     className="grid grid-cols-3 items-center "
                 >
                     <FormInput
+                        id="user-search-input"
                         className="col-start-1 col-span-3 row-start-1 border-r-0 rounded-r-none "
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
@@ -85,9 +86,9 @@ const MemberInviteModalContent = ({
                     {inviteeQueryResults === null ? (
                         <Button
                             type={"submit"}
-                            className="bg-bg-light  z-40 row-start-1 px-3  h-full border-2 border-l-0 rounded-r-lg border-typography-light dark:border-typography-dark  "
+                            className="bg-bg-light dark:bg-bg-dark  z-40 row-start-1 px-3  h-full border-2 border-l-0 rounded-r-lg border-typography-light dark:border-typography-dark  "
                         >
-                            <SearchIcon className="w-6 h-6" />
+                            <SearchIcon className="w-6 h-6 " />
                         </Button>
                     ) : (
                         <Button

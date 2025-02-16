@@ -10,7 +10,7 @@ const Select = ({ options, onChange }: SelectProps) => {
     return (
         <div className={`relative text-typography-light `}>
             <select
-                className="appearance-none w-full border-2  border-typography-light py-[0.9375rem] ps-3 rounded-md"
+                className="appearance-none w-full border-2 bg-bg-light dark:bg-bg-dark  text-typography-light dark:text-typography-dark  border-typography-light dark:border-typography-dark py-[0.9375rem] ps-3 rounded-md"
                 onChange={onChange}
             >
                 {options.map((option) => (
@@ -19,7 +19,7 @@ const Select = ({ options, onChange }: SelectProps) => {
                     </option>
                 ))}
             </select>
-            <ChevronIcon className="absolute top-[50%] -translate-y-[50%] right-3 pointer-events-none" />
+            <ChevronIcon className="absolute top-[50%] -translate-y-[50%] right-3 pointer-events-none [&>*]:stroke-bg-dark [&>*]:dark:stroke-bg-light " />
         </div>
     )
 }

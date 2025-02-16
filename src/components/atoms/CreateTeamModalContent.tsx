@@ -106,6 +106,7 @@ const CreateTeamModalContent = ({
             <div className="flex flex-col items-center w-full max-w-[300px]">
                 <div className="flex flex-col gap-2 w-full max-w-[300px]">
                     <FormInput
+                        id="team-title"
                         value={teamTitle}
                         onChange={(e) => handleTeamNameChange(e)}
                         placeholder="Enter a name for your team"
@@ -123,6 +124,7 @@ const CreateTeamModalContent = ({
                         className="grid grid-cols-3 items-center "
                     >
                         <FormInput
+                            id="searchinput"
                             className="col-start-1 col-span-3 row-start-1 border-r-0 rounded-r-none "
                             value={inviteeQuery}
                             onChange={(e) => setInviteeQuery(e.target.value)}
@@ -132,7 +134,7 @@ const CreateTeamModalContent = ({
                         {inviteeQueryResults === null ? (
                             <Button
                                 type={"submit"}
-                                className="bg-bg-light  z-40 row-start-1 px-3  h-full border-2 border-l-0 rounded-r-lg border-typography-light dark:border-typography-dark  "
+                                className="bg-bg-light dark:bg-bg-dark  z-40 row-start-1 px-3  h-full border-2 border-l-0 rounded-r-lg border-typography-light dark:border-typography-dark  "
                             >
                                 <SearchIcon className="w-6 h-6" />
                             </Button>

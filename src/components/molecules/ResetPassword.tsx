@@ -16,6 +16,7 @@ const ResetPassword = () => {
                 <H2>Artiflare</H2>
                 <div className="w-full">
                     <FormInput
+                        id="password-reset-input"
                         isIncorrect={!email}
                         placeholder="Email"
                         value={email}

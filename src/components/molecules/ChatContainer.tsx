@@ -3,7 +3,6 @@ import ChatBubble from "../atoms/ChatBubble"
 import Button from "../atoms/Button"
 import ChevronIcon from "../icons/ChevronIcon"
 import SendMessageIcon from "../icons/SendMessageIcon"
-import FormInput from "../atoms/FormInput"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch } from "react-redux"
 import { getMessages, sendMessage } from "../../redux/slices/messagingSlice"
@@ -116,9 +115,9 @@ const ChatContainer = () => {
                     id="message-submit"
                     className="grid grid-cols-3 items-center mt-4  "
                 >
-                    <FormInput
+                    <input
                         autoComplete="off"
-                        className="col-start-1 col-span-3 row-start-1 border-r-0 rounded-r-none "
+                        className="col-start-1 col-span-3 row-start-1 border-r-0 rounded-r-none py-[0.9375rem] w-full peer ps-3 outline-none rounded-md bg-bg-light dark:bg-bg-dark dark:text-typography-dark border-2 border-typography-light dark:border-typography-dark dark:placeholder:text-typography-dark"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         placeholder={t("enterMessage")}
@@ -127,9 +126,9 @@ const ChatContainer = () => {
                     <Button
                         type={"submit"}
                         // onClick={handleInviteeSearch}
-                        className="bg-bg-light  z-40 row-start-1 px-3  h-full border-2 border-l-0 rounded-r-lg border-typography-light dark:border-typography-dark  "
+                        className="  z-40 row-start-1 px-3  h-full border-2 border-l-0 rounded-r-lg border-typography-light dark:border-typography-dark bg-bg-light dark:bg-bg-dark dark:text-typography-dark "
                     >
-                        <SendMessageIcon />
+                        <SendMessageIcon className="[&>*]:stroke-bg-dark [&>*]:dark:stroke-bg-light" />
                     </Button>
                 </form>
             </div>

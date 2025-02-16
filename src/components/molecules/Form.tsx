@@ -72,6 +72,7 @@ const Form = ({
             <fieldset className="flex flex-col gap-2 items-center max-md:max-w-[90%] max-md:mx-auto mt-4 w-full text-typography-light">
                 {isSignUp && (
                     <FormInput
+                        id="name-input"
                         value={name}
                         onChange={(e) => dispatch(setName(e.target.value))}
                         placeholder="enter your name"
@@ -80,6 +81,7 @@ const Form = ({
                     />
                 )}
                 <FormInput
+                    id="email-input"
                     value={email}
                     onChange={(e) => dispatch(setEmail(e.target.value))}
                     placeholder="you@example.com"
@@ -88,6 +90,7 @@ const Form = ({
                 />
                 <div className="w-full relative">
                     <FormInput
+                        id="password-input"
                         isIncorrect={!passwordMatch && isSignUp}
                         value={password}
                         onChange={(e) => dispatch(setPassword(e.target.value))}
@@ -115,6 +118,7 @@ const Form = ({
                 </div>
                 {isSignUp && (
                     <FormInput
+                        id="confirmed-password-input"
                         isIncorrect={!passwordMatch}
                         value={confirmedPassword}
                         onChange={(e) =>

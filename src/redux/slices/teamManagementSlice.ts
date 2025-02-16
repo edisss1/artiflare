@@ -421,8 +421,6 @@ export const searchTeams = createAsyncThunk(
                 where("teamType", "==", "public")
             )
 
-            console.log(`Query: ${queryStr}`)
-
             const nameQuerySnap = await getDocs(nameQuery)
             const idQuerySnap = await getDocs(idQuery)
 
@@ -436,7 +434,6 @@ export const searchTeams = createAsyncThunk(
                 resultsMap.set(docSnap.id, docSnap.data())
             })
             const results = Array.from(resultsMap.values()) as Team[]
-            console.log(`Results: ${JSON.stringify(results)}`)
 
             return results
         } catch (err) {

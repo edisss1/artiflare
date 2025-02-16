@@ -97,6 +97,7 @@ const Form = ({
                     />
                     {inputType === "password" ? (
                         <Button
+                            type="button"
                             onClick={() => setInputType("text")}
                             className="absolute right-4 top-[50%] -translate-y-[50%] hover:bg-gray-300 p-2 rounded-full transition-colors duration-150"
                         >
@@ -104,6 +105,7 @@ const Form = ({
                         </Button>
                     ) : (
                         <Button
+                            type="button"
                             onClick={() => setInputType("password")}
                             className="absolute right-4 top-[50%] -translate-y-[50%] hover:bg-gray-300 p-2 rounded-full transition-colors duration-150"
                         >

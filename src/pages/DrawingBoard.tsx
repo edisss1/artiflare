@@ -80,7 +80,6 @@ const DrawingBoard = () => {
                 : "light"
             setCanvasTheme(newTheme)
             excalidrawAPI.updateScene({ appState: { theme: newTheme } })
-            console.log("Updated Excalidraw theme to:", newTheme)
         }
 
         updateExcalidrawTheme()

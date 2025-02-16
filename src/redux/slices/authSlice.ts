@@ -172,7 +172,7 @@ export const signInWithCredentials = createAsyncThunk(
                 boards: userData.boards || [],
                 currentSelectedTeam: userData.currentSelectedTeam,
                 lastAccessAt: new Date().toISOString(),
-                emailVerified: result.user.emailVerified,
+                emailVerified: userData.emailVerified,
                 plan: userData.plan
             }
 
@@ -218,7 +218,6 @@ export const createUserWithCredentials = createAsyncThunk(
             }
 
             sendEmailVerification(result.user)
-            console.log("Email sent to:", result.user.email)
 
             await setDoc(doc(db, "users", user.uid), user)
 

@@ -31,6 +31,7 @@ body::-webkit-scrollbar-thumb {
         "aside nav nav"
         "aside main main"
         "aside main main";
+    overflow: hidden;
 }
 
 .grid-pattern {

@@ -66,17 +66,19 @@ const DashboardSidebar = () => {
             } h-screen py-9 px-4 min-w-fit max-w-[230px] bg-primary dark:bg-primary-dark dark:text-typography-dark border-r-2 border-r-typography-light min-h-[100dvh] relative transition-all duration-150 h- `}
         >
             <div className="gap-[clamp(1rem,40vh,5rem)] h-full flex flex-col relative">
-                <Button
-                    onClick={handleMobileSideBarClose}
-                    className={"lg:hidden"}
-                >
-                    <BurgerMenuIcon />
-                </Button>
-                <Search
-                    placeholder={t("searchByTitle")}
-                    onChange={(e) => handleSearchQueryChange(e)}
-                    value={boardSearchQuery}
-                />
+                <div className="flex flex-col gap-4">
+                    <Button
+                        onClick={handleMobileSideBarClose}
+                        className={"lg:hidden"}
+                    >
+                        <BurgerMenuIcon />
+                    </Button>
+                    <Search
+                        placeholder={t("searchByTitle")}
+                        onChange={(e) => handleSearchQueryChange(e)}
+                        value={boardSearchQuery}
+                    />
+                </div>
                 <DashboardLinksContainer />
                 <div className="absolute bottom-0 left-0 flex gap-2 items-center">
                     <User />

@@ -9,6 +9,7 @@ import { getMessages, sendMessage } from "../../redux/slices/messagingSlice"
 import { useSelector } from "react-redux"
 import { Message } from "../../types/MessageType"
 import { t } from "i18next"
+import { validateInput } from "../../utils/validateInput"
 
 const ChatContainer = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -19,7 +20,13 @@ const ChatContainer = () => {
     const [sortedMessages, setSortedMessages] = useState<Message[] | undefined>(
         []
     )
+    const [isMessageValid, setIsMessageValid] = useState(false)
     const messagesRef = useRef<HTMLDivElement | null>(null)
+
+    useEffect(() => {
+        validateInput(message, setIsMessageValid)
+        console.log(isMessageValid)
+    }, [message])
 
     const handleChatExpanding = () => {
         setChatExtended(!chatExpanded)
@@ -105,6 +112,7 @@ const ChatContainer = () => {
                     {sortedMessages &&
                         sortedMessages.map((message) => (
                             <ChatBubble
+                                key={message.id}
                                 message={message}
                                 isUser={message.senderID === user?.uid}
                             />
@@ -125,8 +133,8 @@ const ChatContainer = () => {
                     />
                     <Button
                         type={"submit"}
-                        // onClick={handleInviteeSearch}
-                        className="  z-40 row-start-1 px-3  h-full border-2 border-l-0 rounded-r-lg border-typography-light dark:border-typography-dark bg-bg-light dark:bg-bg-dark dark:text-typography-dark "
+                        disabled={!isMessageValid}
+                        className="disabled:cursor-not-allowed  z-40 row-start-1 px-3  h-full border-2 border-l-0 rounded-r-lg border-typography-light dark:border-typography-dark bg-bg-light dark:bg-bg-dark dark:text-typography-dark "
                     >
                         <SendMessageIcon className="[&>*]:stroke-bg-dark [&>*]:dark:stroke-bg-light" />
                     </Button>

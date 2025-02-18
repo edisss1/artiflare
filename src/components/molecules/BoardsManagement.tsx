@@ -74,9 +74,13 @@ const BoardsManagement = ({ title }: BoardsManagementProps) => {
         dispatch(updateSortedBy(e.target.value))
     }
 
+    const clearForm = () => {
+        setBoardTitle("")
+    }
+
     return (
         <>
-            <Modal modalRef={createBoardModalRef}>
+            <Modal clearForm={clearForm} modalRef={createBoardModalRef}>
                 <CreateBoardModalContent
                     isChecked={areMembersChecked}
                     setIsChecked={() =>

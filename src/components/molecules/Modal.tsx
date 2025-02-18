@@ -7,17 +7,20 @@ interface ModalProps {
     children: React.ReactNode
     minHeight?: string
     maxHeight?: string
+    clearForm?: () => void
 }
 
 const Modal = ({
     modalRef,
     children,
     minHeight = "lg:min-h-[600px] max-lg:min-h-[300px]",
-    maxHeight
+    maxHeight,
+    clearForm
 }: ModalProps) => {
     const handleClickOutside = (e: MouseEvent) => {
         if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
             closeModal(modalRef)
+            clearForm && clearForm()
         }
     }
 

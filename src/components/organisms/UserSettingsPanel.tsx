@@ -51,7 +51,7 @@ const UserSettingsPanel = () => {
                     <p>{t("deleteProfileText")} </p>
                 </div>
                 <Button
-                    disabled
+                    // disabled
                     onClick={() => openModal(modalRef)}
                     className={
                         "border-2 border-danger text-danger rounded-md  enabled:hover:bg-danger enabled:hover:text-typography-dark transition-colors duration-150 w-fit p-2 mt-4 disabled:cursor-not-allowed disabled:opacity-50"

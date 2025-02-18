@@ -8,8 +8,8 @@ const PrivacyPolicySection = ({
     content
 }: PrivacyPolicySectionProps) => {
     return (
-        <div className="flex flex-col gap-2">
-            <h2 className="font-medium">{title}</h2>
+        <div className="flex flex-col gap-2 w-full ">
+            <h2 className="font-medium text-lg">{title}</h2>
             {content.length > 1 ? (
                 <ul className="list-disc">
                     {content.map((item) => (

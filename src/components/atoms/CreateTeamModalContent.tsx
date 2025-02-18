@@ -3,7 +3,7 @@ import Button from "./Button"
 import FormInput from "./FormInput"
 import Select from "./Select"
 import { TeamType } from "../../types/TeamType"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch } from "react-redux"
@@ -16,12 +16,13 @@ import {
     updateQueryResults
 } from "../../redux/slices/teamManagementSlice"
 import { t } from "i18next"
-import InviteesContainer from "../molecules/InviteesContainer"
 import UserCard from "./UserCard"
 import SearchIcon from "../icons/SearchIcon"
 import AddIcon from "../icons/AddIcon"
 import { sendInvite } from "../../redux/slices/notificationManagementSlice"
 import { Team } from "../../types/Team"
+import CardsContainer from "../molecules/CardsContainer"
+import { validateInput } from "../../utils/validateInput"
 
 interface CreateTeamModalContentProps {
     setIsCreateModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -38,6 +39,7 @@ const CreateTeamModalContent = ({
         (state: RootState) => state.teamManagement
     )
     const [inviteeQuery, setInviteeQuery] = useState<string>("")
+    const [isFormValidated, setIsFormValidated] = useState(false)
 
     const dispatch: AppDispatch = useDispatch()
 
@@ -54,6 +56,24 @@ const CreateTeamModalContent = ({
     const handleTeamNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTeamTitle(e.target.value)
     }
+
+    const clearForm = () => {
+        setTeamTitle("")
+        setTeamType("private")
+        dispatch(clearInvitees())
+        setInviteeQuery("")
+    }
+
+    useEffect(() => {
+        const dialog = modalRef.current
+        if (dialog) {
+            dialog.addEventListener("close", clearForm)
+        }
+
+        return () => {
+            dialog?.removeEventListener("close", clearForm)
+        }
+    }, [])
 
     const handleCreateNewTeam = () => {
         if (user) {
@@ -76,6 +96,10 @@ const CreateTeamModalContent = ({
             modalRef.current?.close()
         }
     }
+
+    useEffect(() => {
+        validateInput(teamTitle, setIsFormValidated)
+    }, [teamTitle])
 
     const handleInviteeSearch = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -106,6 +130,7 @@ const CreateTeamModalContent = ({
             <div className="flex flex-col items-center w-full max-w-[300px]">
                 <div className="flex flex-col gap-2 w-full max-w-[300px]">
                     <FormInput
+                        autoComplete="off"
                         id="team-title"
                         value={teamTitle}
                         onChange={(e) => handleTeamNameChange(e)}
@@ -120,16 +145,16 @@ const CreateTeamModalContent = ({
                     <form
                         onSubmit={handleInviteeSearch}
                         id="invitee-search"
-                        // className="relative"
                         className="grid grid-cols-3 items-center "
                     >
                         <FormInput
-                            id="searchinput"
+                            id="team-search-input"
                             className="col-start-1 col-span-3 row-start-1 border-r-0 rounded-r-none "
                             value={inviteeQuery}
                             onChange={(e) => setInviteeQuery(e.target.value)}
                             placeholder="Search users by email or ID"
                             type="text"
+                            autoComplete="off"
                         />
                         {inviteeQueryResults === null ? (
                             <Button
@@ -147,7 +172,7 @@ const CreateTeamModalContent = ({
                             </Button>
                         )}
                     </form>
-                    <InviteesContainer>
+                    <CardsContainer>
                         {invitees.map((invitee) => (
                             <UserCard
                                 onClick={() => dispatch(deleteInvitee(invitee))}
@@ -156,7 +181,7 @@ const CreateTeamModalContent = ({
                                 name={invitee.displayName}
                             />
                         ))}
-                    </InviteesContainer>
+                    </CardsContainer>
                 </div>
                 <div className="flex flex-col items-center mt-6 gap-6">
                     <p>{t("alreadyHaveATeam")}</p>
@@ -169,9 +194,9 @@ const CreateTeamModalContent = ({
                 </div>
             </div>
             <Button
-                disabled={teamTitle === ""}
+                disabled={!isFormValidated || teamTitle === ""}
                 onClick={handleCreateNewTeam}
-                className="px-6 absolute bottom-6 border-2 disabled:opacity-50 border-typography-light dark:border-typography-dark py-1 rounded-md enabled:hover:bg-bg-dark enabled:hover:text-typography-dark enabled:dark:hover:bg-bg-light enabled:dark:hover:text-typography-light transition-colors duration-150"
+                className="px-6 absolute bottom-6 border-2 disabled:opacity-50 border-typography-light dark:border-typography-dark py-1 rounded-md enabled:hover:bg-bg-dark enabled:hover:text-typography-dark enabled:dark:hover:bg-bg-light enabled:dark:hover:text-typography-light transition-colors duration-150 "
             >
                 {t("create")}
             </Button>

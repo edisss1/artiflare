@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import { Link, useParams } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { RootState } from "../../redux/store"
 import ThemeSwitch from "../atoms/ThemeSwitch"
 
@@ -12,10 +12,7 @@ const CanvasNav = ({
     position = "absolute top-2 left-[5%] max-lg:hidden",
     themeSwitchVisible = false
 }: CanvasNavProps) => {
-    const { boards } = useSelector((state: RootState) => state.boards)
-    const { boardID } = useParams()
-
-    const currentBoard = boards.find((board) => board.id === boardID)
+    const { currentBoard } = useSelector((state: RootState) => state.boards)
 
     return (
         <nav

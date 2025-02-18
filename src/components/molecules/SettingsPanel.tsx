@@ -37,12 +37,12 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
 
     const teamOptions = [
         {
-            label: currentTeam?.name || t("Select Team"), // Display current team's name or a fallback text
-            value: currentTeam?.id || "", // Use current team's ID or a fallback value
-            selected: true // You can also set a flag to indicate it's the selected team
+            label: currentTeam?.name!,
+            value: currentTeam?.id!,
+            selected: true
         },
         ...teams
-            .filter((team) => team.id !== currentTeam?.id) // Exclude currentTeam from the rest
+            .filter((team) => team.id !== currentTeam?.id)
             .map((team) => ({
                 label: team.name,
                 value: team.id!
@@ -55,7 +55,7 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
         const selectedTeamID = e.target.value
         dispatch(updateCurrentSelectedTeam({ selectedTeamID, user }))
 
-        navigate(`/app/settings/team/${currentTeam?.id}`)
+        navigate(0)
     }
 
     useEffect(() => {

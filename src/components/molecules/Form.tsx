@@ -13,8 +13,7 @@ import { Link, useLocation } from "react-router-dom"
 import { handleAuthError } from "../../utils/handleAuthError"
 import Checkbox from "../atoms/Checkbox"
 import { useTranslation } from "react-i18next"
-import HidePassword from "../icons/HidePassword"
-import ShowPassword from "../icons/ShowPassword"
+import RevealPassword from "../atoms/RevealPassword"
 
 interface FormProps {
     onSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void
@@ -98,35 +97,28 @@ const Form = ({
                         type={inputType}
                         autoComplete="current-password"
                     />
-                    {inputType === "password" ? (
-                        <Button
-                            type="button"
-                            onClick={() => setInputType("text")}
-                            className="absolute right-4 top-[50%] -translate-y-[50%] hover:bg-gray-300 p-2 rounded-full transition-colors duration-150"
-                        >
-                            <ShowPassword />
-                        </Button>
-                    ) : (
-                        <Button
-                            type="button"
-                            onClick={() => setInputType("password")}
-                            className="absolute right-4 top-[50%] -translate-y-[50%] hover:bg-gray-300 p-2 rounded-full transition-colors duration-150"
-                        >
-                            <HidePassword />
-                        </Button>
-                    )}
+                    <RevealPassword
+                        inputType={inputType}
+                        setInputType={setInputType}
+                    />
                 </div>
                 {isSignUp && (
-                    <FormInput
-                        id="confirmed-password-input"
-                        isIncorrect={!passwordMatch}
-                        value={confirmedPassword}
-                        onChange={(e) =>
-                            dispatch(setConfirmedPassword(e.target.value))
-                        }
-                        placeholder={t("confirmPassword").toLowerCase()}
-                        type={inputType}
-                    />
+                    <div className="w-full relative">
+                        <FormInput
+                            id="confirmed-password-input"
+                            isIncorrect={!passwordMatch}
+                            value={confirmedPassword}
+                            onChange={(e) =>
+                                dispatch(setConfirmedPassword(e.target.value))
+                            }
+                            placeholder={t("confirmPassword").toLowerCase()}
+                            type={inputType}
+                        />
+                        <RevealPassword
+                            inputType={inputType}
+                            setInputType={setInputType}
+                        />
+                    </div>
                 )}
                 {!passwordMatch && confirmedPassword && (
                     <p className="text-danger text-sm block my-2 ">
@@ -145,6 +137,7 @@ const Form = ({
                         <div className="flex gap-1 items-center">
                             <span>{t("iAgreeToThe")}</span>
                             <Link
+                                target="_blank"
                                 className="relative after:content-[''] after:w-full after:h-px after:bg-typography-light after:absolute after:top-full after:left-0 after:dark:bg-typography-dark hover:after:scale-x-0 after:origin-center
                                 after:transition-all"
                                 to={"/terms"}

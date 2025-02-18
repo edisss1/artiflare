@@ -1,32 +1,25 @@
 import Button from "./Button"
 import FallbackAvatar from "./FallbackAvatar"
-import { useSelector } from "react-redux"
-import {
-    addNewUserToTeam,
-    clearTeams
-} from "../../redux/slices/teamManagementSlice"
-import { AppDispatch, RootState } from "../../redux/store"
-import { useDispatch } from "react-redux"
 
 interface TeamCardProps {
     name: string
     id: string | undefined
+    onClick?: (id: string | undefined) => void
+    cursor?: string
 }
 
-const TeamCard = ({ name, id }: TeamCardProps) => {
-    const { user } = useSelector((state: RootState) => state.auth)
-    const dispatch: AppDispatch = useDispatch()
-
-    const handleJoin = () => {
-        if (!user?.teams.some((team) => team.teamID === id)) {
-            addNewUserToTeam(id, user?.uid)
-
-            dispatch(clearTeams())
-        }
-    }
-
+const TeamCard = ({
+    cursor = "cursor-pointer",
+    name,
+    id,
+    onClick
+}: TeamCardProps) => {
     return (
-        <Button onClick={handleJoin} className="flex gap-2 items-center">
+        <Button
+            type="button"
+            onClick={() => onClick && onClick(id)}
+            className={`${cursor} flex gap-2 items-center`}
+        >
             <FallbackAvatar
                 width="w-8"
                 height="h-8"

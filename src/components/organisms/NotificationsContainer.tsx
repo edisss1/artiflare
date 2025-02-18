@@ -25,15 +25,6 @@ const NotificationsContainer = ({
     const dispatch: AppDispatch = useDispatch()
     const user = useSelector((state: RootState) => state.auth.user)
 
-    // const handleClickOutsideNotifications = (e: MouseEvent) => {
-    //     if (
-    //         notificationsRef.current &&
-    //         !notificationsRef.current.contains(e.target as Node)
-    //     ) {
-    //         closeContainer()
-    //     }
-    // }
-
     useEffect(() => {
         if (user) {
             const unsubscribe = dispatch(getNotificationsForUser(user.uid))

@@ -43,7 +43,9 @@ const Footer = () => {
                             {t("legal")}
                         </h4>
                         <div className={"grid gap-2"}>
-                            <Link to={"/terms"}>{t("termsOfService")}</Link>
+                            <Link target="_blank" to={"/terms"}>
+                                {t("termsOfService")}
+                            </Link>
                             <Link
                                 className="text-balance max-w-[170px]"
                                 to={"/privacy"}

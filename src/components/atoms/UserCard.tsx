@@ -17,7 +17,7 @@ const UserCard = ({ name, img, onClick }: UserCardProps) => {
             <p className="col-span-2 col-start-2 max-w-[80px] truncate text-xs">
                 {name}
             </p>
-            <Button onClick={onClick} className="col-start-4  ">
+            <Button type="button" onClick={onClick} className="col-start-4  ">
                 <CloseIcon className="w-4 h-4" />
             </Button>
         </div>

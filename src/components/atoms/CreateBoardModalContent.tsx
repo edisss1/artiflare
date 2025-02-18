@@ -23,7 +23,6 @@ const CreateBoardModalContent = ({
 
     useEffect(() => {
         validateInput(title, setIsFormValidated)
-        console.log(isFormValidated)
     }, [title])
 
     useEffect(() => {

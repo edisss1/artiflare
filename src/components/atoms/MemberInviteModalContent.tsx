@@ -8,25 +8,27 @@ import {
     updateInvitees,
     updateQueryResults
 } from "../../redux/slices/teamManagementSlice"
-import { useState } from "react"
 import FormInput from "./FormInput"
 import Button from "./Button"
 import SearchIcon from "../icons/SearchIcon"
 import AddIcon from "../icons/AddIcon"
-import InviteesContainer from "../molecules/InviteesContainer"
+import InviteesContainer from "../molecules/CardsContainer"
 import UserCard from "./UserCard"
 import { sendInvite } from "../../redux/slices/notificationManagementSlice"
 
 interface MemberInviteModalContentProps {
     modalRef: React.MutableRefObject<HTMLDialogElement | null>
+    query: string
+    setQuery: React.Dispatch<React.SetStateAction<string>>
 }
 
 const MemberInviteModalContent = ({
-    modalRef
+    modalRef,
+    query,
+    setQuery
 }: MemberInviteModalContentProps) => {
     const dispatch: AppDispatch = useDispatch()
     const { user } = useSelector((state: RootState) => state.auth)
-    const [query, setQuery] = useState("")
     const { inviteeQueryResults, invitees } = useSelector(
         (state: RootState) => state.teamManagement
     )

@@ -1,4 +1,4 @@
-import { RootState } from "../../redux/store"
+import { AppDispatch, RootState } from "../../redux/store"
 import { useSelector } from "react-redux"
 import SearchMembers from "../atoms/SearchMembers"
 import MembersDisplay from "../molecules/MembersDisplay"
@@ -10,13 +10,25 @@ import Modal from "../molecules/Modal"
 import MemberInviteModalContent from "../atoms/MemberInviteModalContent"
 import { useRef, useState } from "react"
 import { openModal } from "../../utils/openModal"
+import { useDispatch } from "react-redux"
+import { clearInvitees } from "../../redux/slices/teamManagementSlice"
 
 const TeamMembersSettingsPanel = () => {
+    const dispatch: AppDispatch = useDispatch()
     const { currentTeam } = useSelector(
         (state: RootState) => state.teamManagement
     )
     const modalRef = useRef<HTMLDialogElement | null>(null)
+    const [membersQuery, setMembersQuery] = useState("")
     const [query, setQuery] = useState("")
+    // const { inviteeQueryResults, invitees } = useSelector(
+    //     (state: RootState) => state.teamManagement
+    // )
+
+    const clearForm = () => {
+        setQuery("")
+        dispatch(clearInvitees())
+    }
 
     return (
         <div className="">
@@ -40,14 +52,22 @@ const TeamMembersSettingsPanel = () => {
                     </span>
                 </p>
             </div>
-            <SearchMembers query={query} setQuery={setQuery} />
-            <MembersDisplay query={query} teamMembers={currentTeam?.members} />
+            <SearchMembers query={membersQuery} setQuery={setMembersQuery} />
+            <MembersDisplay
+                query={membersQuery}
+                teamMembers={currentTeam?.members}
+            />
             <Modal
                 maxHeight="max-h-[450px] h-full"
                 minHeight="min-h-[400px]"
                 modalRef={modalRef}
+                clearForm={clearForm}
             >
-                <MemberInviteModalContent modalRef={modalRef} />
+                <MemberInviteModalContent
+                    query={query}
+                    setQuery={setQuery}
+                    modalRef={modalRef}
+                />
             </Modal>
         </div>
     )

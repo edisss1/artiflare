@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../redux/store"
-import { checkMemebership, updateBoard } from "../redux/slices/boardSlice"
+import {
+    checkMemebership,
+    setBoard,
+    updateBoard
+} from "../redux/slices/boardSlice"
 import { useNavigate, useParams } from "react-router-dom"
 
 import CanvasNav from "../components/molecules/CanvasNav.tsx"
@@ -19,6 +23,7 @@ import { db } from "../firestore/firebaseConfig.ts"
 import Button from "../components/atoms/Button.tsx"
 import ChatIcon from "../components/icons/ChatIcon.tsx"
 import MobileBoardControls from "../components/molecules/MobileBoardControls.tsx"
+import { Board } from "../types/Board.ts"
 
 const DrawingBoard = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -41,6 +46,7 @@ const DrawingBoard = () => {
             const activeElements = elements.filter(
                 (element) => !element.isDeleted
             )
+
             dispatch(updateBoard({ boardID, elements: activeElements, user }))
         }
 
@@ -56,10 +62,14 @@ const DrawingBoard = () => {
 
         onSnapshot(queryBoards, (boardSnap) => {
             boardSnap.forEach((doc) => {
+                const boardData = doc.data() as Board
+
                 const savedElements = JSON.parse(
                     doc.data().elements
                 ) as ExcalidrawElement[]
+
                 if (savedElements) {
+                    dispatch(setBoard(boardData))
                     const loadedElements = restoreElements(savedElements, null)
                     if (excalidrawAPI) {
                         excalidrawAPI.updateScene({ elements: loadedElements })
@@ -118,7 +128,7 @@ const DrawingBoard = () => {
             <CanvasNav themeSwitchVisible />
 
             <div style={{ width: "100vw", height: "100vh" }}>
-                <div className="absolute max-lg:hidden right-4 bottom-8 z-40 flex flex-col items-end gap-4 w-full max-w-[500px] max-lg:flex-col max-lg:items-end max-lg:gap-4">
+                <div className="absolute max-lg:hidden right-4 bottom-16 z-40 flex flex-col items-end gap-4 w-full max-w-[500px] max-lg:flex-col max-lg:items-end max-lg:gap-4">
                     <User />
                     <ChatContainer />
                 </div>

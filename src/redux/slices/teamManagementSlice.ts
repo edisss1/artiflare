@@ -29,6 +29,7 @@ interface TeamState {
     invitees: User[]
     teamQueryResults: Team[] | null
     teamResults: Team[]
+    selectedTeams: Team[]
 }
 
 const initialState: TeamState = {
@@ -48,7 +49,8 @@ const initialState: TeamState = {
     inviteeQueryResults: null,
     invitees: [],
     teamQueryResults: null,
-    teamResults: []
+    teamResults: [],
+    selectedTeams: []
 }
 export const createTeam = createAsyncThunk(
     "teamManagement/createTeam",
@@ -409,15 +411,13 @@ export const searchTeams = createAsyncThunk(
             const teamsRef = collection(db, "teams")
             const nameQuery = query(
                 teamsRef,
-                where("name", ">=", queryStr),
-                where("name", "<=", queryStr + "\uf8ff"),
+                where("name", "==", queryStr),
                 where("teamType", "==", "public")
             )
 
             const idQuery = query(
                 teamsRef,
-                where("id", ">=", queryStr),
-                where("id", "<=", queryStr + "\uf8ff"),
+                where("id", "==", queryStr),
                 where("teamType", "==", "public")
             )
 
@@ -434,7 +434,7 @@ export const searchTeams = createAsyncThunk(
                 resultsMap.set(docSnap.id, docSnap.data())
             })
             const results = Array.from(resultsMap.values()) as Team[]
-
+            console.log(results)
             return results
         } catch (err) {
             console.error(err)
@@ -542,7 +542,7 @@ const teamManagementSlice = createSlice({
                 if (action.payload) {
                     state.error = undefined
                     state.status = "succeeded"
-                    state.teamQueryResults = action.payload
+                    state.teamResults = action.payload
                 }
             })
             .addCase(searchTeams.rejected, (state, action) => {

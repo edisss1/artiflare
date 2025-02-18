@@ -440,7 +440,7 @@ const boardSlice = createSlice({
             .addCase(updateBoard.fulfilled, (state, action: any) => {
                 state.status = "succeeded"
                 if (state.currentBoard) {
-                    state.currentBoard.elements = action.payload.newBoardData
+                    state.currentBoard.elements = action.payload
                     state.currentBoard.updatedAt = new Date().toISOString()
                 }
             })

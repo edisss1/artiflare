@@ -69,7 +69,8 @@ export const resources = {
             upload: "Upload",
             remove: "Remove",
             deleteProfileHeader: "Delete profile",
-            deleteProfileText: "Are you sure you want to delete your profile?",
+            deleteProfileText:
+                "Deleting the profile will irreversibly remove all your boards ",
             areYouSure: "Are you sure?",
             irreversible: "This action is irreversible.",
             delete: "Delete",
@@ -348,7 +349,8 @@ export const resources = {
             upload: "Carica",
             remove: "Rimuovi",
             deleteProfileHeader: "Elimina profilo",
-            deleteProfileText: "Lei sicura di voler cancellare il tuo profilo?",
+            deleteProfileText:
+                "Cancellando il profilo rimuoverà irreversibilmente tutte le vostre schede ",
             areYouSure: "Lei sicura?",
             irreversible: "Questa azione è irreversibile.",
             delete: "Elimina",

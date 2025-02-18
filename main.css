@@ -93,6 +93,10 @@ body::-webkit-scrollbar-thumb {
     @apply bg-typography-light dark:bg-typography-dark rounded-lg;
 }
 
+.label-placeholder:not(:placeholder-shown) {
+    @apply top-0 bg-bg-light dark:bg-bg-dark opacity-100 text-sm;
+}
+
 @media (max-width: 768px) {
     .dashboard {
         grid-template-columns: 1fr;

@@ -33,7 +33,7 @@ const UserSettingsPanel = () => {
 
     return (
         <div className="p-4">
-            <SettingsHeader>{t("profileDetails")}</SettingsHeader>
+            <SettingsHeader>{t("profileSettings")}</SettingsHeader>
             <UserInfoSettings
                 user={user}
                 handleUserDisplayNameChange={handleUserDisplayNameChange}

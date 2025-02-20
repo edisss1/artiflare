@@ -6,13 +6,14 @@ import {
     getTeams,
     updateCurrentSelectedTeam
 } from "../../redux/slices/teamManagementSlice"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import SettingsSelect from "../atoms/SettingsSelect"
 import ProfileSettingsIcon from "../icons/ProfileSettingsIcon"
 import SettingsLink from "../atoms/SettingsLink"
 import TeamProfileIcon from "../icons/TeamProfileIcon"
 import TeamMembersIcon from "../icons/TeamMembersIcon"
 import { t } from "i18next"
+import { useNavigate } from "react-router-dom"
 
 interface SettingsLinksProps {
     uid: string | undefined
@@ -25,6 +26,21 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
         (state: RootState) => state.teamManagement
     )
     const user = useSelector((state: RootState) => state.auth.user)
+    const [teamOptions, setTeamOptions] = useState<
+        (
+            | {
+                  label: string
+                  value: string
+              }
+            | {
+                  label: string
+                  value: string
+                  selected: boolean
+              }
+        )[]
+    >([])
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (user?.teams && user) {
@@ -32,25 +48,29 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
         }
     }, [user])
 
-    const teamOptions = [
-        {
-            label: currentTeam?.name!,
-            value: currentTeam?.id!,
-            selected: true
-        },
-        ...teams
-            .filter((team) => team.id !== currentTeam?.id)
-            .map((team) => ({
-                label: team.name,
-                value: team.id!
-            }))
-    ]
+    useEffect(() => {
+        setTeamOptions([
+            {
+                label: currentTeam?.name!,
+                value: currentTeam?.id!,
+                selected: true
+            },
+            ...teams
+                .filter((team) => team.id !== currentTeam?.id)
+                .map((team) => ({
+                    label: team.name,
+                    value: team.id!
+                }))
+        ])
+    }, [currentTeam])
 
     const handleCurrentTeamChange = (
         e: React.ChangeEvent<HTMLSelectElement>
     ) => {
         const selectedTeamID = e.target.value
         dispatch(updateCurrentSelectedTeam({ selectedTeamID, user }))
+
+        navigate(`/app/settings/team/${user?.currentSelectedTeam}`)
     }
 
     useEffect(() => {
@@ -79,6 +99,7 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
                     <SettingsSelect
                         onChange={handleCurrentTeamChange}
                         options={teamOptions}
+                        value={currentTeam?.id}
                     />
                 </div>
                 <SettingsLink

@@ -9,7 +9,7 @@ import {
     uploadTeamLogo
 } from "../../redux/slices/teamManagementSlice"
 import { useSelector } from "react-redux"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import FileUpload from "../atoms/FileUpload"
 import { t } from "i18next"
 import { useNavigate } from "react-router-dom"
@@ -20,15 +20,11 @@ import { openModal } from "../../utils/openModal"
 const TeamSettingsPanel = () => {
     const dispatch: AppDispatch = useDispatch()
     const user = useSelector((state: RootState) => state.auth.user)
-    const teams = useSelector((state: RootState) => state.teamManagement.teams)
+    const { currentTeam } = useSelector(
+        (state: RootState) => state.teamManagement
+    )
     const navigate = useNavigate()
     const modalRef = useRef<HTMLDialogElement | null>(null)
-
-    // const [logoFile, setLogoFile] = useState<File | null>(null)
-
-    const currentTeam = teams.find(
-        (team) => team.id === user?.currentSelectedTeam
-    )
 
     const [newTeamName, setNewTeamName] = useState<string | undefined>(
         currentTeam?.name
@@ -37,6 +33,10 @@ const TeamSettingsPanel = () => {
     const handleNewTeamName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewTeamName(e.target.value)
     }
+
+    useEffect(() => {
+        setNewTeamName(currentTeam?.name)
+    }, [currentTeam])
 
     const handleTeamNameUpdate = () => {
         dispatch(

@@ -69,7 +69,7 @@ const TeamSettingsPanel = () => {
             <div
                 className={`flex justify-between w-full max-w-[90%] max-md:flex-col max-lg:items-start max-lg:gap-8`}
             >
-                <div className={"grid gap-2 place-items-start"}>
+                <div className={"flex gap-2 flex-col items-start"}>
                     <SettingsInput
                         value={newTeamName}
                         onChange={(e) => handleNewTeamName(e)}

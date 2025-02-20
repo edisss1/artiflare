@@ -62,6 +62,7 @@ const Form = ({
         dispatch(setPassword(""))
         dispatch(setEmail(""))
         dispatch(setConfirmedPassword(""))
+        dispatch(setName(""))
         setErrorMessage(undefined)
         setIsAgreed && setIsAgreed(false)
     }, [location])
@@ -161,8 +162,8 @@ const Form = ({
                     <p className="text-danger text-sm block ">{errorMessage}</p>
                 )}
                 <Button
-                    disabled={!passwordMatch && !email && isSignUp && !isAgreed}
-                    className="my-6 w-full bg-secondary py-4 rounded-lg  hover:opacity-65 transition-opacity duration-150 disabled:opacity-50"
+                    disabled={!passwordMatch || !email || isSignUp || !isAgreed}
+                    className="my-6 w-full bg-secondary py-4 rounded-lg  enabled:hover:opacity-65 transition-opacity duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {children}
                 </Button>

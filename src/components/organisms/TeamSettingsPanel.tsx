@@ -122,7 +122,7 @@ const TeamSettingsPanel = () => {
                     disabled={user?.teams.length === 1}
                     onClick={() => openModal(modalRef)}
                     className={
-                        "border-2 border-danger text-danger rounded-md  disabled:opacity-40 disabled:cursor-not-allowed  enabled:hover:bg-danger enabled:hover:text-typography-dark transition-colors duration-150 w-fit p-2 mt-4"
+                        "border-2 border-danger text-danger rounded-md  dark:bg-danger dark:text-typography-dark dark:hover:opacity-70 disabled:opacity-40 disabled:cursor-not-allowed  enabled:hover:bg-danger enabled:hover:text-typography-dark transition-all duration-150 w-fit p-2 mt-4"
                     }
                 >
                     {t("delete")} {currentTeam?.name}

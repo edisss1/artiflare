@@ -12,7 +12,8 @@ export default {
                 "bg-dark": "#333333",
                 "typography-light": "#333333",
                 "typography-dark": "#FFFFFF",
-                danger: "#FF0505"
+                danger: "#FF0505",
+                "danger-dark": "#E63946"
             },
             keyframes: {
                 extend: { "0%": "h-0", "100%": "h-auto" },

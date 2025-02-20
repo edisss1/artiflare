@@ -3,7 +3,7 @@ import { IconProps } from "../../types/IconProps"
 const HidePassword = ({ className }: IconProps) => {
     return (
         <svg
-            className={className}
+            className={`${className} dark:[&>*]:stroke-bg-light [&>*]:stroke-bg-dark`}
             width="20"
             height="20"
             viewBox="0 0 24 24"

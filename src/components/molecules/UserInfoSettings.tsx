@@ -45,16 +45,17 @@ const UserInfoSettings = ({
                     type={"text"}
                 />
 
-                <div className="flex items-center gap-4 ">
-                    <Button
-                        disabled={user?.displayName === newUserName}
-                        onClick={handleUserDisplayNameChange}
-                        className={
-                            "border-2 border-typography-light disabled:opacity-55 disabled:select-none dark:border-typography-dark px-2 py-1 rounded-md enabled:hover:bg-bg-dark enabled:hover:text-typography-dark enabled:dark:hover:text-typography-light enabled:dark:hover:bg-bg-light transition-colors duration-150"
-                        }
-                    >
-                        {t("change")}
-                    </Button>
+                <Button
+                    disabled={user?.displayName === newUserName}
+                    onClick={handleUserDisplayNameChange}
+                    className={
+                        "border-2 border-typography-light disabled:opacity-55 disabled:select-none dark:border-typography-dark px-2 py-1 rounded-md enabled:hover:bg-bg-dark enabled:hover:text-typography-dark enabled:dark:hover:text-typography-light enabled:dark:hover:bg-bg-light transition-colors duration-150"
+                    }
+                >
+                    {t("change")}
+                </Button>
+                <div className="flex flex-col gap-12 mt-4">
+                    <LanguageSwitch />{" "}
                     <Button
                         onClick={() => handleSignOut(dispatch)}
                         className="border-2 border-typography-light dark:border-typography-dark px-2 py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:text-typography-light dark:hover:bg-bg-light transition-colors duration-150"
@@ -62,7 +63,6 @@ const UserInfoSettings = ({
                         {t("logOut")}
                     </Button>
                 </div>
-                <LanguageSwitch />
             </div>
             <div className={"flex flex-col gap-2 items-center"}>
                 <h3>{t("yourPhoto")}</h3>
@@ -97,14 +97,16 @@ const UserInfoSettings = ({
                     >
                         {t("upload")}
                     </Button>
-                    <Button
-                        onClick={() => {}}
-                        className={
-                            "border-2 border-typography-light dark:border-typography-dark p-2 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:text-typography-light dark:hover:bg-bg-light transition-colors duration-150"
-                        }
-                    >
-                        {t("remove")}
-                    </Button>
+                    {user?.img && (
+                        <Button
+                            onClick={() => {}}
+                            className={
+                                "border-2 border-typography-light dark:border-typography-dark p-2 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:text-typography-light dark:hover:bg-bg-light transition-colors duration-150"
+                            }
+                        >
+                            {t("remove")}
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>

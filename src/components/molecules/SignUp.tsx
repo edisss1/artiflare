@@ -24,6 +24,10 @@ const SignUp = () => {
                 () => navigate(0)
             )
         }
+
+        if (!isAgreed) {
+            alert("You must agree to the terms of service to sign up.")
+        }
     }
 
     return (

@@ -12,7 +12,6 @@ import ProfileSettingsIcon from "../icons/ProfileSettingsIcon"
 import SettingsLink from "../atoms/SettingsLink"
 import TeamProfileIcon from "../icons/TeamProfileIcon"
 import TeamMembersIcon from "../icons/TeamMembersIcon"
-import { useNavigate } from "react-router-dom"
 import { t } from "i18next"
 
 interface SettingsLinksProps {
@@ -26,8 +25,6 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
         (state: RootState) => state.teamManagement
     )
     const user = useSelector((state: RootState) => state.auth.user)
-
-    const navigate = useNavigate()
 
     useEffect(() => {
         if (user?.teams && user) {

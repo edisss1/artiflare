@@ -14,6 +14,8 @@ import TeamProfileIcon from "../icons/TeamProfileIcon"
 import TeamMembersIcon from "../icons/TeamMembersIcon"
 import { t } from "i18next"
 import { useNavigate } from "react-router-dom"
+import { handleSignOut } from "../../utils/handleSignOut"
+import Button from "../atoms/Button"
 
 interface SettingsLinksProps {
     uid: string | undefined
@@ -107,7 +109,7 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
                     to={t("profileSettings")}
                     path={`/app/settings/profile/${uid}`}
                 />
-                <div className={"flex flex-col gap-6"}>
+                <div className={"flex flex-col gap-6 "}>
                     <div>
                         <h2 className={"font-medium mb-2"}>{t("account")}</h2>
                         <div>
@@ -131,6 +133,12 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
                             />
                         </div>
                     </div>
+                    <Button
+                        onClick={() => handleSignOut(dispatch)}
+                        className="border-2 mt-4  border-typography-light dark:border-typography-dark px-2 py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:text-typography-light dark:hover:bg-bg-light transition-colors duration-150"
+                    >
+                        {t("logOut")}
+                    </Button>
                 </div>
             </div>
         </aside>

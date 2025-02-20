@@ -12,14 +12,12 @@ import LanguageSwitch from "../atoms/LanguageSwitch"
 interface UserInfoSettingsProps {
     user: User | null
     handleUserDisplayNameChange: () => void
-    handleSignOut: (dispatch: AppDispatch) => void
     userIcon: string
 }
 
 const UserInfoSettings = ({
     user,
     handleUserDisplayNameChange,
-    handleSignOut,
     userIcon
 }: UserInfoSettingsProps) => {
     const dispatch: AppDispatch = useDispatch()
@@ -44,7 +42,6 @@ const UserInfoSettings = ({
                     onChange={handleUserNameChange}
                     type={"text"}
                 />
-
                 <Button
                     disabled={user?.displayName === newUserName}
                     onClick={handleUserDisplayNameChange}
@@ -54,15 +51,7 @@ const UserInfoSettings = ({
                 >
                     {t("change")}
                 </Button>
-                <div className="flex flex-col gap-12 mt-4">
-                    <LanguageSwitch />{" "}
-                    <Button
-                        onClick={() => handleSignOut(dispatch)}
-                        className="border-2 border-typography-light dark:border-typography-dark px-2 py-1 rounded-md hover:bg-bg-dark hover:text-typography-dark dark:hover:text-typography-light dark:hover:bg-bg-light transition-colors duration-150"
-                    >
-                        {t("logOut")}
-                    </Button>
-                </div>
+                <LanguageSwitch />{" "}
             </div>
             <div className={"flex flex-col gap-2 items-center"}>
                 <h3>{t("yourPhoto")}</h3>

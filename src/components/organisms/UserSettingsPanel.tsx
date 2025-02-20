@@ -8,7 +8,6 @@ import userIcon from "../../assets/UserIcon.svg"
 
 import SettingsHeader from "../atoms/SettingsHeader.tsx"
 import UserInfoSettings from "../molecules/UserInfoSettings.tsx"
-import { handleSignOut } from "../../utils/handleSignOut.ts"
 import { updateUserName } from "../../redux/slices/userManagementSlice.ts"
 import { t } from "i18next"
 import { useNavigate } from "react-router-dom"
@@ -37,7 +36,6 @@ const UserSettingsPanel = () => {
             <UserInfoSettings
                 user={user}
                 handleUserDisplayNameChange={handleUserDisplayNameChange}
-                handleSignOut={handleSignOut}
                 userIcon={userIcon}
             />
 

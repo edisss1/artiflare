@@ -54,8 +54,6 @@ const SettingsPanel = ({ uid, isPanelVisible }: SettingsLinksProps) => {
     ) => {
         const selectedTeamID = e.target.value
         dispatch(updateCurrentSelectedTeam({ selectedTeamID, user }))
-
-        navigate(0)
     }
 
     useEffect(() => {

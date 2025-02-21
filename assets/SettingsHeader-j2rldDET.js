@@ -1,0 +1,1 @@
+import{j as e}from"./index-ChT_ZIC7.js";const a=({children:t})=>e.jsx("h2",{className:"mb-12 block w-fit relative   after:w-full after:h-[2px] after:bg-secondary after:absolute after:top-[150%] after:left-0",children:t});export{a as S};

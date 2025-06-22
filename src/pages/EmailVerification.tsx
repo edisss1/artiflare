@@ -1,15 +1,18 @@
 import { useSelector } from "react-redux"
 import H2 from "../components/atoms/H2"
-import { RootState } from "../redux/store"
+import { AppDispatch, RootState } from "../redux/store"
 import Button from "../components/atoms/Button"
 import { useNavigate } from "react-router-dom"
 import { auth } from "../firestore/firebaseConfig"
 import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { handleSignOut } from "../utils/handleSignOut"
 
 const EmailVerification = () => {
     const { user } = useSelector((state: RootState) => state.auth)
     const navigate = useNavigate()
     const [isVerified, setIsVerified] = useState(user?.emailVerified || false)
+    const dispatch: AppDispatch = useDispatch()
 
     const checkEmailVerified = async () => {
         try {
@@ -32,13 +35,13 @@ const EmailVerification = () => {
     }, [isVerified])
 
     return (
-        <div className="w-screen h-screen flex flex-col gap-6 items-center justify-center">
+        <div className="w-screen h-screen flex flex-col gap-6 items-center justify-center px-4">
             <H2>Artiflare</H2>
             <div className="grid place-items-center gap-4">
                 <h3 className="text-xl font-medium">
                     Verify your email address
                 </h3>
-                <p>
+                <p className="max-md:text-center">
                     We’ve sent you a link — just click on it to confirm you’re
                     not a bot!
                 </p>
@@ -51,7 +54,7 @@ const EmailVerification = () => {
                 </Button>
                 {!isVerified && (
                     <>
-                        <p className="text-sm text-typography-light/60 dark:text-typography-dark/60">
+                        <p className="text-sm text-typography-light/60 dark:text-typography-dark/60 max-md:text-center">
                             If you’ve verified your email, click the button
                             after a few moments.
                         </p>
@@ -61,6 +64,15 @@ const EmailVerification = () => {
                     </>
                 )}
             </div>
+            <Button
+                onClick={() => {
+                    handleSignOut(dispatch)
+                    navigate("/")
+                }}
+                className="bg-primary p-2 rounded-lg hover:scale-105 transition-transform duration-200"
+            >
+                Cancel verification
+            </Button>
         </div>
     )
 }

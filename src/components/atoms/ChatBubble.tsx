@@ -77,7 +77,9 @@ const ChatBubble = ({ message, isUser }: ChatBubbleProps) => {
                         : "bg-gray-500 text-left rounded-bl-none"
                 }`}
             >
-                {!editingMode && message.messageText}
+                <p className="break-words whitespace-pre-wrap">
+                    {!editingMode && message.messageText}
+                </p>
                 {editingMode && (
                     <form
                         onSubmit={handleMessageEditing}
